@@ -1,8 +1,5 @@
 # XelerateAvalonia
 
-![Avalonia Logo](https://www.avaloniaui.net/images/avalonia-banner.png)
-
-Description of your project goes here. Provide a brief overview of what XelerateAvalonia does and any key features.
 
 ## Table of Contents
 
@@ -34,5 +31,6 @@ Make sure you have the following software installed:
 
 2. Build and run the application:
 
+  ```bash
   dotnet build
   dotnet run
