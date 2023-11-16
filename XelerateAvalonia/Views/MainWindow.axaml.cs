@@ -1,4 +1,8 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
+using XelerateAvalonia.ViewModels;
 
 namespace XelerateAvalonia.Views
 {
@@ -7,6 +11,14 @@ namespace XelerateAvalonia.Views
         public MainWindow()
         {
             InitializeComponent();
+
         }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+
     }
 }

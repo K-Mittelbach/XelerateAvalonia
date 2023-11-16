@@ -3,18 +3,102 @@
         xmlns:vm="using:XelerateAvalonia.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		xmlns:i="https://github.com/projektanker/icons.avalonia"
+		
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="750"
         x:Class="XelerateAvalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="XelerateAvalonia">
+		Background="#111619"
+		CanResize="false"
+        Title="Xelerate">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="55"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="779*"/>
+			<ColumnDefinition Width="51*"/>
+			<ColumnDefinition Width="20"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="20"/>
+		</Grid.RowDefinitions>
 
-</Window>
+
+
+		<Grid x:Name="GridMenu" Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Background="#0A0D0F">
+
+			
+
+				<StackPanel Height="918" Width="55">
+					<!-- <Image Margin="5 40 5 0" Height="30" Width="30" Stretch="UniformToFill" Source="/Assets/Xelerate.png"/>-->
+
+					<ToggleButton  Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 40 5 20"  Command="{Binding HomeNavigationCommand}"  >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<i:Icon Value="fa-home" Foreground="White" FontSize="17" />
+							
+						
+						</StackPanel>
+					</ToggleButton>
+
+					<ToggleButton x:Name="LoadImportPage"  IsEnabled="True" Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding ImportNavigationCommand}" >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<i:Icon Value="fa-file" Foreground="White" FontSize="17" />
+							
+						</StackPanel>
+					</ToggleButton>
+
+					<ToggleButton x:Name="LoadPlottingPage" Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"
+								  >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<i:Icon Value="fa-chart-line" Foreground="White" FontSize="17" />
+							
+						</StackPanel>
+					</ToggleButton>
+					
+					<ToggleButton x:Name="LoadImagePage" Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"
+								  >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<i:Icon Value="fa-image" Foreground="White" FontSize="17" />
+
+						</StackPanel>
+					</ToggleButton>
+					<ToggleButton x:Name="LoadDatabasePage" Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"
+								  >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<i:Icon Value="fa-database" Foreground="White" FontSize="17" />
+
+						</StackPanel>
+					</ToggleButton>
+
+					<!-- Settings Area -->
+					<Border Background="white" Padding = "2" Opacity="453" Margin="10 230 10 0" />
+					<ToggleButton x:Name="LoadSettingsPage" Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20"
+								  >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<i:Icon Value="fa-cog" Foreground="White" FontSize="17" />
+
+						</StackPanel>
+					</ToggleButton>
+
+				</StackPanel>
+			
+
+		</Grid>
+		
+</Grid>
+
+	</Window>
+

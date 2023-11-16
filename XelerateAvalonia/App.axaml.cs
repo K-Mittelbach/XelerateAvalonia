@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using XelerateAvalonia.ViewModels;
 using XelerateAvalonia.Views;
+using XelerateAvalonia.Auxilaries;
 
 namespace XelerateAvalonia
 {
@@ -17,9 +18,11 @@ namespace XelerateAvalonia
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
+                var viewModel = Program.ServiceLocator.ServiceProvider.GetService<ViewModelBase>("MainWindowViewModel");
+
+                desktop.MainWindow = new MainWindow()
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = viewModel,
                 };
             }
 

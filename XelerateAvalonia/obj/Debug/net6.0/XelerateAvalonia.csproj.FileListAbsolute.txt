@@ -134,3 +134,15 @@ C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\obj\Debug\net6.0\Xele
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\obj\Debug\net6.0\XelerateAvalonia.csproj.CopyComplete
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\obj\Debug\net6.0\XelerateAvalonia.genruntimeconfig.cache
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\obj\Debug\net6.0\ref\XelerateAvalonia.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Avalonia.Controls.TreeDataGrid.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Semi.Avalonia.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Semi.Avalonia.ColorPicker.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Semi.Avalonia.DataGrid.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Semi.Avalonia.TreeDataGrid.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Projektanker.Icons.Avalonia.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Projektanker.Icons.Avalonia.FontAwesome.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\System.Text.Encodings.Web.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\System.Text.Json.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll

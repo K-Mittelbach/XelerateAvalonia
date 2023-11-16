@@ -67,6 +67,38 @@
             "Avalonia.Themes.Fluent": {
               "target": "Package",
               "version": "[11.0.2, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Projektanker.Icons.Avalonia": {
+              "target": "Package",
+              "version": "[8.3.0, )"
+            },
+            "Projektanker.Icons.Avalonia.FontAwesome": {
+              "target": "Package",
+              "version": "[8.3.0, )"
+            },
+            "Semi.Avalonia": {
+              "target": "Package",
+              "version": "[11.0.1, )"
+            },
+            "Semi.Avalonia.ColorPicker": {
+              "target": "Package",
+              "version": "[11.0.1, )"
+            },
+            "Semi.Avalonia.DataGrid": {
+              "target": "Package",
+              "version": "[11.0.1, )"
+            },
+            "Semi.Avalonia.TreeDataGrid": {
+              "target": "Package",
+              "version": "[11.0.1, )"
             }
           },
           "imports": [

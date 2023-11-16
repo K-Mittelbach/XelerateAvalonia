@@ -2,6 +2,7 @@ C:\Users\mitte\.nuget\packages\avalonia\11.0.2\ref\net6.0\Avalonia.Base.dll
 C:\Users\mitte\.nuget\packages\avalonia.controls.colorpicker\11.0.2\lib\net6.0\Avalonia.Controls.ColorPicker.dll
 C:\Users\mitte\.nuget\packages\avalonia.controls.datagrid\11.0.2\lib\net6.0\Avalonia.Controls.DataGrid.dll
 C:\Users\mitte\.nuget\packages\avalonia\11.0.2\ref\net6.0\Avalonia.Controls.dll
+C:\Users\mitte\.nuget\packages\avalonia.controls.treedatagrid\11.0.0\lib\net5.0\Avalonia.Controls.TreeDataGrid.dll
 C:\Users\mitte\.nuget\packages\avalonia\11.0.2\ref\net6.0\Avalonia.DesignerSupport.dll
 C:\Users\mitte\.nuget\packages\avalonia.desktop\11.0.2\lib\net6.0\Avalonia.Desktop.dll
 C:\Users\mitte\.nuget\packages\avalonia.diagnostics\11.0.2\lib\net6.0\Avalonia.Diagnostics.dll
@@ -30,6 +31,8 @@ C:\Users\mitte\.nuget\packages\microsoft.codeanalysis.csharp.scripting\3.8.0\lib
 C:\Users\mitte\.nuget\packages\microsoft.codeanalysis.common\3.8.0\lib\netcoreapp3.1\Microsoft.CodeAnalysis.dll
 C:\Users\mitte\.nuget\packages\microsoft.codeanalysis.scripting.common\3.8.0\lib\netcoreapp3.1\Microsoft.CodeAnalysis.Scripting.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.CSharp.dll
+C:\Users\mitte\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0\lib\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\mitte\.nuget\packages\microsoft.extensions.dependencyinjection\8.0.0\lib\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.VisualBasic.Core.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.VisualBasic.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.Win32.Primitives.dll
@@ -37,7 +40,13 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Micros
 C:\Users\mitte\.nuget\packages\microsoft.win32.systemevents\6.0.0\lib\net6.0\Microsoft.Win32.SystemEvents.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\mscorlib.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\netstandard.dll
+C:\Users\mitte\.nuget\packages\projektanker.icons.avalonia\8.3.0\lib\netstandard2.0\Projektanker.Icons.Avalonia.dll
+C:\Users\mitte\.nuget\packages\projektanker.icons.avalonia.fontawesome\8.3.0\lib\netstandard2.0\Projektanker.Icons.Avalonia.FontAwesome.dll
 C:\Users\mitte\.nuget\packages\reactiveui\18.3.1\lib\net6.0\ReactiveUI.dll
+C:\Users\mitte\.nuget\packages\semi.avalonia.colorpicker\11.0.1\lib\net6.0\Semi.Avalonia.ColorPicker.dll
+C:\Users\mitte\.nuget\packages\semi.avalonia.datagrid\11.0.1\lib\net6.0\Semi.Avalonia.DataGrid.dll
+C:\Users\mitte\.nuget\packages\semi.avalonia\11.0.1\lib\net6.0\Semi.Avalonia.dll
+C:\Users\mitte\.nuget\packages\semi.avalonia.treedatagrid\11.0.1\lib\net6.0\Semi.Avalonia.TreeDataGrid.dll
 C:\Users\mitte\.nuget\packages\skiasharp\2.88.3\lib\net6.0\SkiaSharp.dll
 C:\Users\mitte\.nuget\packages\splat\14.4.1\lib\net6.0\Splat.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.AppContext.dll
@@ -166,8 +175,8 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Text.Encoding.CodePages.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Text.Encoding.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Text.Encoding.Extensions.dll
-C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Text.Encodings.Web.dll
-C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Text.Json.dll
+C:\Users\mitte\.nuget\packages\system.text.encodings.web\7.0.0\lib\net6.0\System.Text.Encodings.Web.dll
+C:\Users\mitte\.nuget\packages\system.text.json\7.0.3\lib\net6.0\System.Text.Json.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Text.RegularExpressions.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Threading.Channels.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Threading.dll
