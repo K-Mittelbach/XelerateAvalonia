@@ -3,81 +3,86 @@ using ReactiveUI;
 using System;
 using System.Reactive;
 using System.Windows.Input;
-using XelerateAvalonia.Auxilaries;
 using XelerateAvalonia.Views;
 
 namespace XelerateAvalonia.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ReactiveObject, IActivatableViewModel, IScreen
     {
         
-        private ViewModelBase _navigationContent;
-        private INavigationService _navigationService;
-        public ICommand HomeNavigationCommand { get; }
-        public ICommand ImportNavigationCommand { get; }
-        public ICommand PlottingNavigationCommand { get; }
-        public ICommand ImageNavigationCommand { get; }
-        public ICommand DatabaseNavigationCommand { get; }
+        public RoutingState Router { get; } = new RoutingState();
 
-        public ICommand SettingsNavigationCommand { get; }
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
-        public ViewModelBase NavigationContent
+        // The command that navigates a user to first view model.
+        public ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoImage { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoImport { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoPlotting { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoSettings { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoDatabase { get; }
+
+
+
+
+        public MainWindowViewModel()
         {
-            get => this._navigationContent;
-            set => this.RaiseAndSetIfChanged(ref this._navigationContent, value);
+            var startingViewModel = new HomePageViewModel(this);
+            Router.Navigate.Execute(startingViewModel);
+
+            GoHome = ReactiveCommand.CreateFromObservable(
+                () =>
+                {
+                    Console.WriteLine("Navigating to Home Page View");
+                    return Router.Navigate.Execute(new HomePageViewModel(this));
+                }
+            );
+
+            GoImage = ReactiveCommand.CreateFromObservable(
+                () =>
+                {
+                    Console.WriteLine("Navigating to Image View");
+                    return Router.Navigate.Execute(new ImagePageViewModel(this));
+                }
+            );
+
+            GoImport = ReactiveCommand.CreateFromObservable(
+                () =>
+                {
+                    Console.WriteLine("Navigating to Import View");
+                    return Router.Navigate.Execute(new ImportPageViewModel(this));
+                }
+            );
+
+            // Add similar Console.WriteLine statements for other navigation commands...
+
+            GoSettings = ReactiveCommand.CreateFromObservable(
+                () =>
+                {
+                    Console.WriteLine("Navigating to Settings View");
+                    return Router.Navigate.Execute(new SettingsPageViewModel(this));
+                }
+            );
+
+            GoDatabase = ReactiveCommand.CreateFromObservable(
+                () =>
+                {
+                    Console.WriteLine("Navigating to Database View");
+                    return Router.Navigate.Execute(new DatabasePageViewModel(this));
+                }
+            );
+
+            GoPlotting = ReactiveCommand.CreateFromObservable(
+                () =>
+                {
+                    Console.WriteLine("Navigating to Plotting View");
+                    return Router.Navigate.Execute(new PlottingPageViewModel(this));
+                }
+            );
+
+
+
         }
-
-        public MainWindowViewModel(INavigationService navigationService)
-        {
-
-            this._navigationService = navigationService;
-
-            this.HomeNavigationCommand = ReactiveCommand.Create(this.OnHomeNavigationClick);
-            this.ImportNavigationCommand = ReactiveCommand.Create(this.OnImportNavigationClick);
-            this.PlottingNavigationCommand = ReactiveCommand.Create(this.OnPlottingNavigationClick);
-            this.ImageNavigationCommand = ReactiveCommand.Create(this.OnImageNavigationClick);
-            this.DatabaseNavigationCommand = ReactiveCommand.Create(this.OnDatabaseNavigationClick);
-            this.SettingsNavigationCommand = ReactiveCommand.Create(this.OnSettingsNavigationClick);
-
-            this._navigationService
-               .OnNavigation
-               .Subscribe(x => this.NavigationContent = x);
-
-            this.OnHomeNavigationClick();
-        }
-
-        private void OnHomeNavigationClick()
-        {
-            this._navigationService.Navigate("HomePageViewModel");
-        }
-
-        private void OnImportNavigationClick()
-        {
-            Console.WriteLine("did it");
-            this._navigationService.Navigate("ImportPageViewModel");
-        }
-
-        private void OnPlottingNavigationClick()
-        {
-            this._navigationService.Navigate("PlottingPageViewModel");
-        }
-
-        private void OnImageNavigationClick()
-        {
-            this._navigationService.Navigate("ImagePageViewModel");
-        }
-        private void OnDatabaseNavigationClick()
-        {
-            this._navigationService.Navigate("DatabasePageViewModel");
-        }
-
-        private void OnSettingsNavigationClick()
-        {
-            this._navigationService.Navigate("SettingsPageViewModel");
-        }
-
-
-
 
 
     }

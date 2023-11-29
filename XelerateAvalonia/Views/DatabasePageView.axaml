@@ -1,21 +1,99 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:CompileBindings="True"
-             x:Class="XelerateAvalonia.Views.DatabasePageView">
+			 xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
+			 xmlns:rxui="http://reactiveui.net"
+			 x:DataType="vm:DatabasePageViewModel"
+             x:Class="XelerateAvalonia.Views.DatabasePageView"
+			 xmlns:i="https://github.com/projektanker/icons.avalonia">
 
 
-	<StackPanel VerticalAlignment="Center" Spacing="5">
-		<TextBlock VerticalAlignment="Center"
-			       TextAlignment="Center"
-			       FontSize="16"
-			       FontWeight="SemiBold"
-                   TextWrapping="Wrap" />
-		<TextBlock VerticalAlignment="Center"
-			       TextAlignment="Center"
-			       FontSize="16"
-                   TextWrapping="Wrap" />
-	</StackPanel>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="75"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="779*"/>
+			<ColumnDefinition Width="51*"/>
+			<ColumnDefinition Width="20"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="20"/>
+		</Grid.RowDefinitions>
+
+
+		<Grid  Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Background="#0A0D0F">
+			<Border Margin="80 10 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"   Height="80" Width="1580">
+                <StackPanel Orientation="Vertical">
+                             <TextBlock Padding="20"  Width="380"  HorizontalAlignment="Left" FontWeight="Bold"  Foreground="White"  FontSize="23" Text="{Binding UrlPathSegment}" />
+					<Border Margin="20 0 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"  Background="Gray"  Height="2" Width="1320"/>
+				</StackPanel>
+			</Border>
+
+			<StackPanel Height="918" Width="75">
+				
+				<Button  Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 60 5 20"  Command="{Binding GoHome}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-home" Foreground="White" FontSize="17" />
+
+
+					</StackPanel>
+				</Button>
+
+				<Button   Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoImport}" >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-file" Foreground="White" FontSize="17" />
+
+					</StackPanel>
+				</Button>
+
+				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoPlotting}" >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-chart-line" Foreground="White" FontSize="17" />
+
+					</StackPanel>
+				</ToggleButton>
+
+				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoImage}"	  >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-image" Foreground="White" FontSize="17" />
+
+					</StackPanel>
+				</ToggleButton>
+				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" IsEnabled="false"	>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-database" Foreground="White" FontSize="17" />
+
+					</StackPanel>
+				</ToggleButton>
+
+
+
+
+				<Border Background="white" Padding = "2" Opacity="453" Margin="10 230 10 0" />
+				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20" Command="{Binding GoSettings}"	 >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-cog" Foreground="White" FontSize="17" />
+
+					</StackPanel>
+				</ToggleButton>
+
+			</StackPanel>
+			<rxui:RoutedViewHost Name="DatabasePageViewHost" Grid.Row="0" Router="{Binding Router}" >
+				<rxui:RoutedViewHost.DefaultContent>
+					<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+					</StackPanel>
+				</rxui:RoutedViewHost.DefaultContent>
+			</rxui:RoutedViewHost>
+
+
+		</Grid>
+
+	</Grid>
+
 </UserControl>

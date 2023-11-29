@@ -1,18 +1,19 @@
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
+using ReactiveUI;
 using System;
+using XelerateAvalonia.ViewModels;
 
 namespace XelerateAvalonia.Views
 {
-    public partial class ImagePageView : UserControl
+    public partial class ImagePageView : ReactiveUserControl<ImagePageViewModel>
     {
         public ImagePageView()
         {
-            InitializeComponent();
+            this.WhenActivated(disposables => { });
+            AvaloniaXamlLoader.Load(this);
         }
 
-        private void InitializeComponent()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

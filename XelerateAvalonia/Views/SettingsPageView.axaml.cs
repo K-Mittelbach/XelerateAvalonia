@@ -1,18 +1,19 @@
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
+using ReactiveUI;
 using System;
+using XelerateAvalonia.ViewModels;
 
 namespace XelerateAvalonia.Views
 {
-    public partial class SettingsPageView : UserControl
+    public partial class SettingsPageView : ReactiveUserControl<SettingsPageViewModel>
     {
         public SettingsPageView()
         {
-            InitializeComponent();
+            this.WhenActivated(disposables => { });
+            AvaloniaXamlLoader.Load(this);
         }
 
-        private void InitializeComponent()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

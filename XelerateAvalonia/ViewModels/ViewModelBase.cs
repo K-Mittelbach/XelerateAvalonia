@@ -2,7 +2,9 @@
 
 namespace XelerateAvalonia.ViewModels
 {
-    public class ViewModelBase : ReactiveObject
+    public class ViewModelBase : ReactiveObject, IActivatableViewModel
     {
+        public ViewModelActivator Activator { get; } = new ViewModelActivator();
+
     }
 }

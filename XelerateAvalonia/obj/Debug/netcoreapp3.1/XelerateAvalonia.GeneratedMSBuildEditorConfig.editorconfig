@@ -1,0 +1,32 @@
+is_global = true
+build_property.AvaloniaNameGeneratorIsEnabled = true
+build_property.AvaloniaNameGeneratorBehavior = InitializeComponent
+build_property.AvaloniaNameGeneratorDefaultFieldModifier = internal
+build_property.AvaloniaNameGeneratorFilterByPath = *
+build_property.AvaloniaNameGeneratorFilterByNamespace = *
+build_property.RootNamespace = XelerateAvalonia
+build_property.ProjectDir = C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/App.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/DatabasePageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/HomePageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/ImagePageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/ImportPageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/PlottingPageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/SettingsPageView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
