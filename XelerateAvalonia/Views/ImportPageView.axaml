@@ -1,8 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
-			  xmlns:rxui="http://reactiveui.net"
+			 xmlns:rxui="http://reactiveui.net"
 			 x:DataType="vm:ImportPageViewModel"
+			 d:DesignWidth="1330"
+			 d:DesignHeight="750"
              x:Class="XelerateAvalonia.Views.ImportPageView"
 			 xmlns:i="https://github.com/projektanker/icons.avalonia">
 
@@ -46,7 +49,7 @@
 								<i:Icon Value="fa-circle-info" Margin="2 0 0 0" Foreground="#5194F8" FontSize="12"/>
 							</StackPanel>
 						</StackPanel>
-						<Button Margin="80 0 0 0" VerticalAlignment="Center"  CornerRadius="5" Background="LightBlue" BorderThickness="2" BorderBrush="Blue" Width="250" Height="35"> 
+						<Button Margin="80 0 0 0" VerticalAlignment="Center"  CornerRadius="5" Background="LightBlue" BorderThickness="2" BorderBrush="Blue" Width="250" Height="35"  Click="OpenFileButton_Clicked"> 
 							<StackPanel Orientation="Horizontal">
 								<i:Icon Value="fa-upload" Margin="20 0 0 0"  Foreground="Blue" VerticalAlignment="Center" FontSize="18" />
 								<TextBlock  Margin="20 0 0 0" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="Black" FontSize="14" Text="Upload manually"/>
@@ -54,15 +57,15 @@
 						</Button>
 					</StackPanel>
 				</Border>
-				<Border Margin="0 10 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="450" Width="1200">
+				<Border Margin="0 10 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="500" Width="1200">
 					<StackPanel Orientation="Vertical">
 						<StackPanel Orientation="Horizontal" Width="1200" >
 							<StackPanel Orientation="Horizontal">
-								<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Text="Uploaded files" FontSize="16" />
-								<TextBlock Margin="3 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Text="(1)" FontSize="16" Foreground="#5194F8"/>
+								<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Uploaded files" FontSize="16" />
+								<TextBlock Margin="3 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Text="(3)" FontSize="16" Foreground="#5194F8"/>
 							</StackPanel>
 							<StackPanel Orientation="Horizontal">
-								<TextBlock Margin="800 20 0 0" HorizontalAlignment="Right" FontWeight="SemiBold" Text="Sort by :" FontSize="16" />
+								<TextBlock Margin="800 20 0 0" HorizontalAlignment="Right" FontWeight="SemiBold"  Foreground="white" Text="Sort by :" FontSize="16" />
 								<ComboBox Margin="3 15 0 0" BorderThickness="0" VerticalAlignment="Center" Background="transparent" Foreground="#5194F8" FontWeight="SemiBold" FontSize="16" SelectedIndex="0">
 									<ComboBoxItem>Recently uploaded</ComboBoxItem>
 									<ComboBoxItem>Size</ComboBoxItem>
@@ -71,10 +74,56 @@
 								</ComboBox>
 							</StackPanel>
 						</StackPanel>
-						<Border Margin="20 30 20 3" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="65" Width="1160"/>
-						<Border Margin="20 20 20 0" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="65" Width="1160"/>
-						<Border Margin="20 20 20 0" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="65" Width="1160"/>
-						<Border Margin="20 20 20 0" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="65" Width="1160"/>
+						<StackPanel>
+							<TextBlock x:Name="CurrentFile" Text="{Binding CurrentFileName, Mode=TwoWay}" Foreground="#1D1D1D" />
+							<ProgressBar x:Name="FileConversion" Margin="20 0 20 10" Minimum="0" Maximum="100"  Height="10" Background="{Binding ProgressBarBackground, Mode=TwoWay}" Value="{Binding ProgressValue}" />
+						</StackPanel>	
+						<ItemsRepeater ItemsSource="{Binding FileList}">
+							<ItemsRepeater.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="20 10 30 3" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="80" Width="1160">
+										<StackPanel Orientation="Horizontal" Margin="50 0 0 0" VerticalAlignment="Center"  >
+											<i:Icon Value="fa-file-excel" Foreground="white"  VerticalAlignment="Center" FontSize="40" Margin="0 0 50 0"/>
+											<StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="100" >
+												<TextBlock Text="File name:" Foreground="White" />
+												<TextBlock Text="Device used:" Foreground="White" Margin="0 15 0 0"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" Width="100"  VerticalAlignment="Center" >
+												<TextBox Text="{Binding Name}"  Foreground="White" Height="5"/>
+												<TextBox Text="{Binding DeviceUsed}"  Foreground="White" Margin="0 5 0 0"/>
+											</StackPanel>
+											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 25 0"/>
+											<StackPanel Orientation="Vertical"  Width="100" VerticalAlignment="Center">
+												<TextBlock Text="Input source:" Foreground="White"/>
+												<TextBlock Text="Measured time:" Foreground="White" Margin="0 15 0 0"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" Width="100" Margin="15 0 15 0" VerticalAlignment="Center" >
+												<TextBox Text="{Binding InputSource}"  Foreground="White" Height="5"/>
+												<TextBox Text="{Binding MeasuredTime}" Foreground="White" Margin="0 5 0 0"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical"  Width="50" VerticalAlignment="Center">
+												<TextBlock Text="Voltage:" Foreground="White"/>
+												<TextBlock Text="Current:" Foreground="White" Margin="0 15 0 0"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" MinWidth="100" Margin="15 0 0 0" VerticalAlignment="Center" >
+												<TextBox Text="{Binding Voltage}"  Foreground="White" Height="5"/>
+												<TextBox Text="{Binding Current}"  Foreground="White" Margin="0 5 0 0"/>
+											</StackPanel>
+											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 10 0"/>
+											<StackPanel Orientation="Vertical"  Width="75" Margin="15 0 0 0" VerticalAlignment="Center">
+												<TextBlock Text="Size:" Foreground="White"/>
+												<TextBlock Text="Uploaded:" Foreground="White" Margin="0 15 0 0"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" MaxWidth="100" Margin="0 0 30 0" VerticalAlignment="Center" >
+												<TextBox  Text="{Binding Size}"  Foreground="White" Height="5"/>
+												<TextBox  Text="{Binding Uploaded}" Foreground="White" Margin="0 5 0 0"/>
+											</StackPanel>
+											<TextBlock Text="Edit" Foreground="#5194F8" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Center"/>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsRepeater.ItemTemplate>
+						</ItemsRepeater>
 					</StackPanel>
 
 				</Border>
@@ -83,52 +132,41 @@
 
 			<!--NAVBAR Section-->
 			<StackPanel Height="918" Width="75">
-			
 				<Button  Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 60 5 20"  Command="{Binding GoHome}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-home" Foreground="White" FontSize="17" />
-
-
 					</StackPanel>
 				</Button>
 
 				<Button   Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" IsEnabled="false"	 >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-file" Foreground="White" FontSize="17" />
-
 					</StackPanel>
 				</Button>
 
-				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoPlotting}" >
+				<Button  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoPlotting}" >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-chart-line" Foreground="White" FontSize="17" />
-
 					</StackPanel>
-				</ToggleButton>
+				</Button>
 
-				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoImage}"	  >
+				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoImage}"	  >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-image" Foreground="White" FontSize="17" />
-
 					</StackPanel>
-				</ToggleButton>
-				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoDatabase}"	>
+				</Button>
+				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoDatabase}"	>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-database" Foreground="White" FontSize="17" />
-
 					</StackPanel>
-				</ToggleButton>
-
-
-
-
+				</Button>
+				
 				<Border Background="white" Padding = "2" Opacity="453" Margin="10 230 10 0" />
-				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20" Command="{Binding GoSettings}"	 >
+				<Button  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20" Command="{Binding GoSettings}"	 >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-cog" Foreground="White" FontSize="17" />
-
 					</StackPanel>
-				</ToggleButton>
+				</Button>
 
 			</StackPanel>
 			<rxui:RoutedViewHost Name="ImportPageViewHost" Grid.Row="0" Router="{Binding Router}" >

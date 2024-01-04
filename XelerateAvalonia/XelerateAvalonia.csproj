@@ -9,11 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Auxilaries\" />
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
+  
   <ItemGroup>
     <None Remove="Assets\Xelerate.png" />
   </ItemGroup>
@@ -21,12 +20,16 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.2" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.2" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.2" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.2" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.2" />
+    <PackageReference Include="ExcelDataReader" Version="3.6.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="8.3.0" />
@@ -35,5 +38,20 @@
     <PackageReference Include="Semi.Avalonia.ColorPicker" Version="11.0.1" />
     <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.0.1" />
     <PackageReference Include="Semi.Avalonia.TreeDataGrid" Version="11.0.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Compile Update="Views\FileCreationPageView.axaml.cs">
+      <DependentUpon>FileCreationPageView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\StartPageView.axaml.cs">
+      <DependentUpon>StartPageView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>

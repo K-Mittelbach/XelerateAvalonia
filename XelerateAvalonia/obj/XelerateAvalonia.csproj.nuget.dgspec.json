@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[11.0.2, )"
             },
+            "Avalonia.Controls.ItemsRepeater": {
+              "target": "Package",
+              "version": "[11.0.2, )"
+            },
             "Avalonia.Desktop": {
               "target": "Package",
               "version": "[11.0.2, )"
@@ -67,6 +71,18 @@
             "Avalonia.Themes.Fluent": {
               "target": "Package",
               "version": "[11.0.2, )"
+            },
+            "ExcelDataReader": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
+            "ExcelDataReader.DataSet": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
+            "Microsoft.Data.Sqlite.Core": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             },
             "Microsoft.Extensions.DependencyInjection": {
               "target": "Package",

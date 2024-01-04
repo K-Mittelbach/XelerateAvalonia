@@ -15,5 +15,7 @@ namespace XelerateAvalonia.Views
             AvaloniaXamlLoader.Load(this);
         }
 
+
+
     }
 }

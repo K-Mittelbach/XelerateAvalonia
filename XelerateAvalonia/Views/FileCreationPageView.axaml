@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:rxui="http://reactiveui.net"
+			 x:DataType="vm:FileCreationPageViewModel"
+			 d:DesignWidth="1330"
+			 d:DesignHeight="750"
+             x:Class="XelerateAvalonia.Views.FileCreationPageView"
+			 xmlns:i="https://github.com/projektanker/icons.avalonia">
+
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="75"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="779*"/>
+			<ColumnDefinition Width="51*"/>
+			<ColumnDefinition Width="20"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="20"/>
+		</Grid.RowDefinitions>
+
+
+		
+		<Grid  Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" >
+			<Border Margin="20 10 0 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"   Height="80" Width="1400">
+				<StackPanel Orientation="Vertical">
+					<TextBlock Padding="20"  Width="380"  HorizontalAlignment="Left" FontWeight="Bold"  Foreground="White"  FontSize="25" Text="{Binding UrlPathSegment}" />
+					<Border Margin="20 0 0 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"  Background="Gray"  Height="2" Width="1260"/>
+				</StackPanel>
+			</Border>
+			<StackPanel Margin="40 100 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="600" Orientation="Vertical">
+				<TextBlock Margin="0 10 50 20" Text="Xelerate Project" FontWeight="SemiBold"  FontSize="20"/>
+				<TextBlock Margin="0 10 10 5" Text="Project Name" FontWeight="SemiBold"  FontSize="15"/>
+				<TextBox x:Name="ProjectName" Text="{Binding ProjectName}" Margin="0 0 0 20"  Width="750" HorizontalAlignment="Left"/>
+				<TextBlock Margin="0 10 10 5" Text="Location" FontWeight="SemiBold"  FontSize="15"/>
+				<StackPanel Orientation="Horizontal">
+					<TextBox x:Name="Location" Margin="0 0 0 20" Text="{Binding LocationPath}"  Width="750" HorizontalAlignment="Left"/>
+					<Button  Margin="15 0 0 20" VerticalContentAlignment="Center"   HorizontalContentAlignment="Center" Content="..." Height="30" Width="40" Click="OpenFileButton_Clicked"/>
+					
+				</StackPanel>
+
+				<StackPanel Orientation="Horizontal">
+					<TextBlock FontWeight="SemiBold" FontSize="13" Foreground="Gray" Text="Your Project will be stored in: "/>
+					<TextBlock FontWeight="SemiBold" FontSize="13" Foreground="Gray">
+						<TextBlock.Text>
+							<MultiBinding StringFormat="{}{0}\{1}">
+								<Binding ElementName="Location" Path="Text"/>
+								<Binding ElementName="ProjectName" Path="Text"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+					
+				</StackPanel>
+			
+				
+			</StackPanel>
+			
+			<StackPanel Margin="1100 725 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="250" Orientation="Vertical">
+
+
+				<StackPanel Orientation="Horizontal">
+					<Button x:Name="BackBtn" Width="100"  Content="Back" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" Height="35" Margin="0 2 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131" Command="{Binding GoStart}"/>
+					<Button x:Name="CreateBtn" Width="100"  Content="Create" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" Height="35" Margin="10 2 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131" Click="CreateProjectFolderAsync" Command="{Binding CreatedProject}"/>
+				</StackPanel>
+				
+			</StackPanel>
+			
+
+
+
+
+
+
+		</Grid>
+		
+		
+
+
+	
+		
+</Grid>
+
+</UserControl>

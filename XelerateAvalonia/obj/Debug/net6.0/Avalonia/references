@@ -2,6 +2,7 @@ C:\Users\mitte\.nuget\packages\avalonia\11.0.2\ref\net6.0\Avalonia.Base.dll
 C:\Users\mitte\.nuget\packages\avalonia.controls.colorpicker\11.0.2\lib\net6.0\Avalonia.Controls.ColorPicker.dll
 C:\Users\mitte\.nuget\packages\avalonia.controls.datagrid\11.0.2\lib\net6.0\Avalonia.Controls.DataGrid.dll
 C:\Users\mitte\.nuget\packages\avalonia\11.0.2\ref\net6.0\Avalonia.Controls.dll
+C:\Users\mitte\.nuget\packages\avalonia.controls.itemsrepeater\11.0.2\lib\net6.0\Avalonia.Controls.ItemsRepeater.dll
 C:\Users\mitte\.nuget\packages\avalonia.controls.treedatagrid\11.0.0\lib\net5.0\Avalonia.Controls.TreeDataGrid.dll
 C:\Users\mitte\.nuget\packages\avalonia\11.0.2\ref\net6.0\Avalonia.DesignerSupport.dll
 C:\Users\mitte\.nuget\packages\avalonia.desktop\11.0.2\lib\net6.0\Avalonia.Desktop.dll
@@ -24,6 +25,8 @@ C:\Users\mitte\.nuget\packages\avalonia.themes.simple\11.0.2\lib\net6.0\Avalonia
 C:\Users\mitte\.nuget\packages\avalonia.win32\11.0.2\lib\net6.0\Avalonia.Win32.dll
 C:\Users\mitte\.nuget\packages\avalonia.x11\11.0.2\lib\net6.0\Avalonia.X11.dll
 C:\Users\mitte\.nuget\packages\dynamicdata\7.9.5\lib\net6.0\DynamicData.dll
+C:\Users\mitte\.nuget\packages\exceldatareader.dataset\3.6.0\lib\netstandard2.0\ExcelDataReader.DataSet.dll
+C:\Users\mitte\.nuget\packages\exceldatareader\3.6.0\lib\netstandard2.0\ExcelDataReader.dll
 C:\Users\mitte\.nuget\packages\harfbuzzsharp\2.8.2.3\lib\net6.0\HarfBuzzSharp.dll
 C:\Users\mitte\.nuget\packages\microcom.runtime\0.11.0\lib\net5.0\MicroCom.Runtime.dll
 C:\Users\mitte\.nuget\packages\microsoft.codeanalysis.csharp\3.8.0\lib\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.dll
@@ -31,6 +34,7 @@ C:\Users\mitte\.nuget\packages\microsoft.codeanalysis.csharp.scripting\3.8.0\lib
 C:\Users\mitte\.nuget\packages\microsoft.codeanalysis.common\3.8.0\lib\netcoreapp3.1\Microsoft.CodeAnalysis.dll
 C:\Users\mitte\.nuget\packages\microsoft.codeanalysis.scripting.common\3.8.0\lib\netcoreapp3.1\Microsoft.CodeAnalysis.Scripting.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.CSharp.dll
+C:\Users\mitte\.nuget\packages\microsoft.data.sqlite.core\8.0.0\lib\net6.0\Microsoft.Data.Sqlite.dll
 C:\Users\mitte\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0\lib\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\mitte\.nuget\packages\microsoft.extensions.dependencyinjection\8.0.0\lib\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.VisualBasic.Core.dll
@@ -49,6 +53,7 @@ C:\Users\mitte\.nuget\packages\semi.avalonia\11.0.1\lib\net6.0\Semi.Avalonia.dll
 C:\Users\mitte\.nuget\packages\semi.avalonia.treedatagrid\11.0.1\lib\net6.0\Semi.Avalonia.TreeDataGrid.dll
 C:\Users\mitte\.nuget\packages\skiasharp\2.88.3\lib\net6.0\SkiaSharp.dll
 C:\Users\mitte\.nuget\packages\splat\14.4.1\lib\net6.0\Splat.dll
+C:\Users\mitte\.nuget\packages\sqlitepclraw.core\2.1.6\lib\netstandard2.0\SQLitePCLRaw.core.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.AppContext.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Buffers.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Collections.Concurrent.dll

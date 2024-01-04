@@ -4,6 +4,8 @@ using System.Reactive;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ReactiveUI;
+using XelerateAvalonia.Models;
+using XelerateAvalonia.Services;
 
 namespace XelerateAvalonia.ViewModels
 {
@@ -14,6 +16,10 @@ namespace XelerateAvalonia.ViewModels
 
         // Unique identifier for the routable view model.
         public string UrlPathSegment { get; } = "Database";
+
+        private readonly ISessionContext _sessionContext;
+
+       
 
         public ReactiveCommand<Unit, IRoutableViewModel> GoImport { get; }
 
@@ -27,43 +33,47 @@ namespace XelerateAvalonia.ViewModels
 
         public RoutingState Router { get; } = new RoutingState();
 
-        public DatabasePageViewModel(IScreen screen)
+
+
+        public DatabasePageViewModel(IScreen screen, ISessionContext sessionContext)
         {
             HostScreen = screen;
+            _sessionContext = sessionContext;
+           
 
             // Define and initialize the GoImport command in the constructor
             GoImport = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    return HostScreen.Router.NavigateAndReset.Execute(new ImportPageViewModel(HostScreen));
+                    return HostScreen.Router.NavigateAndReset.Execute(new ImportPageViewModel(HostScreen,sessionContext));
                 }
             );
             // Define and initialize the GoImport command in the constructor
             GoHome = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    return HostScreen.Router.NavigateAndReset.Execute(new HomePageViewModel(HostScreen));
+                    return HostScreen.Router.NavigateAndReset.Execute(new HomePageViewModel(HostScreen,sessionContext));
                 }
             );
             // Define and initialize the GoImport command in the constructor
             GoImage = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    return HostScreen.Router.NavigateAndReset.Execute(new ImagePageViewModel(HostScreen));
+                    return HostScreen.Router.NavigateAndReset.Execute(new ImagePageViewModel(HostScreen, sessionContext));
                 }
             );
             // Define and initialize the GoImport command in the constructor
             GoPlotting = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    return HostScreen.Router.NavigateAndReset.Execute(new PlottingPageViewModel(HostScreen));
+                    return HostScreen.Router.NavigateAndReset.Execute(new PlottingPageViewModel(HostScreen, sessionContext));
                 }
             );
             // Define and initialize the GoImport command in the constructor
             GoSettings = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    return HostScreen.Router.NavigateAndReset.Execute(new SettingsPageViewModel(HostScreen));
+                    return HostScreen.Router.NavigateAndReset.Execute(new SettingsPageViewModel(HostScreen, sessionContext));
                 }
             );
         }

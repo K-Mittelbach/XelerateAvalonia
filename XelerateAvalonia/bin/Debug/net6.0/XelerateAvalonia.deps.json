@@ -9,11 +9,15 @@
       "XelerateAvalonia/1.0.0": {
         "dependencies": {
           "Avalonia": "11.0.2",
+          "Avalonia.Controls.ItemsRepeater": "11.0.2",
           "Avalonia.Desktop": "11.0.2",
           "Avalonia.Diagnostics": "11.0.2",
           "Avalonia.Fonts.Inter": "11.0.2",
           "Avalonia.ReactiveUI": "11.0.2",
           "Avalonia.Themes.Fluent": "11.0.2",
+          "ExcelDataReader": "3.6.0",
+          "ExcelDataReader.DataSet": "3.6.0",
+          "Microsoft.Data.Sqlite.Core": "8.0.0",
           "Microsoft.Extensions.DependencyInjection": "8.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Projektanker.Icons.Avalonia": "8.3.0",
@@ -116,6 +120,17 @@
         },
         "runtime": {
           "lib/net6.0/Avalonia.Controls.DataGrid.dll": {
+            "assemblyVersion": "11.0.2.0",
+            "fileVersion": "11.0.2.0"
+          }
+        }
+      },
+      "Avalonia.Controls.ItemsRepeater/11.0.2": {
+        "dependencies": {
+          "Avalonia": "11.0.2"
+        },
+        "runtime": {
+          "lib/net6.0/Avalonia.Controls.ItemsRepeater.dll": {
             "assemblyVersion": "11.0.2.0",
             "fileVersion": "11.0.2.0"
           }
@@ -300,6 +315,25 @@
           "lib/net6.0/DynamicData.dll": {
             "assemblyVersion": "7.9.0.0",
             "fileVersion": "7.9.5.54039"
+          }
+        }
+      },
+      "ExcelDataReader/3.6.0": {
+        "runtime": {
+          "lib/netstandard2.0/ExcelDataReader.dll": {
+            "assemblyVersion": "3.6.0.0",
+            "fileVersion": "3.6.0.0"
+          }
+        }
+      },
+      "ExcelDataReader.DataSet/3.6.0": {
+        "dependencies": {
+          "ExcelDataReader": "3.6.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/ExcelDataReader.DataSet.dll": {
+            "assemblyVersion": "3.6.0.0",
+            "fileVersion": "3.6.0.0"
           }
         }
       },
@@ -617,6 +651,17 @@
           "System.Threading": "4.3.0"
         }
       },
+      "Microsoft.Data.Sqlite.Core/8.0.0": {
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.6"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.Data.Sqlite.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
       "Microsoft.Extensions.DependencyInjection/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0"
@@ -808,6 +853,17 @@
           "lib/net6.0/Splat.dll": {
             "assemblyVersion": "14.4.0.0",
             "fileVersion": "14.4.1.53869"
+          }
+        }
+      },
+      "SQLitePCLRaw.core/2.1.6": {
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {
+            "assemblyVersion": "2.1.6.2060",
+            "fileVersion": "2.1.6.2060"
           }
         }
       },
@@ -1150,6 +1206,13 @@
       "path": "avalonia.controls.datagrid/11.0.2",
       "hashPath": "avalonia.controls.datagrid.11.0.2.nupkg.sha512"
     },
+    "Avalonia.Controls.ItemsRepeater/11.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yWnt9NrvCH0+6Q9pdtKl4NDKEdpzgsZfb428fUTJbEaBklchAqkKzVaWG0VZu9va66eM3erK/GniEbgEn1Z1Bg==",
+      "path": "avalonia.controls.itemsrepeater/11.0.2",
+      "hashPath": "avalonia.controls.itemsrepeater.11.0.2.nupkg.sha512"
+    },
     "Avalonia.Controls.TreeDataGrid/11.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1248,6 +1311,20 @@
       "path": "dynamicdata/7.9.5",
       "hashPath": "dynamicdata.7.9.5.nupkg.sha512"
     },
+    "ExcelDataReader/3.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eXyxTwG7EEWpgQX3juZ2KcndqTqm/ydx9GXS2lUiMJU54U4h5eXdygRtVgINv0t60ezPWEb+lL7uM7Q+wm5BBA==",
+      "path": "exceldatareader/3.6.0",
+      "hashPath": "exceldatareader.3.6.0.nupkg.sha512"
+    },
+    "ExcelDataReader.DataSet/3.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-miW3sWmPXnLM38YadRIfnhL4W4QZajpS6Q/OqsOpFJU5ct8h+M/fMpbGMm5INtsMP0Y1k0WK0stIfSW3RP31Xg==",
+      "path": "exceldatareader.dataset/3.6.0",
+      "hashPath": "exceldatareader.dataset.3.6.0.nupkg.sha512"
+    },
     "HarfBuzzSharp/2.8.2.3": {
       "type": "package",
       "serviceable": true,
@@ -1331,6 +1408,13 @@
       "sha512": "sha512-P+MBhIM0YX+JqROuf7i306ZLJEjQYA9uUyRDE+OqwUI5sh41e2ZbPQV3LfAPh+29cmceE1pUffXsGfR4eMY3KA==",
       "path": "microsoft.csharp/4.3.0",
       "hashPath": "microsoft.csharp.4.3.0.nupkg.sha512"
+    },
+    "Microsoft.Data.Sqlite.Core/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pujbzfszX7jAl7oTbHhqx7pxd9jibeyHHl8zy1gd55XMaKWjDtc5XhhNYwQnrwWYCInNdVoArbaaAvLgW7TwuA==",
+      "path": "microsoft.data.sqlite.core/8.0.0",
+      "hashPath": "microsoft.data.sqlite.core.8.0.0.nupkg.sha512"
     },
     "Microsoft.Extensions.DependencyInjection/8.0.0": {
       "type": "package",
@@ -1457,6 +1541,13 @@
       "sha512": "sha512-Z1Mncnzm9pNIaIbZ/EWH6x5ESnKsmAvu8HP4StBRw+yhz0lzE7LCbt22TNTPaFrYLYbYCbGQIc/61yuSnpLidg==",
       "path": "splat/14.4.1",
       "hashPath": "splat.14.4.1.nupkg.sha512"
+    },
+    "SQLitePCLRaw.core/2.1.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wO6v9GeMx9CUngAet8hbO7xdm+M42p1XeJq47ogyRoYSvNSp0NGLI+MgC0bhrMk9C17MTVFlLiN6ylyExLCc5w==",
+      "path": "sqlitepclraw.core/2.1.6",
+      "hashPath": "sqlitepclraw.core.2.1.6.nupkg.sha512"
     },
     "System.Collections/4.3.0": {
       "type": "package",

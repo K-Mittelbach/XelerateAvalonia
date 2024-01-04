@@ -3,6 +3,8 @@ using ReactiveUI;
 using System;
 using System.Reactive;
 using System.Windows.Input;
+using XelerateAvalonia.Models;
+using XelerateAvalonia.Services;
 using XelerateAvalonia.Views;
 
 namespace XelerateAvalonia.ViewModels
@@ -11,6 +13,8 @@ namespace XelerateAvalonia.ViewModels
     {
         
         public RoutingState Router { get; } = new RoutingState();
+
+        public ISessionContext SessionContext { get; set; } = new SessionContext(); // Initialize SessionContext
 
         public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
@@ -27,14 +31,16 @@ namespace XelerateAvalonia.ViewModels
 
         public MainWindowViewModel()
         {
-            var startingViewModel = new HomePageViewModel(this);
+            
+            
+            var startingViewModel = new StartPageViewModel(this, SessionContext);
             Router.Navigate.Execute(startingViewModel);
 
             GoHome = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
                     Console.WriteLine("Navigating to Home Page View");
-                    return Router.Navigate.Execute(new HomePageViewModel(this));
+                    return Router.Navigate.Execute(new HomePageViewModel(this,SessionContext));
                 }
             );
 
@@ -42,7 +48,7 @@ namespace XelerateAvalonia.ViewModels
                 () =>
                 {
                     Console.WriteLine("Navigating to Image View");
-                    return Router.Navigate.Execute(new ImagePageViewModel(this));
+                    return Router.Navigate.Execute(new ImagePageViewModel(this, SessionContext));
                 }
             );
 
@@ -50,17 +56,15 @@ namespace XelerateAvalonia.ViewModels
                 () =>
                 {
                     Console.WriteLine("Navigating to Import View");
-                    return Router.Navigate.Execute(new ImportPageViewModel(this));
+                    return Router.Navigate.Execute(new ImportPageViewModel(this, SessionContext));
                 }
             );
-
-            // Add similar Console.WriteLine statements for other navigation commands...
 
             GoSettings = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
                     Console.WriteLine("Navigating to Settings View");
-                    return Router.Navigate.Execute(new SettingsPageViewModel(this));
+                    return Router.Navigate.Execute(new SettingsPageViewModel(this, SessionContext));
                 }
             );
 
@@ -68,7 +72,7 @@ namespace XelerateAvalonia.ViewModels
                 () =>
                 {
                     Console.WriteLine("Navigating to Database View");
-                    return Router.Navigate.Execute(new DatabasePageViewModel(this));
+                    return Router.Navigate.Execute(new DatabasePageViewModel(this, SessionContext));
                 }
             );
 
@@ -76,7 +80,7 @@ namespace XelerateAvalonia.ViewModels
                 () =>
                 {
                     Console.WriteLine("Navigating to Plotting View");
-                    return Router.Navigate.Execute(new PlottingPageViewModel(this));
+                    return Router.Navigate.Execute(new PlottingPageViewModel(this, SessionContext));
                 }
             );
 

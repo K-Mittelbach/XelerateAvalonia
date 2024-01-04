@@ -146,3 +146,8 @@ C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Syst
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Microsoft.Data.Sqlite.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\SQLitePCLRaw.core.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\Avalonia.Controls.ItemsRepeater.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\ExcelDataReader.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\ExcelDataReader.DataSet.dll

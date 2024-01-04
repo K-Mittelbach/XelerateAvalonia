@@ -34,6 +34,8 @@ namespace XelerateAvalonia
             IconProvider.Current
             .Register<FontAwesomeIconProvider>();
 
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             return AppBuilder.Configure<App>()
                  .UsePlatformDetect()
                  .LogToTrace()

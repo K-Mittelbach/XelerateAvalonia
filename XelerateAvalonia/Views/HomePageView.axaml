@@ -1,8 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
+			  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			  xmlns:rxui="http://reactiveui.net"
 			 x:DataType="vm:HomePageViewModel"
+			  d:DesignWidth="1330"
+			 d:DesignHeight="750"
              x:Class="XelerateAvalonia.Views.HomePageView"
 			 xmlns:i="https://github.com/projektanker/icons.avalonia">
 
@@ -35,23 +38,24 @@
 			</StackPanel>
 		</Border>
 		<StackPanel Margin="100 100 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="600" Orientation="Vertical">
-			<TextBlock Margin="0 10 50 20" Text="Open recent" FontWeight="SemiBold"  FontSize="20"/>
-			<TextBox Margin="0 0 0 20" Watermark="Search recent" Width="550" HorizontalAlignment="Left"/>
-			<TreeView>
-				<TreeViewItem Header="This week" IsExpanded="True">
-					<TreeViewItem Header="This week"/>
-				</TreeViewItem>
-				<TreeViewItem Header="This month">
-					<TreeViewItem Header="This month"/>
-				</TreeViewItem>
-				<TreeViewItem Header="Older">
-					<TreeViewItem Header="Older"/>
-				</TreeViewItem>
-			</TreeView>
+			<StackPanel Margin="10 20 50 20" Orientation="Horizontal">
+				<TextBlock  Text="Current Project: " FontWeight="SemiBold" VerticalAlignment="Center"  FontSize="20"/>
+				<TextBlock  Margin="25 0 0 0"  Text="{Binding ProjectName}" Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+			</StackPanel>
+			<StackPanel Margin="10 20 50 20" Orientation="Horizontal">
+				<TextBlock Text="Project Path: " FontWeight="SemiBold"  VerticalAlignment="Center" FontSize="20"/>
+				<TextBlock  Margin="25 0 0 0" Text="{Binding ProjectPath}" Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+			</StackPanel>
+			<StackPanel Margin="10 20 50 20" Orientation="Horizontal">
+				<TextBlock Text="Created on: " FontWeight="SemiBold"  VerticalAlignment="Center" FontSize="20"/>
+				<TextBlock  Margin="25 0 0 0" Text="{Binding DateCreated}" Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+			</StackPanel>
+			
+			
 		</StackPanel>
 		<StackPanel Margin="750 100 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="250" Orientation="Vertical">
 			<TextBlock Margin="0 10 50 20" Text="Get started" FontWeight="SemiBold"  FontSize="20"/>
-			<Button Width="400" Height="75" Margin="0 0 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131">
+			<Button x:Name="CreateProjectBtn" Width="400" Height="75" Margin="0 0 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131" Command="{Binding GoFileCreation}">
 				<StackPanel Orientation="Horizontal">
 					<i:Icon Margin="20 5 0 10" FontSize="35" Value="fa-file-circle-plus "/>
 					<StackPanel Orientation="Vertical">
@@ -60,7 +64,7 @@
 					</StackPanel>
 				</StackPanel>
 			</Button>
-			<Button Width="400" Height="75" Margin="0 0 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131">
+			<Button x:Name="OpenProjectBtn" Width="400" Height="75" Margin="0 0 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131">
 				<StackPanel Orientation="Horizontal">
 					<i:Icon Margin="20 5 0 10" FontSize="35" Value="fa-folder-open "/>
 					<StackPanel Orientation="Vertical">
@@ -69,7 +73,7 @@
 					</StackPanel>
 				</StackPanel>
 			</Button>
-			<Button Width="400" Height="75" Margin="0 2 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131">
+			<Button x:Name="OpenManualBtn" Width="400" Height="75" Margin="0 2 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131">
 				<StackPanel Orientation="Horizontal">
 					<i:Icon Margin="20 5 0 10" FontSize="35" Value="fa-file-lines "/>
 					<StackPanel Orientation="Vertical">

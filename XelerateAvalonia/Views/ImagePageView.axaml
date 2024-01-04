@@ -30,8 +30,8 @@
 		<Grid  Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Background="#0A0D0F">
 			<Border Margin="80 10 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"   Height="80" Width="1580">
 				<StackPanel Orientation="Vertical">
-					<TextBlock Padding="20"  Width="380"  HorizontalAlignment="Left" FontWeight="Bold"  Foreground="White"  FontSize="23" Text="{Binding UrlPathSegment}" />
-					<Border Margin="20 0 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"  Background="Gray"  Height="2" Width="1320"/>
+					<TextBlock Padding="20"  Width="380"  HorizontalAlignment="Left" FontWeight="Bold"  Foreground="White"  FontSize="25" Text="{Binding UrlPathSegment}" />
+					<Border Margin="20 0 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"  Background="Gray"  Height="2" Width="1200"/>
 				</StackPanel>
 			</Border>
 			
