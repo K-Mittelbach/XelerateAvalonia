@@ -41,7 +41,7 @@ namespace XelerateAvalonia.Views
                 string localPath = new Uri(files[0].Path.ToString()).LocalPath;
 
                 //  Binding to Property in ViewModel neccessary
-                // Progressbar name property? + Starting file conversion
+                
                 CurrentFileTextBlock.Text = localPath;
                 
             }

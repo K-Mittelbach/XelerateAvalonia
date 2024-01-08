@@ -115,6 +115,14 @@
             "Semi.Avalonia.TreeDataGrid": {
               "target": "Package",
               "version": "[11.0.1, )"
+            },
+            "System.Data.SQLite.Core": {
+              "target": "Package",
+              "version": "[1.0.118, )"
+            },
+            "System.Data.SQLite.EF6": {
+              "target": "Package",
+              "version": "[1.0.118, )"
             }
           },
           "imports": [

@@ -13,9 +13,9 @@ namespace XelerateAvalonia.ViewModels
 
         public string UrlPathSegment { get; } = "Create a new project";
 
-        public string LocationPath { get; set; } = " ";
+        public string LocationPath { get; set; } = "";
 
-        public string ProjectName { get; set; } = " ";
+        public string ProjectName { get; set; } = "";
 
        
         public ReactiveCommand<Unit, IRoutableViewModel> GoStart { get; }

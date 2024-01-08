@@ -38,6 +38,8 @@
     <PackageReference Include="Semi.Avalonia.ColorPicker" Version="11.0.1" />
     <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.0.1" />
     <PackageReference Include="Semi.Avalonia.TreeDataGrid" Version="11.0.1" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.118" />
   </ItemGroup>
 
 

@@ -5,13 +5,13 @@ using System.IO;
 using System.Reactive;
 using ReactiveUI;
 using XelerateAvalonia.Models;
+using XelerateAvalonia.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using Splat;
-using XelerateAvalonia.Services;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
@@ -78,7 +78,13 @@ namespace XelerateAvalonia.ViewModels
             HostScreen = screen;
             _sessionContext = sessionContext;
 
+            string databaseFileName = "database.db";
+            string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
+
+            // Load Cores from database
+
             FileList = new ObservableCollection<CoreMeta>();
+            FileList = DBAccess.GetAllCoreMetas(databasePath);
 
             // Define and initialize the GoImport command in the constructor
             GoHome = ReactiveCommand.CreateFromObservable(
@@ -139,8 +145,7 @@ namespace XelerateAvalonia.ViewModels
             }
             else
             {
-                // File does not exist, handle accordingly (throw exception, return a default value, etc.)
-                // For now, returning -1 to indicate an invalid file path
+                //  returning -1 to indicate an invalid file path
                 return -1;
             }
         }
@@ -179,8 +184,10 @@ namespace XelerateAvalonia.ViewModels
 
         public object[] MetaCoreReader(DataSet dataset, float size)
         {
-            // Extracting Corename from the first row and first column
             string Corename = dataset.Tables[0].Rows[0][0].ToString(); // Assuming "Corename" is in the first row and first column
+
+            // Remove "_results" if it exists in Corename
+            Corename = Corename.Replace("_results", "");
 
             // Assuming the Settings row structure is consistent for Input Source, Measured Time, Voltage, and Current
             string settingsRow = dataset.Tables[0].Rows[1][0].ToString(); // Assuming Settings row is the second row and in the first column
@@ -212,7 +219,10 @@ namespace XelerateAvalonia.ViewModels
             ProgressBarBackground = "#313131";
             ProgressValue = "30";
 
-            var encodingUTF8 = System.Text.Encoding.UTF8;
+            await Task.Run(() =>
+            {
+
+                var encodingUTF8 = System.Text.Encoding.UTF8;
 
             // Get file size from CurrentFileName
             long sizeInBytes = GetFileSize(CurrentFileName);
@@ -222,6 +232,9 @@ namespace XelerateAvalonia.ViewModels
 
             // Create a list to store the extracted row values
             List<object[]> allRowValues = new List<object[]>();
+
+            DataSet CoreDataSet;
+
 
             // Take CurrentFileName and import this ExcelFile into a dataSet
             using (var stream = File.Open(CurrentFileName, FileMode.Open, FileAccess.Read))
@@ -235,43 +248,62 @@ namespace XelerateAvalonia.ViewModels
                 }))
                 {
                     // Read the entire content of the Excel file
-                    var result = reader.AsDataSet();
+                    CoreDataSet = reader.AsDataSet();
 
                     // Extract the data using MetaCoreReader and store row values
-                    for (int rowIdx = 2; rowIdx < result.Tables[0].Rows.Count; rowIdx++)
+                    for (int rowIdx = 2; rowIdx < CoreDataSet.Tables[0].Rows.Count; rowIdx++)
                     {
                         // Extract values from each row using MetaCoreReader
-                        object[] rowValues = MetaCoreReader(result, sizeInKb);
+                        object[] rowValues = MetaCoreReader(CoreDataSet, sizeInKb);
 
                         // Store the row values in the list
                         allRowValues.Add(rowValues);
                     }
-                    ProgressValue = "65";
-                    // Remove the first two rows from the dataset
-                    result.Tables[0].Rows.RemoveAt(0);
-                    result.Tables[0].Rows.RemoveAt(0);
+                    ProgressValue = "50";
+                    
                 }
             }
+
+            string databaseFileName = "database.db";
+            string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
+
+            string Core = Path.GetFileNameWithoutExtension(CurrentFileName);
+
+            DBAccess.SaveDataset(CoreDataSet, Core, databasePath);
+
 
             // After processing the entire file, create CoreMeta entry only once
             MetaCoreCreater(allRowValues);
 
-            ProgressValue = "85";
+            ProgressValue = "65";
 
-            // Upload both the meta data and dataset into db
 
-            // CONNECTION TO DB via "SessionContext.project path + database.db"
+                // Convert the first row of allRowValues to a CoreMeta object
+                if (allRowValues.Count > 0)
+            {
+                object[] firstRowValues = allRowValues[0];
+                string Corename = (string)firstRowValues[0];
+                UniqueId ID = new UniqueId(Guid.NewGuid());
+                string DeviceName = (string)firstRowValues[1];
+                string InputSource = (string)firstRowValues[2];
+                float MeasuredTime = (float)firstRowValues[3];
+                float Voltage = (float)firstRowValues[4];
+                float Current = (float)firstRowValues[5];
+                float size = (float)firstRowValues[6];
+                DateTime currentDateTime = DateTime.Now;
 
-            //1 check if metadataTable already exists --> add new row entry
+                CoreMeta newEntry = new CoreMeta(Corename, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, currentDateTime);
 
-            //2 add new table with dataset
+                // Save CoreMeta object to the database only once
+                DBAccess.SaveCoreMeta(newEntry, false, databasePath);
+            }
 
-            
-            // Wait for one second
-            await Task.Delay(1000);
+            ProgressValue = "80";
+                           
+            });
 
             ProgressValue = "0";
-            ProgressBarBackground = "#1D1D1D";
+            ProgressBarBackground = "#1D1D1D"; ;
         }
 
 
