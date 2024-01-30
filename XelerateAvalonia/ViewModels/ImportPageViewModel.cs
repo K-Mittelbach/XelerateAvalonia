@@ -6,21 +6,23 @@ using System.Reactive;
 using ReactiveUI;
 using XelerateAvalonia.Models;
 using XelerateAvalonia.Services;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Platform.Storage;
-using Avalonia.ReactiveUI;
-using Splat;
+
 using System.Threading.Tasks;
-using System.Windows.Input;
+
 using System.Collections.ObjectModel;
 using System.Xml;
-using System.Reflection.Metadata;
+
 using System.Reactive.Linq;
 using ExcelDataReader;
 using System.Text;
 using System.Linq;
+
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using Image = SixLabors.ImageSharp.Image;
+using System.Collections.Specialized;
+using SixLabors.ImageSharp.Formats.Png;
+using XelerateAvalonia.Auxiliaries;
 
 namespace XelerateAvalonia.ViewModels
 {
@@ -35,7 +37,14 @@ namespace XelerateAvalonia.ViewModels
             get => _fileList;
             set => this.RaiseAndSetIfChanged(ref _fileList, value);
         }
+        private ObservableCollection<ImageCore> _imageList;
+        public ObservableCollection<ImageCore> ImageList
+        {
+            get => _imageList;
+            set => this.RaiseAndSetIfChanged(ref _imageList, value);
+        }
 
+        
         // Unique identifier for the routable view model.
         public string UrlPathSegment { get; } = "File Import";
 
@@ -44,6 +53,20 @@ namespace XelerateAvalonia.ViewModels
         {
             get => _currentFileName;
             set => this.RaiseAndSetIfChanged(ref _currentFileName, value);
+        }
+
+        private string _uploadedFileCount;
+        public string UploadedFileCount
+        {
+            get => _uploadedFileCount   ;
+            set => this.RaiseAndSetIfChanged(ref _uploadedFileCount, value);
+        }
+
+        private string _currentImageName;
+        public string CurrentImageName
+        {
+            get => _currentImageName;
+            set => this.RaiseAndSetIfChanged(ref _currentImageName, value);
         }
 
         private string _progressBarBackground = "#1D1D1D";
@@ -60,6 +83,7 @@ namespace XelerateAvalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _progressValue, value);
         }
 
+        
         public ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoImage { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoPlotting { get; }
@@ -67,11 +91,9 @@ namespace XelerateAvalonia.ViewModels
         public ReactiveCommand<Unit, IRoutableViewModel> GoDatabase { get; }
 
        
-
         public RoutingState Router { get; } = new RoutingState();
 
         private readonly ISessionContext _sessionContext;
-
 
         public ImportPageViewModel(IScreen screen, ISessionContext sessionContext)
         {
@@ -85,6 +107,14 @@ namespace XelerateAvalonia.ViewModels
 
             FileList = new ObservableCollection<CoreMeta>();
             FileList = DBAccess.GetAllCoreMetas(databasePath);
+
+            ImageList = new ObservableCollection<ImageCore>();
+            ImageList = DBAccess.GetAllImages(databasePath);
+
+            UploadedFileCount = DBAccess.GetUploadedFileCounts(databasePath);
+
+            // Subscribe to CollectionChanged event of ImageList
+            ImageList.CollectionChanged += OnImageListChanged;
 
             // Define and initialize the GoImport command in the constructor
             GoHome = ReactiveCommand.CreateFromObservable(
@@ -126,6 +156,10 @@ namespace XelerateAvalonia.ViewModels
             this.WhenAnyValue(x => x.CurrentFileName)
                .Where(CurrentFileName => CurrentFileName != null)
                .Subscribe(_ => DatasetImport());
+
+            this.WhenAnyValue(x => x.CurrentImageName)
+               .Where(CurrentImageName => CurrentImageName != null)
+               .Subscribe(_ => ImageImport());
         }
 
         // Method to get the file size
@@ -149,6 +183,11 @@ namespace XelerateAvalonia.ViewModels
                 return -1;
             }
         }
+        private void OnImageListChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // Update UploadedFileCount whenever ImageList changes
+            UploadedFileCount = "(" + (ImageList.Count + FileList.Count).ToString() +")";
+        }
 
         // Method to create CoreMeta entry only once
         public void MetaCoreCreater(List<object[]> allRowValues)
@@ -171,10 +210,10 @@ namespace XelerateAvalonia.ViewModels
                 UniqueId ID = new UniqueId(Guid.NewGuid());
 
                 // Get current DateTime
-                DateTime currentDateTime = DateTime.Now;
+                DateOnly uploaded = DateOnly.FromDateTime(DateTime.Now);
 
                 // Create a new CoreMeta instance
-                CoreMeta newEntry = new CoreMeta(Corename, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, currentDateTime);
+                CoreMeta newEntry = new CoreMeta(Corename, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, uploaded);
 
                 // Add the new entry to the FileList or perform any other required operations
                 FileList.Add(newEntry);
@@ -184,6 +223,12 @@ namespace XelerateAvalonia.ViewModels
 
         public object[] MetaCoreReader(DataSet dataset, float size)
         {
+
+            // ------- WIP!
+            // Get Settings from document.txt
+
+
+
             string Corename = dataset.Tables[0].Rows[0][0].ToString(); // Assuming "Corename" is in the first row and first column
 
             // Remove "_results" if it exists in Corename
@@ -228,7 +273,7 @@ namespace XelerateAvalonia.ViewModels
             long sizeInBytes = GetFileSize(CurrentFileName);
 
             // Convert bytes to kilobytes (if needed)
-            float sizeInKb = sizeInBytes / 1024f;
+            float sizeInMb = (float)Math.Round(((sizeInBytes / 1024f) / 1000), 2);
 
             // Create a list to store the extracted row values
             List<object[]> allRowValues = new List<object[]>();
@@ -254,7 +299,7 @@ namespace XelerateAvalonia.ViewModels
                     for (int rowIdx = 2; rowIdx < CoreDataSet.Tables[0].Rows.Count; rowIdx++)
                     {
                         // Extract values from each row using MetaCoreReader
-                        object[] rowValues = MetaCoreReader(CoreDataSet, sizeInKb);
+                        object[] rowValues = MetaCoreReader(CoreDataSet, sizeInMb);
 
                         // Store the row values in the list
                         allRowValues.Add(rowValues);
@@ -290,20 +335,127 @@ namespace XelerateAvalonia.ViewModels
                 float Voltage = (float)firstRowValues[4];
                 float Current = (float)firstRowValues[5];
                 float size = (float)firstRowValues[6];
-                DateTime currentDateTime = DateTime.Now;
+                DateOnly currentDateTime = DateOnly.FromDateTime(DateTime.Now);
 
                 CoreMeta newEntry = new CoreMeta(Corename, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, currentDateTime);
 
                 // Save CoreMeta object to the database only once
                 DBAccess.SaveCoreMeta(newEntry, false, databasePath);
             }
-
-            ProgressValue = "80";
+                UploadedFileCount = DBAccess.GetUploadedFileCounts(databasePath);
+                ProgressValue = "80";
                            
             });
 
             ProgressValue = "0";
-            ProgressBarBackground = "#1D1D1D"; ;
+            ProgressBarBackground = "#1D1D1D";
+           
+        }
+
+        public async void ImageImport()
+        {
+            ProgressBarBackground = "#313131";
+            ProgressValue = "30";
+            string imageWidth;
+            string imageHeight;
+            string imagePixelSize;
+            string imageOrientation;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    // 1. Import the image and translate it into a byte array
+                    byte[] imageFile = ReadImageFile(CurrentImageName);
+
+                    // 2. Get other necessary information
+                    string name = Path.GetFileNameWithoutExtension(CurrentImageName);
+
+                    string imageType = Path.GetExtension(CurrentImageName);
+
+                    UniqueId id = new UniqueId(Guid.NewGuid().ToString());
+
+                    // Load the image directly from the file path
+                    using (Image<Rgba32> image = Image.Load<Rgba32>(CurrentImageName))
+                    {
+                        // Get the width and height
+                        int width = image.Width;
+                        int height = image.Height;
+
+                        imageWidth = width.ToString();
+                        imageHeight = height.ToString();
+
+                                             
+                        imagePixelSize = $"{width}x{height}";
+
+                        imageOrientation = width > height ? "Horizontal" : "Vertical";
+
+                        if (imageOrientation == "Horizontal")
+                        {
+                            ImageTransformations.RotateImageSharp(image);
+                            imageOrientation = "Vertical";
+                            imageFile = ImageTransformations.GetBytesFromImage(image);
+                        }
+                        
+                        
+                    }
+                    
+
+                    string imageROIStart = "0";
+                    string imageROIEnd = imageHeight;
+                                                           
+ 
+                    string imageMarginRight ="0";
+                    string imageMarginLeft = "0";
+
+                    long sizeInBytes = GetFileSize(CurrentImageName);
+                    float sizeInMb = (float)Math.Round(((sizeInBytes / 1024f) / 1000),2);
+                    DateOnly uploaded = DateOnly.FromDateTime(DateTime.Now);
+
+                    string databaseFileName = "database.db";
+                    string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
+
+                    // 3. Create a new Image entry
+                    ImageCore newEntryImage = new ImageCore(name, id, imageFile, imageType, imageWidth,imageHeight,imageROIStart,imageROIEnd, imagePixelSize,imageOrientation,imageMarginRight,imageMarginLeft, sizeInMb, uploaded, ImageList, databasePath);
+
+                    // 4. Save the Image entry to the database
+                    DBAccess.SaveImage(newEntryImage, false, databasePath);
+
+                     // Add the new entry to the FileList or perform any other required operations
+                    ImageList.Add(newEntryImage);
+                    UploadedFileCount = DBAccess.GetUploadedFileCounts(databasePath);
+
+                }
+                catch (Exception ex)
+                {
+                    // Handle exceptions, log errors, or display messages as needed
+                    Console.WriteLine($"Error importing image: {ex.Message}");
+                }
+                finally
+                {
+                    // Reset progress values after the operation
+                    ProgressValue = "0";
+                    ProgressBarBackground = "#1D1D1D";
+                }
+            });
+        }
+
+
+        //Reading an image file and converting it into a byte array, converting everyting to a .png for easier usage
+        private byte[] ReadImageFile(string filePath)
+        {
+            using (FileStream fileStream = File.OpenRead(filePath))
+            {
+                using (Image<Rgba32> image = (Image<Rgba32>)Image.Load(fileStream))
+                {
+                    // Convert the image to PNG format and return the byte array
+                    using (MemoryStream pngMemoryStream = new MemoryStream())
+                    {
+                        image.Save(pngMemoryStream, new PngEncoder());
+                        return pngMemoryStream.ToArray();
+                    }
+                }
+            }
         }
 
 

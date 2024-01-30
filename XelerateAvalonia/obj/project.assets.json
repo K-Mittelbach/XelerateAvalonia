@@ -383,6 +383,19 @@
           }
         }
       },
+      "BitMiracle.LibTiff.NET/2.4.649": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/BitMiracle.LibTiff.NET.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/BitMiracle.LibTiff.NET.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "DynamicData/7.9.5": {
         "type": "package",
         "dependencies": {
@@ -1051,6 +1064,22 @@
         },
         "runtime": {
           "lib/net6.0/Semi.Avalonia.TreeDataGrid.dll": {}
+        }
+      },
+      "SixLabors.ImageSharp/3.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/SixLabors.ImageSharp.props": {}
         }
       },
       "SkiaSharp/2.88.3": {
@@ -2088,6 +2117,21 @@
         "lib/netstandard2.0/Avalonia.X11.xml"
       ]
     },
+    "BitMiracle.LibTiff.NET/2.4.649": {
+      "sha512": "XCEdfCphKo0UAvSg1h/OzOFWtjkIGnPMAziYkNqV7NVrqb/tZJTBxJhxIEX7gpvQwg8GIRYt133SUncfkKfjLA==",
+      "type": "package",
+      "path": "bitmiracle.libtiff.net/2.4.649",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bitmiracle.libtiff.net.2.4.649.nupkg.sha512",
+        "bitmiracle.libtiff.net.nuspec",
+        "lib/net40/BitMiracle.LibTiff.NET.dll",
+        "lib/net40/BitMiracle.LibTiff.NET.xml",
+        "lib/netstandard2.0/BitMiracle.LibTiff.NET.dll",
+        "lib/netstandard2.0/BitMiracle.LibTiff.NET.xml"
+      ]
+    },
     "DynamicData/7.9.5": {
       "sha512": "xFwVha7o3qUtVYxco5p+7Urcztc/m1gmaEUxOG0i7LNe+vfCfyb0ECAsT2FLm3zOPHb0g8s9qVu5LfPKfRNVng==",
       "type": "package",
@@ -3100,6 +3144,22 @@
         "lib/net6.0/Semi.Avalonia.TreeDataGrid.dll",
         "semi.avalonia.treedatagrid.11.0.1.nupkg.sha512",
         "semi.avalonia.treedatagrid.nuspec"
+      ]
+    },
+    "SixLabors.ImageSharp/3.1.2": {
+      "sha512": "PYdR6GUI+gW6LBaAQKTik0Ai8oLpFAz3a/KrVusxoTg3kf7F3cuIqKMhJGsuQcmDHCF+iD81Pyn4cexyHrb1ZA==",
+      "type": "package",
+      "path": "sixlabors.imagesharp/3.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/SixLabors.ImageSharp.props",
+        "lib/net6.0/SixLabors.ImageSharp.dll",
+        "lib/net6.0/SixLabors.ImageSharp.xml",
+        "sixlabors.imagesharp.128.png",
+        "sixlabors.imagesharp.3.1.2.nupkg.sha512",
+        "sixlabors.imagesharp.nuspec"
       ]
     },
     "SkiaSharp/2.88.3": {
@@ -4220,6 +4280,7 @@
       "Avalonia.Fonts.Inter >= 11.0.2",
       "Avalonia.ReactiveUI >= 11.0.2",
       "Avalonia.Themes.Fluent >= 11.0.2",
+      "BitMiracle.LibTiff.NET >= 2.4.649",
       "ExcelDataReader >= 3.6.0",
       "ExcelDataReader.DataSet >= 3.6.0",
       "Microsoft.Data.Sqlite.Core >= 8.0.0",
@@ -4231,6 +4292,7 @@
       "Semi.Avalonia.ColorPicker >= 11.0.1",
       "Semi.Avalonia.DataGrid >= 11.0.1",
       "Semi.Avalonia.TreeDataGrid >= 11.0.1",
+      "SixLabors.ImageSharp >= 3.1.2",
       "System.Data.SQLite.Core >= 1.0.118",
       "System.Data.SQLite.EF6 >= 1.0.118"
     ]
@@ -4307,6 +4369,10 @@
             "target": "Package",
             "version": "[11.0.2, )"
           },
+          "BitMiracle.LibTiff.NET": {
+            "target": "Package",
+            "version": "[2.4.649, )"
+          },
           "ExcelDataReader": {
             "target": "Package",
             "version": "[3.6.0, )"
@@ -4350,6 +4416,10 @@
           "Semi.Avalonia.TreeDataGrid": {
             "target": "Package",
             "version": "[11.0.1, )"
+          },
+          "SixLabors.ImageSharp": {
+            "target": "Package",
+            "version": "[3.1.2, )"
           },
           "System.Data.SQLite.Core": {
             "target": "Package",

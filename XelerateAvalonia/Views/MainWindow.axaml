@@ -15,7 +15,8 @@
         Icon="/Assets/avalonia-logo.ico"
 		Background="#111619"
 		CanResize="False"
-        Title="Xelerate">
+        Title="Xelerate"
+		WindowStartupLocation="CenterScreen">
 
 		<rxui:RoutedViewHost Grid.Row="0" Router="{Binding Router}">
 			<rxui:RoutedViewHost.DefaultContent>

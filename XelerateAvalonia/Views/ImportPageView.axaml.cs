@@ -5,6 +5,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using System;
+using System.IO;
 using XelerateAvalonia.ViewModels;
 
 namespace XelerateAvalonia.Views
@@ -23,26 +24,37 @@ namespace XelerateAvalonia.Views
         public async void OpenFileButton_Clicked(object sender, RoutedEventArgs args)
         {
             var button = (sender as Button)!;
-            // Get top level from the current control. Alternatively, you can use Window reference instead.
             var topLevel = TopLevel.GetTopLevel(this);
 
-            // Start async operation to open the dialog.
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                Title = "Open XLS files",
+                Title = "Open XLS or image files",
                 AllowMultiple = false
             });
 
             if (files?.Count > 0)
             {
-                // Access the TextBox by its name
                 var CurrentFileTextBlock = this.FindControl<TextBlock>("CurrentFile");
-                // LOOP all files
+                var CurrentImageTextBlock = this.FindControl<TextBlock>("CurrentImage");
+
                 string localPath = new Uri(files[0].Path.ToString()).LocalPath;
 
-                //  Binding to Property in ViewModel neccessary
-                
-                CurrentFileTextBlock.Text = localPath;
+                // Check file extension to distinguish between Excel and image files
+                string fileExtension = Path.GetExtension(localPath)?.ToLower();
+
+                if (fileExtension == ".xlsx" || fileExtension == ".xls")
+                {
+                    // It's an Excel file
+                    CurrentFileTextBlock.Text = localPath;
+                    
+                }
+                else if (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".jpeg" || fileExtension == ".tif")
+                {
+                    // It's an image file
+                    CurrentImageTextBlock.Text = localPath;
+                    
+                }
+                // If it's not an Excel or image file, do nothing
                 
             }
         }

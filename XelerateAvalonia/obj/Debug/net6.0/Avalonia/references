@@ -24,6 +24,7 @@ C:\Users\mitte\.nuget\packages\avalonia.themes.fluent\11.0.2\lib\net6.0\Avalonia
 C:\Users\mitte\.nuget\packages\avalonia.themes.simple\11.0.2\lib\net6.0\Avalonia.Themes.Simple.dll
 C:\Users\mitte\.nuget\packages\avalonia.win32\11.0.2\lib\net6.0\Avalonia.Win32.dll
 C:\Users\mitte\.nuget\packages\avalonia.x11\11.0.2\lib\net6.0\Avalonia.X11.dll
+C:\Users\mitte\.nuget\packages\bitmiracle.libtiff.net\2.4.649\lib\netstandard2.0\BitMiracle.LibTiff.NET.dll
 C:\Users\mitte\.nuget\packages\dynamicdata\7.9.5\lib\net6.0\DynamicData.dll
 C:\Users\mitte\.nuget\packages\entityframework\6.4.4\lib\netstandard2.1\EntityFramework.dll
 C:\Users\mitte\.nuget\packages\entityframework\6.4.4\lib\netstandard2.1\EntityFramework.SqlServer.dll
@@ -53,6 +54,7 @@ C:\Users\mitte\.nuget\packages\semi.avalonia.colorpicker\11.0.1\lib\net6.0\Semi.
 C:\Users\mitte\.nuget\packages\semi.avalonia.datagrid\11.0.1\lib\net6.0\Semi.Avalonia.DataGrid.dll
 C:\Users\mitte\.nuget\packages\semi.avalonia\11.0.1\lib\net6.0\Semi.Avalonia.dll
 C:\Users\mitte\.nuget\packages\semi.avalonia.treedatagrid\11.0.1\lib\net6.0\Semi.Avalonia.TreeDataGrid.dll
+C:\Users\mitte\.nuget\packages\sixlabors.imagesharp\3.1.2\lib\net6.0\SixLabors.ImageSharp.dll
 C:\Users\mitte\.nuget\packages\skiasharp\2.88.3\lib\net6.0\SkiaSharp.dll
 C:\Users\mitte\.nuget\packages\splat\14.4.1\lib\net6.0\Splat.dll
 C:\Users\mitte\.nuget\packages\sqlitepclraw.core\2.1.6\lib\netstandard2.0\SQLitePCLRaw.core.dll

@@ -25,11 +25,11 @@ namespace XelerateAvalonia.Models
 
         public float Size { get; set; }
 
-        public DateTime Uploaded { get; set; }
+        public DateOnly Uploaded { get; set; }
 
 
         // Defining the Meta data for each dataset -> should be loaded from database
-        public CoreMeta(string name, UniqueId id , string deviceUsed, string inputSource, float measuredTime, float voltage, float current, float size, DateTime uploaded)
+        public CoreMeta(string name, UniqueId id , string deviceUsed, string inputSource, float measuredTime, float voltage, float current, float size, DateOnly uploaded)
         {
             Name = name;
             ID = id;

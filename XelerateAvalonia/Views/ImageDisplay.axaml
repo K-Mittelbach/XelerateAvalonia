@@ -1,0 +1,159 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.expression.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:ImageDisplayViewModel"
+             x:Class="XelerateAvalonia.Views.ImageDisplay"
+             Background="#111619">
+
+
+	<Grid x:Name="MainGrid">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+
+		<!-- Bordered container for centered image -->
+		<Border Grid.Column="0" BorderBrush="gray" BorderThickness="1" Margin="20 32 0 78" MaxWidth="500" MaxHeight="800">
+			<Image x:Name="ImageControl"  Source="{Binding ImageControl, Mode=TwoWay}" Width="480" Height="780" Margin="20"/>
+		</Border>
+		
+
+		<!-- Sliders -->
+		<StackPanel Grid.Column="0"  Margin="0 32 0 0">
+			<!-- Slider for ROI Start -->
+			<Grid x:Name="SliderGridStart">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<StackPanel  Orientation="Horizontal"  Margin="0,0,0,0" VerticalAlignment="Top">
+					<StackPanel  Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0" HorizontalAlignment="Left" >
+						<TextBlock Text="ROI Start" VerticalAlignment="Center" Margin="80,0,0,0"/>
+					</StackPanel>
+					<StackPanel  Orientation="Horizontal" Grid.Row="1" Margin="35,0,0,0" HorizontalAlignment="Center" >
+						<Rectangle x:Name="SliderROIStart" Fill="Red" Width="170" Height="2"  Margin="0,0,0,0"  VerticalAlignment="Center" Grid.Row="1" HorizontalAlignment="Right"/>
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+
+			<!-- Slider for ROI End -->
+			<Grid x:Name="SliderGridEnd">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				
+				<StackPanel  Orientation="Horizontal"  Margin="0,0,0,0" VerticalAlignment="Bottom">
+					<StackPanel  Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,0" HorizontalAlignment="Left" >
+						<Rectangle x:Name="SliderROIEnd" Fill="Red" Width="170" Height="2"  Margin="171,0,0,0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+					</StackPanel>
+					<StackPanel  Orientation="Horizontal" Grid.Row="1" Margin="35,0,0,0" HorizontalAlignment="Center" >
+						<TextBlock Text="ROI End" VerticalAlignment="Center" Margin="0,0,0,0"/>
+					</StackPanel>
+				</StackPanel>
+				
+			</Grid>
+		</StackPanel>
+
+
+
+		<!-- Settings and Inputs on the right -->
+		<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10">
+			<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 10 0 0 " Orientation="Horizontal">
+				<Border Margin="15 0 0 0"  HorizontalAlignment="Left" Background="Gray" Height="1" Width="50"/>
+				<TextBlock Text="ROI Settings"  HorizontalAlignment="Left" FontWeight="Bold" Foreground="White" FontSize="20" Margin="7 0 0 0"/>
+				<Border Margin="5 0 0 0"  HorizontalAlignment="Left" Background="Gray" Height="1" Width="200"/>
+			</StackPanel>
+			<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 0 0 0 " Orientation="Horizontal">
+				<Border Margin="15 -12 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Gray" Height="220" Width="1"/>
+				<StackPanel  Grid.Column="1" VerticalAlignment="Top" Margin="10 0 0 0 " Orientation="Vertical">
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 15 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="ROIStart [mm]:" FontWeight="SemiBold" Foreground="White" Margin="25 20 2 0" FontSize="12"/>
+						<TextBox x:Name="TextBoxROIStart" Text="{Binding ElementName=SliderGridStart, Path=Margin.Top, Mode=TwoWay}" HorizontalAlignment="Left" Width="100"  Margin="145 12 0 0" Height="3" FontSize="12" TextAlignment="Right"/>
+					</StackPanel>
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 15 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="ROIEnd [mm] :"  FontWeight="SemiBold" Foreground="White" Margin="25 20 12 0" FontSize="12"/>
+						<TextBox x:Name="TextBoxROIEnd" Text="{Binding ElementName=SliderGridEnd, Path=Margin.Top, Mode=TwoWay}" HorizontalAlignment="Left" Width="100"  Margin="137 12 0 0" Height="3" FontSize="12" TextAlignment="Right"/>
+					</StackPanel>
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 15 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="PixelSize:" FontWeight="SemiBold" Foreground="White" Margin="25 20 0 0" FontSize="12"/>
+						<TextBox x:Name="PixelSize" Text="{Binding PixelSizeText}" HorizontalAlignment="Left" Width="100"  Margin="177 12 0 0" Height="3" FontSize="12" TextAlignment="Right"/>
+					</StackPanel>
+				</StackPanel>
+				<Border Margin="15 -12 0 0" VerticalAlignment="Top" HorizontalAlignment="Right" Background="Gray" Height="220" Width="1"/>
+
+			</StackPanel>
+			<Border Margin="15 0 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Gray" Height="1" Width="381"/>
+		</StackPanel>
+
+
+		<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10 250  0 0">
+			<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 25 0 0 " Orientation="Horizontal">
+				<Border Margin="15 0 0 0"  HorizontalAlignment="Left" Background="Gray" Height="1" Width="50"/>
+				<TextBlock Text="Settings"  HorizontalAlignment="Left" FontWeight="Bold" Foreground="White" FontSize="20" Margin="7 0 0 0"/>
+				<Border Margin="5 0 0 0"  HorizontalAlignment="Left" Background="Gray" Height="1" Width="242"/>
+			</StackPanel>
+			<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 0 0 0 " Orientation="Horizontal">
+				<Border Margin="15 -13 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Gray" Height="270" Width="1"/>
+				<StackPanel  Grid.Column="1" VerticalAlignment="Top" Margin="10 0 0 0 " Orientation="Vertical">
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 10 0 0 " Orientation="Horizontal">
+						<TextBlock   Text="Name:" FontWeight="SemiBold" Foreground="White" Margin="25 20 2 0" FontSize="12"/>
+						<TextBox x:Name="FileName"  Text="{Binding FileNameText}"  HorizontalAlignment="Left" Width="100"  Margin="190 12 0 0" Height="3" FontSize="12" TextAlignment="Right"/>
+					</StackPanel>
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 15 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="Orientation:" FontWeight="SemiBold" Foreground="White" Margin="25 20 12 0" FontSize="12"/>
+						<TextBox x:Name="Orientation"   Text="{Binding OrientationText}" HorizontalAlignment="Left" Width="100"  Margin="150 12 0 0" Height="3" FontSize="12" TextAlignment="Right"/>
+					</StackPanel>
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 15 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="Cross Margin Top [%] :" FontWeight="SemiBold" Foreground="White" Margin="25 20 0 0" FontSize="12"/>
+						<TextBox  x:Name="CrossMarginTop"  Text="{Binding CrossMarginTopText}" HorizontalAlignment="Left" Width="100"  Margin="105 12 0 0" Height="3" FontSize="12" TextAlignment="Right"/>
+					</StackPanel>
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 15 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="Cross Margin Bottom [%] :" FontWeight="SemiBold" Foreground="White" Margin="25 20 0 0" FontSize="12"/>
+						<TextBox  x:Name="CrossMarginBottom" Text="{Binding CrossMarginBottomText}" HorizontalAlignment="Left" Width="100"  Margin="85 12 0 0" Height="3" FontSize="12" TextAlignment="Right"/>
+					</StackPanel>
+				</StackPanel>
+				<Border Margin="15 -13 0 0" VerticalAlignment="Top" HorizontalAlignment="Right" Background="Gray" Height="270" Width="1"/>
+
+			</StackPanel>
+			<Border Margin="15 0 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Gray" Height="1" Width="381"/>
+		</StackPanel>
+
+		<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10 560 0 0">
+			<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 20 0 0 " Orientation="Horizontal">
+				<Border Margin="15 0 0 0"  HorizontalAlignment="Left" Background="Gray" Height="1" Width="50"/>
+				<TextBlock Text="Image Correction"  HorizontalAlignment="Left" FontWeight="Bold" Foreground="White" FontSize="20" Margin="7 0 0 0"/>
+				<Border Margin="5 0 0 0"  HorizontalAlignment="Left" Background="Gray" Height="1" Width="153"/>
+			</StackPanel>
+			<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 0 0 0 " Orientation="Horizontal">
+				<Border Margin="15 -12 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Gray" Height="220" Width="1"/>
+				<StackPanel  Grid.Column="1" VerticalAlignment="Top" Margin="10 0 0 0 " Orientation="Vertical">
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 45 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="Rotate Image:" FontWeight="SemiBold" Foreground="White" Margin="25 15 2 0" FontSize="12"/>
+						<Button x:Name="RotateButton" Width="100" Foreground="White" Content="Rotate" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="30" Margin="150 7 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131" />
+					</StackPanel>
+					<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0 35 0 0 " Orientation="Horizontal">
+						<TextBlock  Text="Brightness:" FontWeight="SemiBold" Foreground="White" Margin="25 20 12 0" FontSize="12"/>
+						<Slider x:Name="GammaSlider" Value="1" Maximum="2" Minimum="0" TickPlacement="Outside" Margin="145,5,0,0" Foreground="white" Background="white" IsEnabled="True" MinWidth="120"/>
+					</StackPanel>
+					
+				</StackPanel>
+				<Border Margin="5 -12 0 0" VerticalAlignment="Top" HorizontalAlignment="Right" Background="Gray" Height="220" Width="1"/>
+
+			</StackPanel>
+			<Border Margin="15 0 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="Gray" Height="1" Width="380"/>
+		</StackPanel>
+
+
+		<!-- Buttons at the bottom -->
+		<StackPanel Grid.Column="1" VerticalAlignment="Bottom" Width="250" HorizontalAlignment="Right" Margin="30 2 10 8">
+			<StackPanel Orientation="Horizontal">
+				<Button x:Name="ExitButton" Width="100" Foreground="White" Content="Cancel" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35" Margin="0 2 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131" Click="OnExitButtonClick"/>
+				<Button x:Name="SaveButton" Width="120" Foreground="White" Content="Save and Exit" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="35" Margin="10 2 0 10" Background="#313131" CornerRadius="0" BorderBrush="#313131" Click="OnSaveButtonClick"/>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</UserControl>

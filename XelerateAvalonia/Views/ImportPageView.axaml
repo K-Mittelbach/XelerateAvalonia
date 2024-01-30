@@ -57,12 +57,12 @@
 						</Button>
 					</StackPanel>
 				</Border>
-				<Border Margin="0 10 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="500" Width="1200">
+				<Border Margin="0 10 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Width="1200" Height="500">
 					<StackPanel Orientation="Vertical">
 						<StackPanel Orientation="Horizontal" Width="1200" >
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Uploaded files" FontSize="16" />
-								<TextBlock Margin="3 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Text="(3)" FontSize="16" Foreground="#5194F8"/>
+								<TextBlock Margin="3 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Text="{Binding UploadedFileCount}" FontSize="16" Foreground="#5194F8"/>
 							</StackPanel>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Margin="800 20 0 0" HorizontalAlignment="Right" FontWeight="SemiBold"  Foreground="white" Text="Sort by :" FontSize="16" />
@@ -74,56 +74,135 @@
 								</ComboBox>
 							</StackPanel>
 						</StackPanel>
-						<StackPanel>
-							<TextBlock x:Name="CurrentFile" Text="{Binding CurrentFileName, Mode=TwoWay}" Foreground="#1D1D1D" />
-							<ProgressBar x:Name="FileConversion" Margin="20 0 20 10" Minimum="0" Maximum="100"  Height="10" Background="{Binding ProgressBarBackground, Mode=TwoWay}" Value="{Binding ProgressValue}" />
-						</StackPanel>	
+						<StackPanel Orientation="Vertical" Width="1200">
+							<TextBlock x:Name="CurrentFile" Text="{Binding CurrentFileName, Mode=TwoWay}" FontSize="1" Foreground="#1D1D1D" />
+							<TextBlock x:Name="CurrentImage" Text="{Binding CurrentImageName, Mode=TwoWay}" FontSize="1" Foreground="#1D1D1D" />
+							<ProgressBar x:Name="FileConversion" Margin="20 0 20 10" Minimum="0"  Width="1100" Maximum="100"  Height="10" Background="{Binding ProgressBarBackground, Mode=TwoWay}" Value="{Binding ProgressValue}" HorizontalAlignment="Center" />
+						</StackPanel>
+						<ScrollViewer VerticalScrollBarVisibility="Auto" Height="399"  Margin="2" Padding="0">
+						<StackPanel MinHeight="450">
 						<ItemsRepeater ItemsSource="{Binding FileList}">
 							<ItemsRepeater.ItemTemplate>
 								<DataTemplate>
-									<Border Margin="20 10 30 3" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="80" Width="1160">
+									<Border Margin="20 10 30 3" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="75" Width="1150">
 										<StackPanel Orientation="Horizontal" Margin="50 0 0 0" VerticalAlignment="Center"  >
-											<i:Icon Value="fa-file-excel" Foreground="white"  VerticalAlignment="Center" FontSize="40" Margin="0 0 50 0"/>
-											<StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="100" >
-												<TextBlock Text="File name:" Foreground="White" />
-												<TextBlock Text="Device used:" Foreground="White" Margin="0 15 0 0"/>
-											</StackPanel>
-											<StackPanel Orientation="Vertical" Width="100"  VerticalAlignment="Center" >
-												<TextBox Text="{Binding Name}"  Foreground="White" Height="5"/>
-												<TextBox Text="{Binding DeviceUsed}"  Foreground="White" Margin="0 5 0 0"/>
+											<i:Icon Value="fa-file-excel" Foreground="white"  VerticalAlignment="Center" FontSize="30" Margin="0 0 50 0"/>
+											<StackPanel Orientation="Vertical" Width="150"  VerticalAlignment="Center" >
+												<TextBlock Text="{Binding Name}" Foreground="#5194F8"  FontWeight="SemiBold" FontSize="14"/>
 											</StackPanel>
 											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 25 0"/>
-											<StackPanel Orientation="Vertical"  Width="100" VerticalAlignment="Center">
-												<TextBlock Text="Input source:" Foreground="White"/>
-												<TextBlock Text="Measured time:" Foreground="White" Margin="0 15 0 0"/>
+											<StackPanel Orientation="Vertical"  Width="110" VerticalAlignment="Center">
+												<TextBlock Text="Input source :" Foreground="White" FontSize="12" FontWeight="SemiBold"  HorizontalAlignment="Right"/>
+												<TextBlock Text="Measured time [s] :" Foreground="White" Margin="0 20 0 0" FontWeight="SemiBold"  FontSize="12" HorizontalAlignment="Right" />
 											</StackPanel>
 											<StackPanel Orientation="Vertical" Width="100" Margin="15 0 15 0" VerticalAlignment="Center" >
-												<TextBox Text="{Binding InputSource}"  Foreground="White" Height="5"/>
-												<TextBox Text="{Binding MeasuredTime}" Foreground="White" Margin="0 5 0 0"/>
+												<TextBox Text="{Binding InputSource}"  Foreground="White" Height="3" FontSize="12" IsReadOnly="True" TextAlignment="Right" />
+												<TextBox Text="{Binding MeasuredTime}" Foreground="White" Height="3" Margin="0 5 0 0" FontSize="12" IsReadOnly="True" TextAlignment="Right" />
 											</StackPanel>
-											<StackPanel Orientation="Vertical"  Width="50" VerticalAlignment="Center">
-												<TextBlock Text="Voltage:" Foreground="White"/>
-												<TextBlock Text="Current:" Foreground="White" Margin="0 15 0 0"/>
+											<StackPanel Orientation="Vertical"  Width="100" Margin="10 0 0 0" VerticalAlignment="Center">
+												<TextBlock Text="Voltage [kV] :" Foreground="White" FontSize="12" FontWeight="SemiBold"  HorizontalAlignment="Right" />
+												<TextBlock Text="Current [A] :" Foreground="White" Margin="0 20 0 0"  FontWeight="SemiBold"  FontSize="12" HorizontalAlignment="Right"/>
 											</StackPanel>
 											<StackPanel Orientation="Vertical" MinWidth="100" Margin="15 0 0 0" VerticalAlignment="Center" >
-												<TextBox Text="{Binding Voltage}"  Foreground="White" Height="5"/>
-												<TextBox Text="{Binding Current}"  Foreground="White" Margin="0 5 0 0"/>
+												<TextBox Text="{Binding Voltage}"  Foreground="White" Height="3" FontSize="12" IsReadOnly="True" TextAlignment="Right" />
+												<TextBox Text="{Binding Current}"  Foreground="White" Height="3" Margin="0 5 0 0" FontSize="12" IsReadOnly="True" TextAlignment="Right" />
 											</StackPanel>
 											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 10 0"/>
-											<StackPanel Orientation="Vertical"  Width="75" Margin="15 0 0 0" VerticalAlignment="Center">
-												<TextBlock Text="Size:" Foreground="White"/>
-												<TextBlock Text="Uploaded:" Foreground="White" Margin="0 15 0 0"/>
+											<StackPanel Orientation="Vertical"  Width="75" Margin="15 0 2 0" VerticalAlignment="Center">
+												<TextBlock Text="Size [MB] :" Foreground="White" FontSize="12" FontWeight="SemiBold"  HorizontalAlignment="Right"/>
+												<TextBlock Text="Uploaded :" Foreground="White" Margin="0 20 0 0" FontWeight="SemiBold"  FontSize="12" HorizontalAlignment="Right"/>
 											</StackPanel>
-											<StackPanel Orientation="Vertical" MaxWidth="100" Margin="0 0 30 0" VerticalAlignment="Center" >
-												<TextBox  Text="{Binding Size}"  Foreground="White" Height="5"/>
-												<TextBox  Text="{Binding Uploaded}" Foreground="White" Margin="0 5 0 0"/>
+											<StackPanel Orientation="Vertical" MaxWidth="100" Margin="10 0 30 0" VerticalAlignment="Center" >
+												<TextBlock  Text="{Binding Size}"  Foreground="White"  FontSize="12"  HorizontalAlignment="Right" />
+												<TextBlock Text="{Binding Uploaded}" Foreground="White" Margin="0 20 -2 0" FontSize="12"  HorizontalAlignment="Right"/>
 											</StackPanel>
-											<TextBlock Text="Select" Foreground="#5194F8" FontSize="17" FontWeight="SemiBold" VerticalAlignment="Center"/>
+											<Menu>
+												<MenuItem Header="Select" Foreground="#5194F8" FontSize="15" FontWeight="SemiBold">
+													<MenuItem Header="Edit Meta data" >
+														<MenuItem.Icon>
+															<i:Icon Value="fa-pen-to-square" Foreground="white"  VerticalAlignment="Center" FontWeight="Light"  FontSize="14" />
+														</MenuItem.Icon>
+													</MenuItem>
+													<MenuItem Header="Calibrate" >
+														<MenuItem.Icon>
+															<i:Icon Value="fa-ruler-vertical" Foreground="white"  VerticalAlignment="Center" FontWeight="Light"  FontSize="14" />
+														</MenuItem.Icon>
+													</MenuItem>
+													<Separator/>
+													<MenuItem Header="Delete">
+														<MenuItem.Icon>
+															<i:Icon Value="fa-trash" Foreground="white"  VerticalAlignment="Center" FontWeight="Light" FontSize="14" />
+														</MenuItem.Icon>
+													</MenuItem>
+												</MenuItem>
+											</Menu>
 										</StackPanel>
 									</Border>
 								</DataTemplate>
 							</ItemsRepeater.ItemTemplate>
 						</ItemsRepeater>
+						<ItemsRepeater ItemsSource="{Binding ImageList}">
+							<ItemsRepeater.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="20 10 30 3" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="75" Width="1150">
+										<StackPanel Orientation="Horizontal" Margin="50 0 0 0" VerticalAlignment="Center"  >
+											<i:Icon Value="fa-file-image" Foreground="white"  VerticalAlignment="Center" FontSize="30" Margin="0 0 50 0"/>
+											<StackPanel Orientation="Vertical" Width="150"  VerticalAlignment="Center" >
+												<TextBlock Text="{Binding Name}" Foreground="#5194F8"  FontWeight="SemiBold" FontSize="14" />
+											</StackPanel>
+											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 25 0"/>
+											<StackPanel Orientation="Vertical"  Width="110" VerticalAlignment="Center">
+												<TextBlock Text="Image Width [px] :" Foreground="White" FontSize="12" FontWeight="SemiBold"   HorizontalAlignment="Right"/>
+												<TextBlock Text="Image Height [px] :" Foreground="White"  FontSize="12" FontWeight="SemiBold"   Margin="0 20 0 0" HorizontalAlignment="Right"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" Width="100" Margin="15 0 15 0" VerticalAlignment="Center" >
+												<TextBox  Text="{Binding Width}" Foreground="White" Height="3" FontSize="12" IsReadOnly="True"  TextAlignment="Right"/>
+												<TextBox  Text="{Binding Height}" Foreground="White" Height="3" Margin="0 5 0 0" FontSize="12" IsReadOnly="True" TextAlignment="Right"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical"  Width="100"  Margin="10 0 0 0"  VerticalAlignment="Center">
+												<TextBlock Text="ROI start [mm] :" Foreground="White" FontSize="12" FontWeight="SemiBold"  HorizontalAlignment="Right"/>
+												<TextBlock Text="ROI end  [mm] :" Foreground="White" Margin="0 20 0 0" FontWeight="SemiBold"  FontSize="12" HorizontalAlignment="Right"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" MinWidth="100" Margin="15 0 0 0" VerticalAlignment="Center" >
+												<TextBox Text="{Binding ROIStart}" Foreground="White" Height="3" IsReadOnly="True" TextAlignment="Right" />
+												<TextBox  Text="{Binding ROIEnd}" Foreground="White" Height="3" Margin="0 5 0 0" IsReadOnly="True" TextAlignment="Right" />
+											</StackPanel>
+											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 10 0"/>
+											<StackPanel Orientation="Vertical"  Width="75" Margin="15 0 2 0" VerticalAlignment="Center">
+												<TextBlock Text="Size [MB] :" Foreground="White" FontSize="12" FontWeight="SemiBold"  HorizontalAlignment="Right"/>
+												<TextBlock Text="Uploaded :" Foreground="White" Margin="0 20 0 0" FontWeight="SemiBold"  FontSize="12" HorizontalAlignment="Right"/>
+											</StackPanel>
+											<StackPanel Orientation="Vertical" MaxWidth="100" Margin="10 0 30 0" VerticalAlignment="Center" >
+												<TextBlock  Text="{Binding Size}"   Foreground="White"  FontSize="12"  HorizontalAlignment="Right"  />
+												<TextBlock  Text="{Binding Uploaded}"  Foreground="White" Margin="0 20 -2 0" FontSize="12"  HorizontalAlignment="Right" />
+											</StackPanel>
+											<Menu>
+												<MenuItem Header="Select" Foreground="#5194F8" FontSize="15" FontWeight="SemiBold">
+													<MenuItem Header="Edit Settings" Command="{Binding DisplayImageSettingsCommand}">
+														<MenuItem.Icon>
+															<i:Icon Value="fa-pen-to-square" Foreground="white"  VerticalAlignment="Center" FontWeight="Light"  FontSize="14" />
+														</MenuItem.Icon>
+														</MenuItem>
+													<MenuItem Header="Calibrate ROI"  Command="{Binding DisplayImageCommand}">
+														<MenuItem.Icon>
+															<i:Icon Value="fa-ruler-vertical" Foreground="white"  VerticalAlignment="Center" FontWeight="Light"  FontSize="14" />
+														</MenuItem.Icon>
+													</MenuItem>
+													<Separator/>
+													<MenuItem Header="Delete" Command="{Binding DeleteImageCommand}">
+														<MenuItem.Icon>
+															<i:Icon Value="fa-trash" Foreground="White"  VerticalAlignment="Center" FontWeight="Light" FontSize="14" />
+														</MenuItem.Icon>	
+													</MenuItem>
+												</MenuItem>
+											</Menu>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsRepeater.ItemTemplate>
+						</ItemsRepeater>						
+							</StackPanel>
+						</ScrollViewer>
 					</StackPanel>
 
 				</Border>

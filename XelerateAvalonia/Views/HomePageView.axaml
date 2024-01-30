@@ -39,16 +39,16 @@
 		</Border>
 		<StackPanel Margin="100 100 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="600" Orientation="Vertical">
 			<StackPanel Margin="10 20 50 20" Orientation="Horizontal">
-				<TextBlock  Text="Current Project: " FontWeight="SemiBold" VerticalAlignment="Center"  FontSize="20"/>
-				<TextBlock  Margin="25 0 0 0"  Text="{Binding ProjectName}" Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+				<TextBlock  Text="Current Project: " FontWeight="SemiBold"   VerticalAlignment="Center"  FontSize="20"/>
+				<TextBlock  Margin="25 0 0 0"  Text="{Binding ProjectName}"   Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" />
 			</StackPanel>
 			<StackPanel Margin="10 20 50 20" Orientation="Horizontal">
 				<TextBlock Text="Project Path: " FontWeight="SemiBold"  VerticalAlignment="Center" FontSize="20"/>
-				<TextBlock  Margin="25 0 0 0" Text="{Binding ProjectPath}" Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+				<TextBlock  Margin="25 0 0 0" Text="{Binding ProjectPath}"  HorizontalAlignment="Right" Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" />
 			</StackPanel>
 			<StackPanel Margin="10 20 50 20" Orientation="Horizontal">
 				<TextBlock Text="Created on: " FontWeight="SemiBold"  VerticalAlignment="Center" FontSize="20"/>
-				<TextBlock  Margin="25 0 0 0" Text="{Binding DateCreated}" Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+				<TextBlock  Margin="25 0 0 0" Text="{Binding DateCreated}"  Foreground="#5194F8" FontSize="18" VerticalAlignment="Center" />
 			</StackPanel>
 			
 			

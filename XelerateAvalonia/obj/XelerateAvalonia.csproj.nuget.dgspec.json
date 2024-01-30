@@ -72,6 +72,10 @@
               "target": "Package",
               "version": "[11.0.2, )"
             },
+            "BitMiracle.LibTiff.NET": {
+              "target": "Package",
+              "version": "[2.4.649, )"
+            },
             "ExcelDataReader": {
               "target": "Package",
               "version": "[3.6.0, )"
@@ -115,6 +119,10 @@
             "Semi.Avalonia.TreeDataGrid": {
               "target": "Package",
               "version": "[11.0.1, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[3.1.2, )"
             },
             "System.Data.SQLite.Core": {
               "target": "Package",
