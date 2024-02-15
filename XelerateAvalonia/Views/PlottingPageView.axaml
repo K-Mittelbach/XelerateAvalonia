@@ -6,7 +6,7 @@
 			 x:DataType="vm:PlottingPageViewModel"
              x:Class="XelerateAvalonia.Views.PlottingPageView"
 			 d:DesignWidth="1330"
-			 d:DesignHeight="750"
+			 d:DesignHeight="800"
 			 xmlns:i="https://github.com/projektanker/icons.avalonia">
 	
 	
@@ -38,259 +38,188 @@
 					<Border Margin="20 0 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"  Background="Gray"  Height="2" Width="1200"/>
 				</StackPanel>
 			</Border>
-			
 			<StackPanel Margin="100 100 20 20" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="1200" Orientation="Vertical">
-				<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="75" Width="1200">	
+				<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="275" Width="550">
+					<StackPanel Orientation="Vertical">
+						<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Input selection" FontSize="18"/>
+						<TextBlock Text="Input core data :" Margin="20 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white"/>
+						<StackPanel Margin="20 10 0 0" Orientation="Horizontal" Width="550">
+							<ComboBox x:Name="SelectedDataSet" MaxDropDownHeight="300" Foreground="White" Height="30" FontSize="12" Width="500"
+									  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+									  ItemsSource="{Binding DataSets}"
+									  SelectedItem="{Binding SelectedDataSetItem}"
+									  SelectedIndex="1">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120"/>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+
+
+						<TextBlock Text="Input core image :" Margin="20 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white"/>
+						<StackPanel Margin="20 10 0 0" Orientation="Horizontal" Width="550">
+							<ComboBox x:Name="SelectedImage" MaxDropDownHeight="300" Foreground="White" Height="30" FontSize="12" Width="500"
+									  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+									  ItemsSource="{Binding ImageList}"
+									  SelectedItem="{Binding SelectedImageItem}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+					</StackPanel>
 				</Border>
-				<StackPanel Orientation="Horizontal" Margin="50 0 20 30" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="1"  Height="450" Width="1200">
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<ToggleButton  Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="H"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Li"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Na"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="K"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Rb"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cs"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Fr"/>
+				<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="350" Width="550">
+					<StackPanel Orientation="Vertical">
+						<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Plotting settings" FontSize="18"/>
+						<StackPanel Orientation="Vertical">
+							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+								<TextBlock Text="Core image compression factor " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ComboBox Margin="235 0 0 0" VerticalAlignment="Center" >
+									<ComboBoxItem>1</ComboBoxItem>
+									<ComboBoxItem>2</ComboBoxItem>
+									<ComboBoxItem>3</ComboBoxItem>
+								</ComboBox>
+							</StackPanel>
+							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+								<TextBlock Text="Vertical display" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" ></ToggleSwitch>
+							</StackPanel>
+							<StackPanel Margin="20 30 0 0"   Width="300" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+								<TextBlock Text="TrueDepth conversion " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" ></ToggleSwitch>
+							</StackPanel>
+							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+								<TextBlock Text="Slider " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" ></ToggleSwitch>
+							</StackPanel>
+
+
+						
+							
+						</StackPanel>
+						
 					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5"  Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5"  Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Be"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Mg"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ca"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Sr"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ba"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ra"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Sc"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Y"/>
-						<ToggleButton Margin="0 0 5 5"  Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="La"/>
-						<ToggleButton Margin="0 0 25 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ac"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ti"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Zr"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Hf"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Rf"/>
-						<Border Margin="0 0 5 5"  Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ce"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Th"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="V"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Nb"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ta"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Db"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Pr"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Pa"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cr"/>
-						<ToggleButton Margin="0 0 5 5"  Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Mo"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="W"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Sg"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Nd"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="U"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Mn"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Tc"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Re"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Bh"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Pm"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Np"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Fe"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ru"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Os"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Hs"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Sm"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Pu"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Co"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Rh"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ir"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Mt"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Eu"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Am"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ni"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Pd"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Pt"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ds"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Gd"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cm"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cu"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ag"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Au"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Rg"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Tb"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Bk"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Zn"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cd"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Hg"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cn"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Dy"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cf"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="B"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Al"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ga"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="In"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="TI"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Nh"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ho"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Es"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="C"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Si"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ge"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Sn"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Pb"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="FI"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Er"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Fm"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="N"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="P"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="As"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Sb"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Bi"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Mc"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Tm"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Md"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="O"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="S"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Se"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Te"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Po"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Lv"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Yb"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="No"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<Border Margin="0 0 5 5" Height="55" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="F"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Cl"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Br"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="I"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="At"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ts"/>
-						<Border Margin="0 0 5 5" Height="15" Width="55" />
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Lu"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Lr"/>
-					</StackPanel>
-					<StackPanel VerticalAlignment="Top"  HorizontalAlignment="Left">
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="He"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ne"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Ar"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Kr"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Xe"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Rn"/>
-						<ToggleButton Margin="0 0 5 5" Height="55" Width="55"  HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" FontSize="21" FontWeight="SemiBold" Content="Og"/>
-					</StackPanel>
-				</StackPanel>
-				
+				</Border>
 			</StackPanel>
 			
-			
-			
-			
+			<!-- Element Selection and Core Range Selection -->
+			<StackPanel Orientation="Vertical">
+				<StackPanel Margin="675 100 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="275" Orientation="Vertical">
+					<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="646" Width="625">
+						<StackPanel Orientation="Vertical" Height="640" >
+							<!--DOWNCORE Range -->
+							<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Downcore range selection" FontSize="18"/>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Left">
+										<ScrollViewer VerticalScrollBarVisibility="Auto" Height="155"  Margin="2" Padding="0">
+											
+												<ListBox x:Name="CoresAdd" Width="575" Height="475" >
+													<ItemsRepeater ItemsSource="{Binding CoreSections}">
+												<ItemsRepeater.ItemTemplate>
+													<DataTemplate>
+											<ListBoxItem Height="35"  >
+												<StackPanel Orientation="Horizontal">
+													<TextBlock  Text="{Binding CoreName}" FontSize="12" VerticalAlignment="Center"/>
+													<TextBlock  Text="{Binding SectionName}" FontSize="12" VerticalAlignment="Center" Margin="2 0 0 0"/>
+													<CheckBox HorizontalAlignment="Right" Margin="425 0 0 50" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+												</StackPanel>
+																							
+											</ListBoxItem>
+											</DataTemplate>
+													</ItemsRepeater.ItemTemplate>
+											</ItemsRepeater>
+										</ListBox>
+														
+										</ScrollViewer>
+										
+									</StackPanel>
+									
+								</StackPanel>
+							
+							
+							<!--ELEMENTS -->
+							<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Select elements" FontSize="18"/>
+							<ScrollViewer VerticalScrollBarVisibility="Auto" Height="275"  Margin="2" Padding="0">
+								<WrapPanel Margin="20 20 0 25" Orientation="Horizontal" HorizontalAlignment="Left" Height="525" Width="575">
+								<ItemsRepeater ItemsSource="{Binding ElementList}">
+									<ItemsRepeater.Layout>
+										<WrapLayout Orientation="Horizontal" />
+									</ItemsRepeater.Layout>
+									<ItemsRepeater.ItemTemplate>
+										<DataTemplate>
+											<ToggleButton IsChecked="{Binding IsChecked, Mode=TwoWay}}"  Margin="5" Height="65" Width="70" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="17" FontWeight="SemiBold" CornerRadius="5"  >
+												<StackPanel Orientation="Vertical">
+													<TextBlock Text="{Binding Name}" FontSize="20" HorizontalAlignment="Center"/>
+													<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+														<TextBlock Text="std: " Margin="0" FontSize="10"/>
+														<TextBlock Text="{Binding StandardDeviation}" Margin="0" FontSize="10"/>
+													</StackPanel>
+													<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+														<TextBlock Text="Ø: " Margin="0" FontSize="10"/>
+														<TextBlock Text="{Binding ZeroSum}" Margin="0 0 0 0" FontSize="10"/>
+													</StackPanel>
+												</StackPanel>
+											</ToggleButton>
+										</DataTemplate>
+									</ItemsRepeater.ItemTemplate>
+								</ItemsRepeater>
+							</WrapPanel>
+								</ScrollViewer>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"  Margin="0 0 0 0"  HorizontalAlignment="Right">
+								<Button Margin="0 0 0 30" Width="150" Height="35" HorizontalAlignment="Center" Foreground="white"  Content="Reset" Background="#313131" CornerRadius="0" BorderBrush="#313131"   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+								<Button Margin="25 0 20 30" Width="150" Height="35"  Foreground="white"  Content="Create Plot" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding OpenPlotWindow}" />
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</StackPanel>
+
 
 			<!--NAVBAR Section-->
-			<StackPanel Height="918" Width="55">
+			<StackPanel Height="918" Width="75">
 				<Button  Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 60 5 20"  Command="{Binding GoHome}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-home" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
-				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoImport}" >
+
+				<Button   Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoImport}" >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-file" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
-				<Button  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"  IsEnabled="false"	>
+
+				<Button  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" IsEnabled="False" >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-chart-line" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
-				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoImage}" >
+
+				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoImage}"	  >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-image" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
-				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" 	Command="{Binding GoDatabase}">
+				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoDatabase}"	>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-database" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
+
 				<Border Background="white" Padding = "2" Opacity="453" Margin="10 230 10 0" />
-				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20" Command="{Binding GoSettings}"	 >
+				<Button  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20" Command="{Binding GoSettings}"	 >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-cog" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
 
 			</StackPanel>
-			<rxui:RoutedViewHost Name="PlottingPageViewHost" Grid.Row="0" Router="{Binding Router}" >
+			<rxui:RoutedViewHost Name="PlottingPageViewModel" Grid.Row="0" Router="{Binding Router}" >
 				<rxui:RoutedViewHost.DefaultContent>
 					<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 					</StackPanel>

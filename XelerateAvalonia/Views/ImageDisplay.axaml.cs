@@ -30,8 +30,17 @@ namespace XelerateAvalonia.Views
     {
         private Grid _sliderGridStart;
         private Grid _sliderGridEnd;
+
+        private Grid _sliderGridLeft;
+        private Grid _sliderGridRight;
+
+        private Avalonia.Controls.Image _imageControl;
+
         private double startDragY;
         private double endDragY;
+        private double rightDragY;
+        private double leftDragY;
+
         private double totalRotationAngle = 0;
         private double GammaValue;
 
@@ -53,12 +62,14 @@ namespace XelerateAvalonia.Views
             AvaloniaXamlLoader.Load(this);
 
             FileName = this.FindControl<TextBox>("FileName");
-            TextBoxROIStart = this.FindControl<TextBox>("TextBoxROIStart");
-            TextBoxROIEnd = this.FindControl<TextBox>("TextBoxROIEnd");
+            TextBoxROITop= this.FindControl<TextBox>("TextBoxROITop");
+            TextBoxROIBottom = this.FindControl<TextBox>("TextBoxROIBottom");
+            TextBoxROILeft = this.FindControl<TextBox>("TextBoxROILeft");
+            TextBoxROIRight = this.FindControl<TextBox>("TextBoxROIRight");
             PixelSize = this.FindControl<TextBox>("PixelSize");
             Orientation = this.FindControl<TextBox>("Orientation");
-            CrossMarginTop = this.FindControl<TextBox>("CrossMarginTop");
-            CrossMarginBottom = this.FindControl<TextBox>("CrossMarginBottom");
+            CoreID = this.FindControl<TextBox>("CoreID");
+            SectionID = this.FindControl<TextBox>("SectionID");
 
             var brightnessSlider = this.FindControl<Slider>("GammaSlider");
             brightnessSlider.ValueChanged += OnBrightnessSliderValueChanged;
@@ -66,26 +77,30 @@ namespace XelerateAvalonia.Views
             if (item != null)
             {
                 FileName.Text = item.Name?.ToString();
-                TextBoxROIStart.Text = item.ROIStart?.ToString();
-                TextBoxROIEnd.Text = item.ROIEnd?.ToString();
+                TextBoxROITop.Text = item.ROIStart?.ToString();
+                TextBoxROIBottom.Text = item.ROIEnd?.ToString();
+                TextBoxROILeft.Text = item.ImageMarginLeft?.ToString();
+                TextBoxROIRight.Text = item.ImageMarginRight?.ToString();
                 PixelSize.Text = item.ImagePixelSize?.ToString();
                 Orientation.Text = item.ImageOrientation?.ToString();
-                CrossMarginTop.Text = item.ImageMarginLeft?.ToString();
-                CrossMarginBottom.Text = item.ImageMarginRight?.ToString();
+                CoreID.Text = item.CoreID.ToString();
+                SectionID.Text = item.SectionID.ToString();
             }
 
             
 
             _sliderGridStart = this.FindControl<Grid>("SliderGridStart");
             _sliderGridEnd = this.FindControl<Grid>("SliderGridEnd");
+            _sliderGridLeft = this.FindControl<Grid>("SliderGridLeft");
+            _sliderGridRight = this.FindControl<Grid>("SliderGridRight");
 
-            var imageControl = this.FindControl<Avalonia.Controls.Image>("ImageControl");
+            _imageControl = this.FindControl<Avalonia.Controls.Image>("ImageControl");
 
             var rotateButton = this.FindControl<Button>("RotateButton");
             rotateButton.Click += OnRotateButtonClick;
 
             // Set the content of the UserControl to the provided Image control
-            imageControl.Source = image.Source;
+            _imageControl.Source = image.Source;
 
             SetSliderPositions(item);
 
@@ -94,11 +109,13 @@ namespace XelerateAvalonia.Views
             _sliderGridStart.PointerMoved += SliderROIStart_OnPointerMoved;
             _sliderGridEnd.PointerPressed += SliderROIEnd_OnPointerPressed;
             _sliderGridEnd.PointerMoved += SliderROIEnd_OnPointerMoved;
+            _sliderGridLeft.PointerPressed += SliderROILeft_OnPointerPressed;
+            _sliderGridLeft.PointerMoved += SliderROILeft_OnPointerMoved;
+            _sliderGridRight.PointerPressed += SliderROIRight_OnPointerPressed;
+            _sliderGridRight.PointerMoved += SliderROIRight_OnPointerMoved;
 
         }
 
-
-       
         private void OnRotateButtonClick(object sender, RoutedEventArgs e)
         {
             var imageControl = this.FindControl<Avalonia.Controls.Image>("ImageControl");
@@ -143,9 +160,14 @@ namespace XelerateAvalonia.Views
             double verticalPositionStart = double.Parse(item.ROIStart);
             double verticalPositionEnd = double.Parse(item.ROIEnd);
 
+            double verticalPositionLeft = double.Parse(item.ImageMarginLeft);
+            double verticalPositionRight = double.Parse(item.ImageMarginRight);
+
             // Set the Y-coordinates of the Grid controls
             _sliderGridStart.Margin = new Thickness(0, verticalPositionStart, 0, 0);
             _sliderGridEnd.Margin = new Thickness(0, verticalPositionEnd, 0, 0);
+            _sliderGridLeft.Margin = new Thickness(verticalPositionRight, 0, 0, 0);
+            _sliderGridRight.Margin = new Thickness(verticalPositionLeft, 0, 0, 0);
         }
 
         private void SliderROIStart_OnPointerPressed(object sender, PointerPressedEventArgs e)
@@ -161,7 +183,37 @@ namespace XelerateAvalonia.Views
                 _sliderGridStart.Margin = new Thickness(0, newY, 0, 0);
             }
         }
+        private void SliderROILeft_OnPointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            leftDragY = e.GetPosition(_sliderGridLeft).X - _sliderGridLeft.Margin.Left;
+        }
 
+        private void SliderROILeft_OnPointerMoved(object sender, PointerEventArgs e)
+        {
+            if (e.GetCurrentPoint(_sliderGridLeft).Properties.IsLeftButtonPressed)
+            {
+                double newX = e.GetPosition(_sliderGridLeft.Parent as Control).X - leftDragY;
+
+                // Update the horizontal position of the slider within the parent control
+                _sliderGridLeft.Margin = new Thickness(newX, 0, 0, 0);
+            }
+        }
+
+        private void SliderROIRight_OnPointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            rightDragY = e.GetPosition(_sliderGridRight).X - _sliderGridRight.Margin.Left;
+        }
+
+        private void SliderROIRight_OnPointerMoved(object sender, PointerEventArgs e)
+        {
+            if (e.GetCurrentPoint(_sliderGridRight).Properties.IsLeftButtonPressed)
+            {
+                double newX = e.GetPosition(_sliderGridRight.Parent as Control).X - rightDragY;
+
+                // Update the horizontal position of the slider within the parent control
+                _sliderGridRight.Margin = new Thickness(newX, 0, 0, 0);
+            }
+        }
         private void SliderROIEnd_OnPointerPressed(object sender, PointerPressedEventArgs e)
         {
             endDragY = e.GetPosition(_sliderGridEnd).Y;
@@ -189,12 +241,14 @@ namespace XelerateAvalonia.Views
         {
             // Gather input field values
             string name = FileName.Text;
-            string roiStart = TextBoxROIStart.Text;
-            string roiEnd = TextBoxROIEnd.Text;
+            string roiStart = TextBoxROITop.Text;
+            string roiEnd = TextBoxROIBottom.Text;
+            string roiLeft = TextBoxROILeft.Text;
+            string roiRight = TextBoxROIRight.Text;
             string pixelSize = PixelSize.Text;
             string orientation = Orientation.Text;
-            string marginLeft = CrossMarginTop.Text;
-            string marginRight = CrossMarginBottom.Text;
+            string coreID = CoreID.Text;
+            string sectionID = SectionID.Text;
             string FileType = Item.FileType;
 
 
@@ -210,20 +264,30 @@ namespace XelerateAvalonia.Views
             }
 
 
+            // IMAGE SLICE SELECTION METHOD CALL
+
+            //Change for integration of ROI Selection from User
+
+            byte[] croppedImageBytes = ImageTransformations.CaptureImageSlice(_sliderGridLeft, _sliderGridRight, _sliderGridStart, _sliderGridEnd, imageBytes);
+
+
             // Create a new ImageCore object with the gathered values and updated image bytes
             ImageCore newItem = new ImageCore(
                 name,
-                null, // Assuming we don't have an ID for the new item yet
+                null, 
                 imageBytes,
-                FileType, // Placeholder for image type, not updated here
-                Item.Width, // Placeholder for image width, not updated here
-                Item.Height, // Placeholder for image height, not updated here
+                croppedImageBytes,
+                Int32.Parse(coreID),
+                Int32.Parse(sectionID),
+                FileType, 
+                Item.Width, 
+                Item.Height,
                 roiStart,
                 roiEnd,
                 pixelSize,
                 orientation,
-                marginRight,
-                marginLeft,
+                roiLeft,
+                roiRight,
                 0, // Placeholder for size, not updated here
                 default, // Placeholder for uploaded, not updated here
                 null, // Placeholder for images collection, not updated here
@@ -243,9 +307,7 @@ namespace XelerateAvalonia.Views
 
             window.Close();
 
-            //reload the ImportViewPage
-
-            // Define and initialize the GoImport command in the constructor
+            
             
         }
 

@@ -33,7 +33,13 @@ namespace XelerateAvalonia.Models
 
         public byte[] Blob { get; set; }
 
+        public byte[] BlobROI { get; set; }
+
         public string FileType { get; set; }
+
+        public int CoreID { get; set; }
+
+        public int SectionID { get; set; }
 
         public string Width { get; set; }
 
@@ -66,11 +72,14 @@ namespace XelerateAvalonia.Models
         private ObservableCollection<ImageCore> parentCollection;
 
 
-        public ImageCore(string name, UniqueId id ,byte[] blob ,string fileType, string width, string height, string ROIstart, string ROIend, string imagePixelSize, string imageOrientation, string imageMarginLeft, string imageMarginRight , float size, DateOnly uploaded, ObservableCollection<ImageCore> parentCollection,string databasePath)
+        public ImageCore(string name, UniqueId id ,byte[] blob , byte[] blobROI, int coreID, int sectionID, string fileType, string width, string height, string ROIstart, string ROIend, string imagePixelSize, string imageOrientation, string imageMarginLeft, string imageMarginRight , float size, DateOnly uploaded, ObservableCollection<ImageCore> parentCollection,string databasePath)
         {
             Name = name;
             ID = id;
             Blob = blob;
+            BlobROI = blobROI;
+            CoreID = coreID;
+            SectionID = sectionID;
             FileType = fileType;
             Width = width;
             Height = height;
@@ -114,18 +123,17 @@ namespace XelerateAvalonia.Models
             Window window = new Window
             {
                 Title = "Image ROI Calibration / Settings",
-                Width = 950,
+                Width = 915,
                 Height = 900,
                 Content = new ImageDisplay(CreateImageControl(),this,databasePath),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 CanResize = false
-
-
             };
 
             // Show the window
             
             window.Show();
+            
         }
 
        

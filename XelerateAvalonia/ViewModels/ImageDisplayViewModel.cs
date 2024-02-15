@@ -18,6 +18,8 @@ namespace XelerateAvalonia.ViewModels
         private float _gammaValue = 1.0f;
         private SixLabors.ImageSharp.Image<Rgba32> _imageSharp;
         private string _fileName;
+        private string _coreID;
+        private string _sectionID;
         private string _textBoxROIStart;
         private string _textBoxROIEnd;
         private string _pixelSize;
@@ -72,6 +74,18 @@ namespace XelerateAvalonia.ViewModels
         {
             get => _fileName;
             set => this.RaiseAndSetIfChanged(ref _fileName, value);
+        }
+
+        public string CoreIDText
+        {
+            get => _coreID;
+            set => this.RaiseAndSetIfChanged(ref _coreID, value);
+        }
+
+        public string SectionIDText
+        {
+            get => _sectionID;
+            set => this.RaiseAndSetIfChanged(ref _sectionID, value);
         }
 
         public string TextBoxROIStart
@@ -139,48 +153,6 @@ namespace XelerateAvalonia.ViewModels
             }
         }
 
-        public void SaveImage()
-        {
-            // Gather input field values
-            string name = "FileName.Text";
-            string roiStart = "TextBoxROIStart.Text";
-            string roiEnd = "TextBoxROIEnd.Text";
-            string pixelSize = "PixelSize.Text";
-            string orientation = "Orientation.Text";
-            string marginLeft = "CrossMarginTop.Text";
-            string marginRight = "CrossMarginBottom.Text";
-            string FileType = Item.FileType;
-
-            byte[] imageBytes = _imageSharp != null ? ImageTransformations.GetBytesFromImage(_imageSharp) : Item.Blob;
-
-            // Create a new ImageCore object
-            ImageCore newItem = new ImageCore(
-                name,
-                null,
-                imageBytes,
-                FileType,
-                Item.Width,
-                Item.Height,
-                roiStart,
-                roiEnd,
-                pixelSize,
-                orientation,
-                marginRight,
-                marginLeft,
-                0,
-                default,
-                null,
-                null
-            );
-
-            // Overwrite properties except for size and uploaded from the existing item
-            newItem.Size = Item.Size;
-            newItem.Uploaded = Item.Uploaded;
-
-            // Save the updated item in the database
-            DBAccess.SaveImage(newItem, true, DatabasePath);
-
-            _imageSharp?.Dispose();
-        }
+       
     }
 }

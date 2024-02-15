@@ -23,6 +23,7 @@ using Image = SixLabors.ImageSharp.Image;
 using System.Collections.Specialized;
 using SixLabors.ImageSharp.Formats.Png;
 using XelerateAvalonia.Auxiliaries;
+using System.Text.RegularExpressions;
 
 namespace XelerateAvalonia.ViewModels
 {
@@ -183,6 +184,7 @@ namespace XelerateAvalonia.ViewModels
                 return -1;
             }
         }
+
         private void OnImageListChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             // Update UploadedFileCount whenever ImageList changes
@@ -266,165 +268,217 @@ namespace XelerateAvalonia.ViewModels
 
             await Task.Run(() =>
             {
-
                 var encodingUTF8 = System.Text.Encoding.UTF8;
+                long sizeInBytes = GetFileSize(CurrentFileName);
+                float sizeInMb = (float)Math.Round(((sizeInBytes / 1024f) / 1000), 2);
 
-            // Get file size from CurrentFileName
-            long sizeInBytes = GetFileSize(CurrentFileName);
+                List<object[]> allRowValues = new List<object[]>();
 
-            // Convert bytes to kilobytes (if needed)
-            float sizeInMb = (float)Math.Round(((sizeInBytes / 1024f) / 1000), 2);
+                DataSet CoreDataSet;
 
-            // Create a list to store the extracted row values
-            List<object[]> allRowValues = new List<object[]>();
-
-            DataSet CoreDataSet;
-
-
-            // Take CurrentFileName and import this ExcelFile into a dataSet
-            using (var stream = File.Open(CurrentFileName, FileMode.Open, FileAccess.Read))
-            {
-                // Auto-detect format, supports:
-                //  - Binary Excel files (2.0-2003 format; *.xls)
-                //  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
-                using (var reader = ExcelReaderFactory.CreateReader(stream, new ExcelReaderConfiguration()
+                using (var stream = File.Open(CurrentFileName, FileMode.Open, FileAccess.Read))
                 {
-                    FallbackEncoding = Encoding.GetEncoding(1252)  // Set the fallback encoding 
-                }))
-                {
-                    // Read the entire content of the Excel file
-                    CoreDataSet = reader.AsDataSet();
-
-                    // Extract the data using MetaCoreReader and store row values
-                    for (int rowIdx = 2; rowIdx < CoreDataSet.Tables[0].Rows.Count; rowIdx++)
+                    using (var reader = ExcelReaderFactory.CreateReader(stream, new ExcelReaderConfiguration()
                     {
-                        // Extract values from each row using MetaCoreReader
-                        object[] rowValues = MetaCoreReader(CoreDataSet, sizeInMb);
+                        FallbackEncoding = Encoding.GetEncoding(1252)
+                    }))
+                    {
+                        CoreDataSet = reader.AsDataSet();
 
-                        // Store the row values in the list
-                        allRowValues.Add(rowValues);
+                        for (int rowIdx = 2; rowIdx < CoreDataSet.Tables[0].Rows.Count; rowIdx++)
+                        {
+                            object[] rowValues = MetaCoreReader(CoreDataSet, sizeInMb);
+                            allRowValues.Add(rowValues);
+                        }
+                        ProgressValue = "50";
                     }
-                    ProgressValue = "50";
-                    
                 }
-            }
 
-            string databaseFileName = "database.db";
-            string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
+                // Retrieve column headers
+                DataRow headersRow = CoreDataSet.Tables[0].Rows[2];
+                int numColumns = headersRow.ItemArray.Length;
+                List<string> elementNames = new List<string>();
 
-            string Core = Path.GetFileNameWithoutExtension(CurrentFileName);
-
-            DBAccess.SaveDataset(CoreDataSet, Core, databasePath);
-
-
-            // After processing the entire file, create CoreMeta entry only once
-            MetaCoreCreater(allRowValues);
-
-            ProgressValue = "65";
+                // Initialize a list of abbreviations of all occurring natural elements
+                List<string> naturalElementAbbreviations = new List<string>
+                {
+                    "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn",
+                    "Fe", "Ni", "Cu", "Zn", "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag",
+                    "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb"
+                };
 
 
-                // Convert the first row of allRowValues to a CoreMeta object
-                if (allRowValues.Count > 0)
-            {
+                // Retrieve all element names with their respective STD in their column and their amount of zeros as a Zero % value
+                List<string> elements = new List<string>();
+                List<string> elementsSTD = new List<string>();
+                List<string> elementsZeroSum = new List<string>();
+
+                for (int i = 0; i < numColumns; i++)
+                {
+                    // Retrieve the column name
+                    string columnHeader = headersRow[i].ToString();
+
+                    // Check if the column header exactly matches any natural element abbreviation
+                    if (naturalElementAbbreviations.Contains(columnHeader))
+                    {
+                        // Get all values in the column starting from the third row
+                        var columnValues = new List<double>();
+                        foreach (DataRow row in CoreDataSet.Tables[0].Rows)
+                        {
+                            double value;
+                            if (double.TryParse(row[i].ToString(), out value))
+                            {
+                                columnValues.Add(value);
+                            }
+                        }
+
+                        // Calculate standard deviation and percentage of zeros for the corresponding column
+                        double stdDev = CalculateStandardDeviation(columnValues);
+                        double zeroPercentage = CalculateZeroPercentage(columnValues);
+
+                        // Add the element name, standard deviation, and zero percentage to their respective lists
+                        elements.Add(columnHeader);
+                        elementsSTD.Add(stdDev.ToString());
+                        elementsZeroSum.Add(zeroPercentage.ToString());
+                    }
+                }
+
+                // Fill in missing elements with null values
+                List<string> allElements = new List<string>
+                    {
+                        "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn",
+                        "Fe", "Ni", "Cu", "Zn", "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag",
+                        "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb"
+                    };
+
+                foreach (string element in allElements)
+                {
+                    if (!elements.Contains(element))
+                    {
+                        elements.Add(element);
+                        elementsSTD.Add(null);
+                        elementsZeroSum.Add(null);
+                    }
+                }
+
+                string databaseFileName = "database.db";
+                string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
                 object[] firstRowValues = allRowValues[0];
-                string Corename = (string)firstRowValues[0];
-                UniqueId ID = new UniqueId(Guid.NewGuid());
-                string DeviceName = (string)firstRowValues[1];
-                string InputSource = (string)firstRowValues[2];
-                float MeasuredTime = (float)firstRowValues[3];
-                float Voltage = (float)firstRowValues[4];
-                float Current = (float)firstRowValues[5];
-                float size = (float)firstRowValues[6];
-                DateOnly currentDateTime = DateOnly.FromDateTime(DateTime.Now);
+                
+                string Core = (string)firstRowValues[0];
+                string validCoreName = Core.Replace("-", "_");
 
-                CoreMeta newEntry = new CoreMeta(Corename, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, currentDateTime);
+                DBAccess.SaveDataset(CoreDataSet, validCoreName, databasePath);
 
-                // Save CoreMeta object to the database only once
-                DBAccess.SaveCoreMeta(newEntry, false, databasePath);
-            }
+                // After processing the entire file, create CoreMeta entry only once
+                MetaCoreCreater(allRowValues);
+
+                if (allRowValues.Count > 0)
+                {
+                    firstRowValues = allRowValues[0];
+                    UniqueId ID = new UniqueId(Guid.NewGuid());
+                    string DeviceName = (string)firstRowValues[1];
+                    string InputSource = (string)firstRowValues[2];
+                    float MeasuredTime = (float)firstRowValues[3];
+                    float Voltage = (float)firstRowValues[4];
+                    float Current = (float)firstRowValues[5];
+                    float size = (float)firstRowValues[6];
+                    DateOnly currentDateTime = DateOnly.FromDateTime(DateTime.Now);
+
+                    CoreMeta newEntry = new CoreMeta(validCoreName, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, currentDateTime);
+
+                    DBAccess.SaveCoreMeta(newEntry, false, databasePath, elements, elementsSTD, elementsZeroSum);
+                }
+
                 UploadedFileCount = DBAccess.GetUploadedFileCounts(databasePath);
                 ProgressValue = "80";
-                           
             });
 
             ProgressValue = "0";
             ProgressBarBackground = "#1D1D1D";
-           
         }
+
 
         public async void ImageImport()
         {
             ProgressBarBackground = "#313131";
             ProgressValue = "30";
-            string imageWidth;
-            string imageHeight;
-            string imagePixelSize;
-            string imageOrientation;
 
             await Task.Run(() =>
             {
                 try
                 {
-                    // 1. Import the image and translate it into a byte array
-                    byte[] imageFile = ReadImageFile(CurrentImageName);
-
-                    // 2. Get other necessary information
-                    string name = Path.GetFileNameWithoutExtension(CurrentImageName);
-
-                    string imageType = Path.GetExtension(CurrentImageName);
-
-                    UniqueId id = new UniqueId(Guid.NewGuid().ToString());
-
-                    // Load the image directly from the file path
-                    using (Image<Rgba32> image = Image.Load<Rgba32>(CurrentImageName))
+                    string[] imageNames = CurrentImageName.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries); // Split the concatenated string into individual file paths
+                    imageNames = imageNames.Select(imageName => imageName.Trim()).ToArray();
+                    foreach (string imageName in imageNames)
                     {
-                        // Get the width and height
-                        int width = image.Width;
-                        int height = image.Height;
+                        // 1. Import the image and translate it into a byte array
+                        byte[] imageFile = ReadImageFile(imageName.Trim()); // Trim to remove any leading or trailing whitespace
 
-                        imageWidth = width.ToString();
-                        imageHeight = height.ToString();
+                        // Initial ROI Selection 
+                        byte[] imageROI = imageFile;
 
-                                             
-                        imagePixelSize = $"{width}x{height}";
+                        string name = Path.GetFileNameWithoutExtension(imageName);
 
-                        imageOrientation = width > height ? "Horizontal" : "Vertical";
+                        // Retrieve CoreID and Section ID by filename
+                        int coreID, sectionID;
 
-                        if (imageOrientation == "Horizontal")
+                        // Regular expression to match all numbers in the filename (Section ID)
+                        var sectionMatches = Regex.Matches(name, @"\d+");
+
+                        // If there are matches, get the last number as sectionID, else default to 1
+                        sectionID = sectionMatches.Count > 0 ? int.Parse(sectionMatches[sectionMatches.Count - 1].Value) : 1;
+
+                        // If there's more than one match, get the number before the last one as coreID
+                        coreID = sectionMatches.Count > 1 ? int.Parse(sectionMatches[sectionMatches.Count - 2].Value) : 1;
+
+                        string imageType = Path.GetExtension(imageName);
+
+                        UniqueId id = new UniqueId(Guid.NewGuid().ToString());
+
+                        // Load the image directly from the file path
+                        using (Image<Rgba32> image = Image.Load<Rgba32>(imageName.Trim())) // Trim to remove any leading or trailing whitespace
                         {
-                            ImageTransformations.RotateImageSharp(image);
-                            imageOrientation = "Vertical";
-                            imageFile = ImageTransformations.GetBytesFromImage(image);
+                            // Get the width and height
+                            int width = image.Width;
+                            int height = image.Height;
+
+                            string imageWidth = width.ToString();
+                            string imageHeight = height.ToString();
+                            string imagePixelSize = $"{width}x{height}";
+                            string imageOrientation = width > height ? "Horizontal" : "Vertical";
+
+                            if (imageOrientation == "Horizontal")
+                            {
+                                ImageTransformations.RotateImageSharp(image);
+                                imageOrientation = "Vertical";
+                                imageFile = ImageTransformations.GetBytesFromImage(image);
+                            }
+
+                            string imageROIStart = "0";
+                            string imageROIEnd = "810";
+
+                            string imageMarginRight = "0";
+                            string imageMarginLeft = "0";
+
+                            long sizeInBytes = GetFileSize(imageName);
+                            float sizeInMb = (float)Math.Round(((sizeInBytes / 1024f) / 1000), 2);
+                            DateOnly uploaded = DateOnly.FromDateTime(DateTime.Now);
+
+                            string databaseFileName = "database.db";
+                            string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
+
+                            // 3. Create a new Image entry
+                            ImageCore newEntryImage = new ImageCore(name, id, imageFile, imageROI, coreID, sectionID, imageType, imageWidth, imageHeight, imageROIStart, imageROIEnd, imagePixelSize, imageOrientation, imageMarginRight, imageMarginLeft, sizeInMb, uploaded, ImageList, databasePath);
+
+                            // 4. Save the Image entry to the database
+                            DBAccess.SaveImage(newEntryImage, false, databasePath);
+
+                            // Add the new entry to the FileList or perform any other required operations
+                            ImageList.Add(newEntryImage);
+                            UploadedFileCount = DBAccess.GetUploadedFileCounts(databasePath);
                         }
-                        
-                        
                     }
-                    
-
-                    string imageROIStart = "0";
-                    string imageROIEnd = imageHeight;
-                                                           
- 
-                    string imageMarginRight ="0";
-                    string imageMarginLeft = "0";
-
-                    long sizeInBytes = GetFileSize(CurrentImageName);
-                    float sizeInMb = (float)Math.Round(((sizeInBytes / 1024f) / 1000),2);
-                    DateOnly uploaded = DateOnly.FromDateTime(DateTime.Now);
-
-                    string databaseFileName = "database.db";
-                    string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
-
-                    // 3. Create a new Image entry
-                    ImageCore newEntryImage = new ImageCore(name, id, imageFile, imageType, imageWidth,imageHeight,imageROIStart,imageROIEnd, imagePixelSize,imageOrientation,imageMarginRight,imageMarginLeft, sizeInMb, uploaded, ImageList, databasePath);
-
-                    // 4. Save the Image entry to the database
-                    DBAccess.SaveImage(newEntryImage, false, databasePath);
-
-                     // Add the new entry to the FileList or perform any other required operations
-                    ImageList.Add(newEntryImage);
-                    UploadedFileCount = DBAccess.GetUploadedFileCounts(databasePath);
-
                 }
                 catch (Exception ex)
                 {
@@ -456,6 +510,23 @@ namespace XelerateAvalonia.ViewModels
                     }
                 }
             }
+        }
+
+        public double CalculateStandardDeviation(IEnumerable<double> values)
+        {
+            double mean = values.Average();
+            double sumOfSquaresOfDifferences = values.Select(val => (val - mean) * (val - mean)).Sum();
+            double variance = sumOfSquaresOfDifferences / values.Count();
+            double standardDeviation = Math.Sqrt(variance);
+            return Math.Round(standardDeviation, 2); // Round to two decimal places
+        }
+
+        public double CalculateZeroPercentage(IEnumerable<double> values)
+        {
+            int totalValues = values.Count();
+            int zeroCount = values.Count(val => val == 0);
+            double zeroPercentage = (double)zeroCount / totalValues * 100.0;
+            return zeroPercentage;
         }
 
 

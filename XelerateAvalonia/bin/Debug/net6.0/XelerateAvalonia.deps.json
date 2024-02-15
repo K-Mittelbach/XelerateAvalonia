@@ -23,6 +23,7 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Projektanker.Icons.Avalonia": "8.3.0",
           "Projektanker.Icons.Avalonia.FontAwesome": "8.3.0",
+          "ScottPlot.Avalonia": "5.0.21",
           "Semi.Avalonia": "11.0.1",
           "Semi.Avalonia.ColorPicker": "11.0.1",
           "Semi.Avalonia.DataGrid": "11.0.1",
@@ -251,7 +252,7 @@
           "HarfBuzzSharp": "2.8.2.3",
           "HarfBuzzSharp.NativeAssets.Linux": "2.8.2.3",
           "HarfBuzzSharp.NativeAssets.WebAssembly": "2.8.2.3",
-          "SkiaSharp": "2.88.3",
+          "SkiaSharp": "2.88.7",
           "SkiaSharp.NativeAssets.Linux": "2.88.3",
           "SkiaSharp.NativeAssets.WebAssembly": "2.88.3"
         },
@@ -785,6 +786,30 @@
           }
         }
       },
+      "ScottPlot/5.0.21": {
+        "dependencies": {
+          "SkiaSharp": "2.88.7"
+        },
+        "runtime": {
+          "lib/net6.0/ScottPlot.dll": {
+            "assemblyVersion": "5.0.21.0",
+            "fileVersion": "5.0.21.0"
+          }
+        }
+      },
+      "ScottPlot.Avalonia/5.0.21": {
+        "dependencies": {
+          "Avalonia": "11.0.2",
+          "Avalonia.Skia": "11.0.2",
+          "ScottPlot": "5.0.21"
+        },
+        "runtime": {
+          "lib/net6.0/ScottPlot.Avalonia.dll": {
+            "assemblyVersion": "5.0.21.0",
+            "fileVersion": "5.0.21.0"
+          }
+        }
+      },
       "Semi.Avalonia/11.0.1": {
         "dependencies": {
           "Avalonia": "11.0.2"
@@ -839,21 +864,21 @@
           }
         }
       },
-      "SkiaSharp/2.88.3": {
+      "SkiaSharp/2.88.7": {
         "dependencies": {
-          "SkiaSharp.NativeAssets.Win32": "2.88.3",
-          "SkiaSharp.NativeAssets.macOS": "2.88.3"
+          "SkiaSharp.NativeAssets.Win32": "2.88.7",
+          "SkiaSharp.NativeAssets.macOS": "2.88.7"
         },
         "runtime": {
           "lib/net6.0/SkiaSharp.dll": {
             "assemblyVersion": "2.88.0.0",
-            "fileVersion": "2.88.3.0"
+            "fileVersion": "2.88.7.0"
           }
         }
       },
       "SkiaSharp.NativeAssets.Linux/2.88.3": {
         "dependencies": {
-          "SkiaSharp": "2.88.3"
+          "SkiaSharp": "2.88.7"
         },
         "runtimeTargets": {
           "runtimes/linux-arm/native/libSkiaSharp.so": {
@@ -878,7 +903,7 @@
           }
         }
       },
-      "SkiaSharp.NativeAssets.macOS/2.88.3": {
+      "SkiaSharp.NativeAssets.macOS/2.88.7": {
         "runtimeTargets": {
           "runtimes/osx/native/libSkiaSharp.dylib": {
             "rid": "osx",
@@ -888,7 +913,7 @@
         }
       },
       "SkiaSharp.NativeAssets.WebAssembly/2.88.3": {},
-      "SkiaSharp.NativeAssets.Win32/2.88.3": {
+      "SkiaSharp.NativeAssets.Win32/2.88.7": {
         "runtimeTargets": {
           "runtimes/win-arm64/native/libSkiaSharp.dll": {
             "rid": "win-arm64",
@@ -1520,6 +1545,20 @@
       "path": "runtime.win-x86.runtime.native.system.data.sqlclient.sni/4.4.0",
       "hashPath": "runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512"
     },
+    "ScottPlot/5.0.21": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RrzYd6blgiZ8xfdgE7xN3j4u8PCpRs6Cu7H3QVdhyEnGrRMqnsNsJHzKmfVVHIFUrU9CL5FloK392DpbW0lk0A==",
+      "path": "scottplot/5.0.21",
+      "hashPath": "scottplot.5.0.21.nupkg.sha512"
+    },
+    "ScottPlot.Avalonia/5.0.21": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YEpOZWcGehsI2KOEXe7Lqme0MTGYhOt7GAJCJGmt3PIZWW04Hu1Rv/ur/cW+svhxuf65rhetpz2EFp65FlIgxQ==",
+      "path": "scottplot.avalonia/5.0.21",
+      "hashPath": "scottplot.avalonia.5.0.21.nupkg.sha512"
+    },
     "Semi.Avalonia/11.0.1": {
       "type": "package",
       "serviceable": true,
@@ -1555,12 +1594,12 @@
       "path": "sixlabors.imagesharp/3.1.2",
       "hashPath": "sixlabors.imagesharp.3.1.2.nupkg.sha512"
     },
-    "SkiaSharp/2.88.3": {
+    "SkiaSharp/2.88.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-GG8X3EdfwyBfwjl639UIiOVOKEdeoqDgYrz0P1MUCnefXt9cofN+AK8YB/v1+5cLMr03ieWCQdDmPqnFIzSxZw==",
-      "path": "skiasharp/2.88.3",
-      "hashPath": "skiasharp.2.88.3.nupkg.sha512"
+      "sha512": "sha512-LJHAMrbWO00J7jXWLWehyjqFo29T4VzABimfJb4nICqpEe3c/KvQGWL4ItON8ymzhxYOeFgyxeRzuNzO4GHSug==",
+      "path": "skiasharp/2.88.7",
+      "hashPath": "skiasharp.2.88.7.nupkg.sha512"
     },
     "SkiaSharp.NativeAssets.Linux/2.88.3": {
       "type": "package",
@@ -1569,12 +1608,12 @@
       "path": "skiasharp.nativeassets.linux/2.88.3",
       "hashPath": "skiasharp.nativeassets.linux.2.88.3.nupkg.sha512"
     },
-    "SkiaSharp.NativeAssets.macOS/2.88.3": {
+    "SkiaSharp.NativeAssets.macOS/2.88.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-CEbWAXMGFkPV3S1snBKK7jEG3+xud/9kmSAhu0BEUKKtlMdxx+Qal0U9bntQREM9QpqP5xLWZooodi8IlV8MEg==",
-      "path": "skiasharp.nativeassets.macos/2.88.3",
-      "hashPath": "skiasharp.nativeassets.macos.2.88.3.nupkg.sha512"
+      "sha512": "sha512-3jNzco4VjcYPFNxR9aNWcgweFXbTSdM1VpNRzCS4X0i1A1OuNqcaulrAvmntNpujeWxHo9e6WGh6FN8Jf5+XhA==",
+      "path": "skiasharp.nativeassets.macos/2.88.7",
+      "hashPath": "skiasharp.nativeassets.macos.2.88.7.nupkg.sha512"
     },
     "SkiaSharp.NativeAssets.WebAssembly/2.88.3": {
       "type": "package",
@@ -1583,12 +1622,12 @@
       "path": "skiasharp.nativeassets.webassembly/2.88.3",
       "hashPath": "skiasharp.nativeassets.webassembly.2.88.3.nupkg.sha512"
     },
-    "SkiaSharp.NativeAssets.Win32/2.88.3": {
+    "SkiaSharp.NativeAssets.Win32/2.88.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-MU4ASL8VAbTv5vSw1PoiWjjjpjtGhWtFYuJnrN4sNHFCePb2ohQij9JhSdqLLxk7RpRtWPdV93fbA53Pt+J0yw==",
-      "path": "skiasharp.nativeassets.win32/2.88.3",
-      "hashPath": "skiasharp.nativeassets.win32.2.88.3.nupkg.sha512"
+      "sha512": "sha512-BCXmWdQ0oVck9vRwC8U3ocSaTHEx28VB+6qw9OxGIMQ86iO5bp4Flqk3IXH0l9Pbr7vWAUOpI212iaL9mTaUZQ==",
+      "path": "skiasharp.nativeassets.win32/2.88.7",
+      "hashPath": "skiasharp.nativeassets.win32.2.88.7.nupkg.sha512"
     },
     "Splat/14.4.1": {
       "type": "package",

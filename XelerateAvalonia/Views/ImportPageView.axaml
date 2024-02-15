@@ -87,7 +87,7 @@
 									<Border Margin="20 10 30 3" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="75" Width="1150">
 										<StackPanel Orientation="Horizontal" Margin="50 0 0 0" VerticalAlignment="Center"  >
 											<i:Icon Value="fa-file-excel" Foreground="white"  VerticalAlignment="Center" FontSize="30" Margin="0 0 50 0"/>
-											<StackPanel Orientation="Vertical" Width="150"  VerticalAlignment="Center" >
+											<StackPanel Orientation="Vertical" Width="125"  VerticalAlignment="Center" >
 												<TextBlock Text="{Binding Name}" Foreground="#5194F8"  FontWeight="SemiBold" FontSize="14"/>
 											</StackPanel>
 											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 25 0"/>
@@ -101,7 +101,7 @@
 											</StackPanel>
 											<StackPanel Orientation="Vertical"  Width="100" Margin="10 0 0 0" VerticalAlignment="Center">
 												<TextBlock Text="Voltage [kV] :" Foreground="White" FontSize="12" FontWeight="SemiBold"  HorizontalAlignment="Right" />
-												<TextBlock Text="Current [A] :" Foreground="White" Margin="0 20 0 0"  FontWeight="SemiBold"  FontSize="12" HorizontalAlignment="Right"/>
+												<TextBlock Text="Current [mA] :" Foreground="White" Margin="0 20 0 0"  FontWeight="SemiBold"  FontSize="12" HorizontalAlignment="Right"/>
 											</StackPanel>
 											<StackPanel Orientation="Vertical" MinWidth="100" Margin="15 0 0 0" VerticalAlignment="Center" >
 												<TextBox Text="{Binding Voltage}"  Foreground="White" Height="3" FontSize="12" IsReadOnly="True" TextAlignment="Right" />
@@ -147,8 +147,16 @@
 									<Border Margin="20 10 30 3" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#313131" BorderBrush="#808080" Height="75" Width="1150">
 										<StackPanel Orientation="Horizontal" Margin="50 0 0 0" VerticalAlignment="Center"  >
 											<i:Icon Value="fa-file-image" Foreground="white"  VerticalAlignment="Center" FontSize="30" Margin="0 0 50 0"/>
-											<StackPanel Orientation="Vertical" Width="150"  VerticalAlignment="Center" >
+											<StackPanel Orientation="Vertical" Width="125"  VerticalAlignment="Center" >
 												<TextBlock Text="{Binding Name}" Foreground="#5194F8"  FontWeight="SemiBold" FontSize="14" />
+												<StackPanel Orientation="Horizontal" Margin="0 3 0 0">
+													<TextBlock Text="Core " Foreground="lightblue"  FontWeight="SemiBold" FontSize="11" />
+													<TextBlock Text="{Binding CoreID}" Foreground="lightblue"  FontWeight="Medium" FontSize="11"/>
+												</StackPanel>
+												<StackPanel Orientation="Horizontal">
+													<TextBlock Text="Section  " Foreground="lightblue"  FontWeight="SemiBold" FontSize="11" />
+													<TextBlock Text="{Binding SectionID}" Foreground="lightblue"  FontWeight="Medium" FontSize="11"/>
+												</StackPanel>
 											</StackPanel>
 											<Border Height="55" Width="2" Background="#D9D9D9" VerticalAlignment="Center" Opacity="60" Margin="40 0 25 0"/>
 											<StackPanel Orientation="Vertical"  Width="110" VerticalAlignment="Center">
@@ -178,12 +186,7 @@
 											</StackPanel>
 											<Menu>
 												<MenuItem Header="Select" Foreground="#5194F8" FontSize="15" FontWeight="SemiBold">
-													<MenuItem Header="Edit Settings" Command="{Binding DisplayImageSettingsCommand}">
-														<MenuItem.Icon>
-															<i:Icon Value="fa-pen-to-square" Foreground="white"  VerticalAlignment="Center" FontWeight="Light"  FontSize="14" />
-														</MenuItem.Icon>
-														</MenuItem>
-													<MenuItem Header="Calibrate ROI"  Command="{Binding DisplayImageCommand}">
+													<MenuItem Header="Edit Image Settings"  Command="{Binding DisplayImageCommand}">
 														<MenuItem.Icon>
 															<i:Icon Value="fa-ruler-vertical" Foreground="white"  VerticalAlignment="Center" FontWeight="Light"  FontSize="14" />
 														</MenuItem.Icon>

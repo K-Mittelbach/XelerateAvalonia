@@ -5,6 +5,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using XelerateAvalonia.ViewModels;
 
@@ -29,7 +30,7 @@ namespace XelerateAvalonia.Views
             var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Open XLS or image files",
-                AllowMultiple = false
+                AllowMultiple = true // Allow multiple files to be selected
             });
 
             if (files?.Count > 0)
@@ -37,27 +38,37 @@ namespace XelerateAvalonia.Views
                 var CurrentFileTextBlock = this.FindControl<TextBlock>("CurrentFile");
                 var CurrentImageTextBlock = this.FindControl<TextBlock>("CurrentImage");
 
-                string localPath = new Uri(files[0].Path.ToString()).LocalPath;
+                string fileExtensions = ".xlsx,.xls,.jpg,.png,.jpeg,.tif"; // Define the allowed file extensions
+                List<string> excelFiles = new List<string>();
+                List<string> imageFiles = new List<string>();
 
-                // Check file extension to distinguish between Excel and image files
-                string fileExtension = Path.GetExtension(localPath)?.ToLower();
+                foreach (var file in files)
+                {
+                    string localPath = new Uri(file.Path.ToString()).LocalPath;
+                    string fileExtension = Path.GetExtension(localPath)?.ToLower();
 
-                if (fileExtension == ".xlsx" || fileExtension == ".xls")
-                {
-                    // It's an Excel file
-                    CurrentFileTextBlock.Text = localPath;
-                    
+                    if (fileExtensions.Contains(fileExtension))
+                    {
+                        if (fileExtension == ".xlsx" || fileExtension == ".xls")
+                        {
+                            excelFiles.Add(localPath);
+                        }
+                        else if (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".jpeg" || fileExtension == ".tif")
+                        {
+                            imageFiles.Add(localPath);
+                        }
+                    }
                 }
-                else if (fileExtension == ".jpg" || fileExtension == ".png" || fileExtension == ".jpeg" || fileExtension == ".tif")
+
+                // Update CurrentFileTextBlock only if no image files are imported
+                if (imageFiles.Count == 0)
                 {
-                    // It's an image file
-                    CurrentImageTextBlock.Text = localPath;
-                    
+                    CurrentFileTextBlock.Text = string.Join(", ", excelFiles);
                 }
-                // If it's not an Excel or image file, do nothing
-                
+                CurrentImageTextBlock.Text = string.Join(", ", imageFiles);
             }
         }
+
 
 
     }

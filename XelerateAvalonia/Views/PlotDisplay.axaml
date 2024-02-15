@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.expression.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
+             x:DataType="vm:PlottingPageViewModel"
+             x:Class="XelerateAvalonia.Views.PlotDisplay"
+             Background="#111619">
+
+
+
+		<Grid Grid.Column="0">
+			<!-- Bordered container for centered image -->
+			<Border BorderBrush="gray" BorderThickness="1" Margin="20 32 0 78" MaxWidth="500" MaxHeight="800">
+				<ScottPlot:AvaPlot Name="AvaPlot1" />
+			</Border>
+
+
+			<!-- Settings and Inputs on the right -->
+		<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10">
+		
+	
+		</StackPanel>
+
+		
+	</Grid>
+</UserControl>

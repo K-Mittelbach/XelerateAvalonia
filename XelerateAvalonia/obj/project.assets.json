@@ -1016,6 +1016,36 @@
           }
         }
       },
+      "ScottPlot/5.0.21": {
+        "type": "package",
+        "dependencies": {
+          "SkiaSharp": "2.88.7"
+        },
+        "compile": {
+          "lib/net6.0/ScottPlot.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/ScottPlot.dll": {}
+        }
+      },
+      "ScottPlot.Avalonia/5.0.21": {
+        "type": "package",
+        "dependencies": {
+          "Avalonia": "11.0.2",
+          "Avalonia.Skia": "11.0.2",
+          "ScottPlot": "5.0.21"
+        },
+        "compile": {
+          "lib/net6.0/ScottPlot.Avalonia.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/ScottPlot.Avalonia.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
       "Semi.Avalonia/11.0.1": {
         "type": "package",
         "dependencies": {
@@ -1082,11 +1112,11 @@
           "build/SixLabors.ImageSharp.props": {}
         }
       },
-      "SkiaSharp/2.88.3": {
+      "SkiaSharp/2.88.7": {
         "type": "package",
         "dependencies": {
-          "SkiaSharp.NativeAssets.Win32": "2.88.3",
-          "SkiaSharp.NativeAssets.macOS": "2.88.3"
+          "SkiaSharp.NativeAssets.Win32": "2.88.7",
+          "SkiaSharp.NativeAssets.macOS": "2.88.7"
         },
         "compile": {
           "lib/net6.0/SkiaSharp.dll": {
@@ -1129,13 +1159,13 @@
           }
         }
       },
-      "SkiaSharp.NativeAssets.macOS/2.88.3": {
+      "SkiaSharp.NativeAssets.macOS/2.88.7": {
         "type": "package",
         "compile": {
-          "lib/net5.0/_._": {}
+          "lib/net6.0/_._": {}
         },
         "runtime": {
-          "lib/net5.0/_._": {}
+          "lib/net6.0/_._": {}
         },
         "runtimeTargets": {
           "runtimes/osx/native/libSkiaSharp.dylib": {
@@ -1157,13 +1187,13 @@
           "buildTransitive/netstandard1.0/SkiaSharp.NativeAssets.WebAssembly.targets": {}
         }
       },
-      "SkiaSharp.NativeAssets.Win32/2.88.3": {
+      "SkiaSharp.NativeAssets.Win32/2.88.7": {
         "type": "package",
         "compile": {
-          "lib/net5.0/_._": {}
+          "lib/net6.0/_._": {}
         },
         "runtime": {
-          "lib/net5.0/_._": {}
+          "lib/net6.0/_._": {}
         },
         "runtimeTargets": {
           "runtimes/win-arm64/native/libSkiaSharp.dll": {
@@ -3095,6 +3125,47 @@
         "version.txt"
       ]
     },
+    "ScottPlot/5.0.21": {
+      "sha512": "RrzYd6blgiZ8xfdgE7xN3j4u8PCpRs6Cu7H3QVdhyEnGrRMqnsNsJHzKmfVVHIFUrU9CL5FloK392DpbW0lk0A==",
+      "type": "package",
+      "path": "scottplot/5.0.21",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net462/ScottPlot.dll",
+        "lib/net6.0/ScottPlot.dll",
+        "lib/net8.0/ScottPlot.dll",
+        "lib/netstandard2.0/ScottPlot.dll",
+        "readme.md",
+        "scottplot.5.0.21.nupkg.sha512",
+        "scottplot.nuspec"
+      ]
+    },
+    "ScottPlot.Avalonia/5.0.21": {
+      "sha512": "YEpOZWcGehsI2KOEXe7Lqme0MTGYhOt7GAJCJGmt3PIZWW04Hu1Rv/ur/cW+svhxuf65rhetpz2EFp65FlIgxQ==",
+      "type": "package",
+      "path": "scottplot.avalonia/5.0.21",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net462/ScottPlot.Avalonia.dll",
+        "lib/net462/ScottPlot.Avalonia.pdb",
+        "lib/net6.0/ScottPlot.Avalonia.dll",
+        "lib/net6.0/ScottPlot.Avalonia.pdb",
+        "lib/net8.0/ScottPlot.Avalonia.dll",
+        "lib/net8.0/ScottPlot.Avalonia.pdb",
+        "readme.md",
+        "scottplot.avalonia.5.0.21.nupkg.sha512",
+        "scottplot.avalonia.nuspec",
+        "src/ScottPlot.Avalonia/AssemblyInfo.cs",
+        "src/ScottPlot.Avalonia/AvaPlot.cs",
+        "src/ScottPlot.Avalonia/AvaPlotExtensions.cs",
+        "src/ScottPlot.Avalonia/AvaPlotMenu.cs",
+        "src/ScottPlot.Avalonia/ScottPlot.Avalonia.csproj"
+      ]
+    },
     "Semi.Avalonia/11.0.1": {
       "sha512": "iswElH/UtuJq9C2p6W1xiKbt0cPMm/TdukbMKAKIhYMaFwPDxv/+yNSanOkbKF/cY84jYd9lp+cFufh9vmN5UQ==",
       "type": "package",
@@ -3162,10 +3233,10 @@
         "sixlabors.imagesharp.nuspec"
       ]
     },
-    "SkiaSharp/2.88.3": {
-      "sha512": "GG8X3EdfwyBfwjl639UIiOVOKEdeoqDgYrz0P1MUCnefXt9cofN+AK8YB/v1+5cLMr03ieWCQdDmPqnFIzSxZw==",
+    "SkiaSharp/2.88.7": {
+      "sha512": "LJHAMrbWO00J7jXWLWehyjqFo29T4VzABimfJb4nICqpEe3c/KvQGWL4ItON8ymzhxYOeFgyxeRzuNzO4GHSug==",
       "type": "package",
-      "path": "skiasharp/2.88.3",
+      "path": "skiasharp/2.88.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3178,9 +3249,6 @@
         "lib/net462/SkiaSharp.dll",
         "lib/net462/SkiaSharp.pdb",
         "lib/net462/SkiaSharp.xml",
-        "lib/net5.0/SkiaSharp.dll",
-        "lib/net5.0/SkiaSharp.pdb",
-        "lib/net5.0/SkiaSharp.xml",
         "lib/net6.0-android30.0/SkiaSharp.dll",
         "lib/net6.0-android30.0/SkiaSharp.pdb",
         "lib/net6.0-android30.0/SkiaSharp.xml",
@@ -3235,7 +3303,7 @@
         "lib/xamarinwatchos1.0/SkiaSharp.dll",
         "lib/xamarinwatchos1.0/SkiaSharp.pdb",
         "lib/xamarinwatchos1.0/SkiaSharp.xml",
-        "skiasharp.2.88.3.nupkg.sha512",
+        "skiasharp.2.88.7.nupkg.sha512",
         "skiasharp.nuspec"
       ]
     },
@@ -3262,10 +3330,10 @@
         "skiasharp.nativeassets.linux.nuspec"
       ]
     },
-    "SkiaSharp.NativeAssets.macOS/2.88.3": {
-      "sha512": "CEbWAXMGFkPV3S1snBKK7jEG3+xud/9kmSAhu0BEUKKtlMdxx+Qal0U9bntQREM9QpqP5xLWZooodi8IlV8MEg==",
+    "SkiaSharp.NativeAssets.macOS/2.88.7": {
+      "sha512": "3jNzco4VjcYPFNxR9aNWcgweFXbTSdM1VpNRzCS4X0i1A1OuNqcaulrAvmntNpujeWxHo9e6WGh6FN8Jf5+XhA==",
       "type": "package",
-      "path": "skiasharp.nativeassets.macos/2.88.3",
+      "path": "skiasharp.nativeassets.macos/2.88.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3278,13 +3346,13 @@
         "buildTransitive/net6.0-macos10.15/SkiaSharp.NativeAssets.macOS.targets",
         "buildTransitive/xamarinmac2.0/SkiaSharp.NativeAssets.macOS.targets",
         "lib/net462/_._",
-        "lib/net5.0/_._",
         "lib/net6.0-macos10.15/_._",
+        "lib/net6.0/_._",
         "lib/netcoreapp3.1/_._",
         "lib/netstandard1.3/_._",
         "lib/xamarinmac2.0/_._",
         "runtimes/osx/native/libSkiaSharp.dylib",
-        "skiasharp.nativeassets.macos.2.88.3.nupkg.sha512",
+        "skiasharp.nativeassets.macos.2.88.7.nupkg.sha512",
         "skiasharp.nativeassets.macos.nuspec"
       ]
     },
@@ -3311,10 +3379,10 @@
         "skiasharp.nativeassets.webassembly.nuspec"
       ]
     },
-    "SkiaSharp.NativeAssets.Win32/2.88.3": {
-      "sha512": "MU4ASL8VAbTv5vSw1PoiWjjjpjtGhWtFYuJnrN4sNHFCePb2ohQij9JhSdqLLxk7RpRtWPdV93fbA53Pt+J0yw==",
+    "SkiaSharp.NativeAssets.Win32/2.88.7": {
+      "sha512": "BCXmWdQ0oVck9vRwC8U3ocSaTHEx28VB+6qw9OxGIMQ86iO5bp4Flqk3IXH0l9Pbr7vWAUOpI212iaL9mTaUZQ==",
       "type": "package",
-      "path": "skiasharp.nativeassets.win32/2.88.3",
+      "path": "skiasharp.nativeassets.win32/2.88.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3323,13 +3391,13 @@
         "build/net462/SkiaSharp.NativeAssets.Win32.targets",
         "buildTransitive/net462/SkiaSharp.NativeAssets.Win32.targets",
         "lib/net462/_._",
-        "lib/net5.0/_._",
+        "lib/net6.0/_._",
         "lib/netcoreapp3.1/_._",
         "lib/netstandard1.3/_._",
         "runtimes/win-arm64/native/libSkiaSharp.dll",
         "runtimes/win-x64/native/libSkiaSharp.dll",
         "runtimes/win-x86/native/libSkiaSharp.dll",
-        "skiasharp.nativeassets.win32.2.88.3.nupkg.sha512",
+        "skiasharp.nativeassets.win32.2.88.7.nupkg.sha512",
         "skiasharp.nativeassets.win32.nuspec"
       ]
     },
@@ -4288,6 +4356,7 @@
       "Microsoft.Extensions.DependencyInjection.Abstractions >= 8.0.0",
       "Projektanker.Icons.Avalonia >= 8.3.0",
       "Projektanker.Icons.Avalonia.FontAwesome >= 8.3.0",
+      "ScottPlot.Avalonia >= 5.0.21",
       "Semi.Avalonia >= 11.0.1",
       "Semi.Avalonia.ColorPicker >= 11.0.1",
       "Semi.Avalonia.DataGrid >= 11.0.1",
@@ -4400,6 +4469,10 @@
           "Projektanker.Icons.Avalonia.FontAwesome": {
             "target": "Package",
             "version": "[8.3.0, )"
+          },
+          "ScottPlot.Avalonia": {
+            "target": "Package",
+            "version": "[5.0.21, )"
           },
           "Semi.Avalonia": {
             "target": "Package",

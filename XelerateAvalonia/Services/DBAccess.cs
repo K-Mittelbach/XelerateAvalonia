@@ -8,6 +8,7 @@ using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SixLabors.ImageSharp.Formats.Tga;
+using System.Security.Cryptography.X509Certificates;
 
 namespace XelerateAvalonia.Services
 {
@@ -48,7 +49,8 @@ namespace XelerateAvalonia.Services
                                 string uploaded = sdr.GetString(sdr.GetOrdinal("Uploaded"));
 
                                 // Creating CoreMeta using the constructor
-                                CoreMeta coreMeta = new CoreMeta(name, new UniqueId(id), deviceUsed, inputSource, measuredTime, voltage, current, size, DateOnly.Parse(uploaded));
+                                CoreMeta coreMeta = new CoreMeta(name, new UniqueId(id), deviceUsed, inputSource, 
+                                    measuredTime, voltage, current, size, DateOnly.Parse(uploaded));
 
                                 coreMetas.Add(coreMeta);
                             }
@@ -86,6 +88,9 @@ namespace XelerateAvalonia.Services
                                 string name = sdr["Name"].ToString();
                                 string id = sdr["ID"].ToString();
                                 byte[] imageBytes = (byte[])sdr["ImageBytes"];
+                                byte[] imageROI = (byte[])sdr["ImageROI"];
+                                int CoreID = sdr["CoreID"] != DBNull.Value ? (int)sdr["CoreID"] : 1;
+                                int SectionID = sdr["SectionID"] != DBNull.Value ? (int)sdr["SectionID"] : 1;
                                 string imageType = sdr["ImageType"].ToString();
                                 string imageWidth = sdr["ImageWidth"].ToString();
                                 string imageHeight = sdr["ImageHeight"].ToString();
@@ -99,7 +104,10 @@ namespace XelerateAvalonia.Services
                                 string uploaded = sdr.GetString(sdr.GetOrdinal("Uploaded"));
 
                                 // Creating Image using the constructor
-                                ImageCore image = new ImageCore(name, new UniqueId(id), imageBytes,imageType, imageWidth, imageHeight, imageROIStart, imageROIEnd, imagePixelSize, imageOrientation, imageMarginRight, imageMarginLeft, size, DateOnly.Parse(uploaded),images,databasePath);
+                                ImageCore image = new ImageCore(name, new UniqueId(id), imageBytes, 
+                                    imageROI,CoreID, SectionID, imageType, imageWidth, imageHeight, imageROIStart, 
+                                    imageROIEnd, imagePixelSize, imageOrientation, imageMarginRight, imageMarginLeft, size, 
+                                    DateOnly.Parse(uploaded),images,databasePath);
 
                                 images.Add(image);
                             }
@@ -111,7 +119,7 @@ namespace XelerateAvalonia.Services
             return images;
         }
 
-        public static void SaveCoreMeta(CoreMeta coreMeta, bool isUpdate, string databasePath)
+        public static void SaveCoreMeta(CoreMeta coreMeta, bool isUpdate, string databasePath, List<string> elements, List<string> elementSTD, List<string> elementZeroSum)
         {
             var cf = new ConnectionFactory(databasePath);
 
@@ -119,6 +127,10 @@ namespace XelerateAvalonia.Services
             {
                 cf.Connection.Open();
 
+                string[] DefaultElements = new string[] { "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn", "Fe",
+                    "Ni", "Cu", "Zn", "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag", "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb" };
+
+                // Create table if not exists
                 var createTableStatement =
                     "CREATE TABLE IF NOT EXISTS MetaTable (" +
                     "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -129,28 +141,59 @@ namespace XelerateAvalonia.Services
                     "Voltage REAL, " +
                     "Current REAL, " +
                     "Size REAL, " +
-                    "Uploaded TEXT" +
-                    ")";
+                    "Uploaded TEXT";
+
+                // Add columns for each element for standard deviation and zero sum
+                foreach (string element in DefaultElements)
+                {
+                    createTableStatement += $", {element}_std TEXT DEFAULT '0', {element}_zero_sum TEXT DEFAULT '0'";
+                }
+
+                createTableStatement += ")";
 
                 var createTableCommand = new SQLiteCommand(createTableStatement, cf.Connection);
                 createTableCommand.ExecuteNonQuery();
 
+                // Generate placeholder values for missing elements
+                var defaultElementValues = Enumerable.Repeat("0", DefaultElements.Length).ToArray();
+
                 string statement;
 
-                if (isUpdate==false)
+                if (!isUpdate)
                 {
                     statement =
                         "INSERT INTO MetaTable " +
-                        "(Name, DeviceUsed, InputSource, MeasuredTime, Voltage, Current, Size, Uploaded) " +
-                        "VALUES(@Name, @DeviceUsed, @InputSource, @MeasuredTime, @Voltage, @Current, @Size, @Uploaded)";
+                        "(Name, DeviceUsed, InputSource, MeasuredTime, Voltage, Current, Size, Uploaded";
+
+                    // Add columns for element standard deviation and zero sum to INSERT INTO statement
+                    foreach (string element in elements)
+                    {
+                        statement += $", {element}_std, {element}_zero_sum";
+                    }
+
+                    statement += ") VALUES (@Name, @DeviceUsed, @InputSource, @MeasuredTime, @Voltage, @Current, @Size, @Uploaded";
+
+                    // Add parameters with default values for missing elements
+                    for (int i = 0; i < DefaultElements.Length; i++)
+                    {
+                        statement += ", @Param" + (i * 2) + ", @Param" + ((i * 2) + 1);
+                    }
+
+                    statement += ")";
                 }
                 else
                 {
                     statement =
                         "UPDATE MetaTable " +
                         "SET Name = @Name, DeviceUsed = @DeviceUsed, InputSource = @InputSource, " +
-                        "MeasuredTime = @MeasuredTime, Voltage = @Voltage, Current = @Current, Size = @Size, Uploaded = @Uploaded " +
-                        "WHERE Id = @Id";
+                        "MeasuredTime = @MeasuredTime, Voltage = @Voltage, Current = @Current, Size = @Size, Uploaded = @Uploaded";
+
+                    for (int i = 0; i < elements.Count; i++)
+                    {
+                        statement += $", {elements[i]}_std = @Param{(i * 2)}, {elements[i]}_zero_sum = @Param{(i * 2) + 1}";
+                    }
+
+                    statement += " WHERE Id = @Id";
                 }
 
                 var insertCommand = new SQLiteCommand(statement, cf.Connection);
@@ -169,9 +212,18 @@ namespace XelerateAvalonia.Services
                 insertCommand.Parameters.AddWithValue("@Size", coreMeta.Size);
                 insertCommand.Parameters.AddWithValue("@Uploaded", coreMeta.Uploaded.ToString());
 
+                // Add parameter values for element standard deviation and zero sum
+                for (int i = 0; i < elements.Count; i++)
+                {
+                    insertCommand.Parameters.AddWithValue("@Param" + (i * 2), elementSTD.Count > i ? elementSTD[i] : defaultElementValues[i]);
+                    insertCommand.Parameters.AddWithValue("@Param" + ((i * 2) + 1), elementZeroSum.Count > i ? elementZeroSum[i] : defaultElementValues[i]);
+                }
+
                 insertCommand.ExecuteNonQuery();
             }
         }
+
+
 
         public static void RemoveCoreMeta(CoreMeta coreMeta, string databasePath)
         {
@@ -219,6 +271,9 @@ namespace XelerateAvalonia.Services
                     "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "Name TEXT, " +
                     "ImageBytes BLOB, " +
+                    "ImageROI BLOB, " +
+                    "CoreID INT, " +
+                    "SectionID INT, " +
                     "ImageType TEXT, " +
                     "ImageWidth TEXT, " +
                     "ImageHeight TEXT, " +
@@ -241,14 +296,17 @@ namespace XelerateAvalonia.Services
                 {
                     statement =
                         "INSERT INTO ImageTable " +
-                        "(Name, ImageBytes,ImageType, ImageWidth,ImageHeight,ImageROIStart, ImageROIEnd, ImagePixelSize, ImageOrientation, ImageMarginRight, ImageMarginLeft, Size, Uploaded) " +
-                        "VALUES(@Name,  @ImageBytes,@ImageType, @ImageWidth, @ImageHeight, @ImageROIStart, @ImageROIEnd,@ImagePixelSize, @ImageOrientation, @ImageMarginRight, @ImageMarginLeft, @Size, @Uploaded)";
+                        "(Name, ImageBytes, ImageROI, CoreID, SectionID, ImageType, ImageWidth, ImageHeight, ImageROIStart, ImageROIEnd, ImagePixelSize, ImageOrientation, " +
+                        "ImageMarginRight, ImageMarginLeft, Size, Uploaded) " +
+                        "VALUES(@Name,  @ImageBytes,@ImageROI, @CoreID, @SectionID, @ImageType, @ImageWidth, @ImageHeight, @ImageROIStart, @ImageROIEnd,@ImagePixelSize, @ImageOrientation, " +
+                        "@ImageMarginRight, @ImageMarginLeft, @Size, @Uploaded)";
                 }
                 else
                 {
                     statement =
                         "UPDATE ImageTable " +
-                        "SET ImageBytes = @ImageBytes, ImageType = @ImageType, ImageWidth = @ImageWidth, ImageHeight = @ImageHeight, ImageROIStart = @ImageROIStart, " +
+                        "SET ImageBytes = @ImageBytes, ImageROI = @ImageROI, CoreID = @CoreID, SectionID = @SectionID, ImageType = @ImageType, ImageWidth = @ImageWidth, ImageHeight = @ImageHeight, " +
+                        "ImageROIStart = @ImageROIStart, " +
                         "ImageROIEnd = @ImageROIEnd, ImagePixelSize = @ImagePixelSize, ImageOrientation = @ImageOrientation, ImageMarginRight = @ImageMarginRight, " +
                         "ImageMarginLeft = @ImageMarginLeft, Size = @Size, Uploaded = @Uploaded " +
                         "WHERE Name = @Name";
@@ -259,6 +317,9 @@ namespace XelerateAvalonia.Services
                           
                 insertCommand.Parameters.AddWithValue("@Name", image.Name);
                 insertCommand.Parameters.AddWithValue("@ImageBytes", image.Blob);
+                insertCommand.Parameters.AddWithValue("@ImageROI", image.BlobROI);
+                insertCommand.Parameters.AddWithValue("@CoreID", image.CoreID);
+                insertCommand.Parameters.AddWithValue("@SectionID", image.SectionID);
                 insertCommand.Parameters.AddWithValue("@ImageType", image.FileType);
                 insertCommand.Parameters.AddWithValue("@ImageWidth", image.Width);
                 insertCommand.Parameters.AddWithValue("@ImageHeight", image.Height);
@@ -373,6 +434,188 @@ namespace XelerateAvalonia.Services
                 return "(" + totalCount.ToString() +")";
             }
         }
+
+        public static ObservableCollection<NaturalElements> GetAllElements(string DataSetname, string databasePath)
+        {
+            ObservableCollection<NaturalElements> elementsCollection = new ObservableCollection<NaturalElements>();
+            string[] DefaultElements = new string[] { "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn", "Fe", "Ni", "Cu", "Zn", 
+                "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag", "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb" };
+
+            var cf = new ConnectionFactory(databasePath);
+            using (cf.Connection)
+            {
+                cf.Connection.Open();
+
+                // Define the SQL query to retrieve non-null values for the specified dataset
+                string query = $"SELECT * FROM MetaTable WHERE Name = @DataSetname";
+                using (var command = new SQLiteCommand(query, cf.Connection))
+                {
+                    command.Parameters.AddWithValue("@DataSetname", DataSetname);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // Read values from the reader for each element and create NaturalElements objects
+                            foreach (var element in DefaultElements)
+                            {
+                                string name = element.ToString();
+                                UniqueId id = new UniqueId(Guid.NewGuid()); // Generate a new unique ID for each element
+                                string standardDeviation = reader[$"{element}_std"].ToString();
+                                string zeroSum = reader[$"{element}_zero_sum"].ToString();
+                                string isChecked = "False";
+
+                                // Skip if standard deviation is null
+                                if (string.IsNullOrEmpty(standardDeviation))
+                                {
+                                    continue;
+                                }
+
+                                // Create NaturalElements object and add it to the collection
+                                NaturalElements elements = new NaturalElements(name, id, standardDeviation, zeroSum, isChecked);
+                                elementsCollection.Add(elements);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return elementsCollection;
+        }
+        public static ObservableCollection<CoreSections> GetAllCoreSections(string tableName, string databasePath)
+        {
+            ObservableCollection<CoreSections> coreSectionsList = new ObservableCollection<CoreSections>();
+
+            var cf = new ConnectionFactory(databasePath);
+
+            using (cf.Connection)
+            {
+                cf.Connection.Open();
+
+                // Using parameterized query to prevent SQL injection
+                string query = $"SELECT CoreID, SectionID FROM {tableName} ORDER BY CoreID, SectionID";
+
+                using (var command = new SQLiteCommand(query, cf.Connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        string currentCoreId = null;
+                        string currentSectionId = null;
+                        int startRow = 1; // Initial start row
+                        int endRow = 0;   // Initial end row
+                        string isChecked = "False";
+
+                        while (reader.Read())
+                        {
+                            double coreId = Math.Round(Convert.ToDouble(reader["CoreID"]), 1);
+                            double sectionId = Math.Round(Convert.ToDouble(reader["SectionID"]), 1);
+
+                            string coreName = "Core " + coreId.ToString();
+                            string sectionName = "Section " + sectionId.ToString();
+
+                            if (currentCoreId != coreName || currentSectionId != sectionName)
+                            {
+                                // If not the first iteration, add the previous CoreSections object to the list
+                                if (currentCoreId != null)
+                                {
+                                    coreSectionsList.Add(new CoreSections(currentCoreId, currentSectionId, new UniqueId(Guid.NewGuid()), startRow.ToString(), endRow.ToString(), isChecked));
+                                    startRow = endRow + 1; // Update start row for the next CoreSections object
+                                }
+
+                                currentCoreId = coreName;
+                                currentSectionId = sectionName;
+                            }
+
+                            endRow++; // Increment end row for each CoreId
+                        }
+
+                        // Add the last CoreSections object after reading all rows
+                        if (currentCoreId != null)
+                        {
+                            coreSectionsList.Add(new CoreSections(currentCoreId, currentSectionId, new UniqueId(Guid.NewGuid()), startRow.ToString(), endRow.ToString(), isChecked));
+                        }
+                    }
+                }
+            }
+
+            return coreSectionsList;
+        }
+        public static DataTable GetTableAsDataTable(string tableName, string databasePath)
+        {
+            DataTable dataTable = new DataTable(tableName);
+
+            var cf = new ConnectionFactory(databasePath);
+
+            using (cf.Connection)
+            {
+                cf.Connection.Open();
+
+                // Using parameterized query to prevent SQL injection
+                string query = $"SELECT * FROM {tableName}";
+
+                using (var command = new SQLiteCommand(query, cf.Connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        // Populate the DataTable with column names and types
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            string columnName = reader.GetName(i);
+
+                            // Exclude specific columns
+                            if (columnName != "filename" &&
+                                columnName != "Voltage" &&
+                                columnName != "Amperage" &&
+                                columnName != "CoreID" &&
+                                columnName != "SectionID" &&
+                                columnName != "DepthID" &&
+                                columnName != "SampleID" &&
+                                columnName != "RepID" &&
+                                columnName != "cps" &&
+                                columnName != "Dt" &&
+                                columnName != "MSE")
+                            {
+                                dataTable.Columns.Add(columnName, reader.GetFieldType(i));
+                            }
+                        }
+
+                        // Populate the DataTable with data
+                        while (reader.Read())
+                        {
+                            DataRow row = dataTable.NewRow();
+
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+
+                                // Exclude specific columns
+                                if (columnName != "filename" &&
+                                    columnName != "Voltage" &&
+                                    columnName != "Amperage" &&
+                                    columnName != "CoreID" &&
+                                    columnName != "SectionID" &&
+                                    columnName != "DepthID" &&
+                                    columnName != "SampleID" &&
+                                    columnName != "RepID" &&
+                                    columnName != "cps" &&
+                                    columnName != "Dt" &&
+                                    columnName != "MSE")
+                                {
+                                    row[columnName] = reader[i];
+                                }
+                            }
+
+                            dataTable.Rows.Add(row);
+                        }
+                    }
+                }
+            }
+
+            return dataTable;
+        }
+
+
+
 
     }
 }

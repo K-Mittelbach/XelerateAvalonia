@@ -42,6 +42,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/PlotDisplay.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/PlottingPageView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
