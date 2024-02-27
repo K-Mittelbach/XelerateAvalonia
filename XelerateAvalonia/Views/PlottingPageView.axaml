@@ -51,7 +51,7 @@
 									  SelectedIndex="1">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
-										<TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120"/>
+										<TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
 							</ComboBox>
@@ -94,8 +94,8 @@
 								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" ></ToggleSwitch>
 							</StackPanel>
 							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
-								<TextBlock Text="Slider " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" ></ToggleSwitch>
+								<TextBlock Text="Dark Mode " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center"  IsChecked="{Binding IsDarkModeEnabled}" ></ToggleSwitch>
 							</StackPanel>
 
 
@@ -152,7 +152,7 @@
 									</ItemsRepeater.Layout>
 									<ItemsRepeater.ItemTemplate>
 										<DataTemplate>
-											<ToggleButton IsChecked="{Binding IsChecked, Mode=TwoWay}}"  Margin="5" Height="65" Width="70" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="17" FontWeight="SemiBold" CornerRadius="5"  >
+											<ToggleButton IsChecked="{Binding IsChecked, Mode=TwoWay}}"  Margin="5" Height="66" Width="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="17" FontWeight="SemiBold" CornerRadius="5"  >
 												<StackPanel Orientation="Vertical">
 													<TextBlock Text="{Binding Name}" FontSize="20" HorizontalAlignment="Center"/>
 													<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -170,8 +170,8 @@
 								</ItemsRepeater>
 							</WrapPanel>
 								</ScrollViewer>
-							<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"  Margin="0 0 0 0"  HorizontalAlignment="Right">
-								<Button Margin="0 0 0 30" Width="150" Height="35" HorizontalAlignment="Center" Foreground="white"  Content="Reset" Background="#313131" CornerRadius="0" BorderBrush="#313131"   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+							<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"  Margin="0 20 0 0"  HorizontalAlignment="Right">
+								<Button Margin="0 0 0 30" Width="150" Height="35" HorizontalAlignment="Center" Foreground="white"  Content="Reset" Background="#313131" CornerRadius="0" BorderBrush="#313131"   HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding ReloadPage}"/>
 								<Button Margin="25 0 20 30" Width="150" Height="35"  Foreground="white"  Content="Create Plot" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding OpenPlotWindow}" />
 							</StackPanel>
 						</StackPanel>
@@ -193,18 +193,19 @@
 						<i:Icon Value="fa-file" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
-
+				
+				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoStatistics}"	  >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-magnifying-glass-chart" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</Button>
+				
 				<Button  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" IsEnabled="False" >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-chart-line" Foreground="White" FontSize="17" />
 					</StackPanel>
 				</Button>
-
-				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoImage}"	  >
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-						<i:Icon Value="fa-image" Foreground="White" FontSize="17" />
-					</StackPanel>
-				</Button>
+				
 				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoDatabase}"	>
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-database" Foreground="White" FontSize="17" />

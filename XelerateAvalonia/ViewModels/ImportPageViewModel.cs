@@ -86,7 +86,7 @@ namespace XelerateAvalonia.ViewModels
 
         
         public ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
-        public ReactiveCommand<Unit, IRoutableViewModel> GoImage { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoStatistics { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoPlotting { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoSettings { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoDatabase { get; }
@@ -125,12 +125,12 @@ namespace XelerateAvalonia.ViewModels
                 }
             );
             // Define and initialize the GoImport command in the constructor
-            GoImage = ReactiveCommand.CreateFromObservable(
-                () =>
-                {
-                    return HostScreen.Router.NavigateAndReset.Execute(new ImagePageViewModel(HostScreen, sessionContext));
-                }
-            );
+            GoStatistics = ReactiveCommand.CreateFromObservable(
+               () =>
+               {
+                   return HostScreen.Router.NavigateAndReset.Execute(new StatisticsPageViewModel(HostScreen, sessionContext));
+               }
+           );
             // Define and initialize the GoImport command in the constructor
             GoPlotting = ReactiveCommand.CreateFromObservable(
                 () =>
@@ -225,11 +225,8 @@ namespace XelerateAvalonia.ViewModels
 
         public object[] MetaCoreReader(DataSet dataset, float size)
         {
-
             // ------- WIP!
             // Get Settings from document.txt
-
-
 
             string Corename = dataset.Tables[0].Rows[0][0].ToString(); // Assuming "Corename" is in the first row and first column
 
@@ -493,7 +490,6 @@ namespace XelerateAvalonia.ViewModels
                 }
             });
         }
-
 
         //Reading an image file and converting it into a byte array, converting everyting to a .png for easier usage
         private byte[] ReadImageFile(string filePath)

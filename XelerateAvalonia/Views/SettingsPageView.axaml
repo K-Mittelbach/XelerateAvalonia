@@ -35,13 +35,17 @@
 				</StackPanel>
 			</Border>
 
+			
+			
+			
+			
+			
+			
+			<!-- NavBar Section-->
 			<StackPanel Height="918" Width="55">
-				
 				<Button  Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 60 5 20"  Command="{Binding GoHome}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-home" Foreground="White" FontSize="17" />
-
-
 					</StackPanel>
 				</Button>
 
@@ -51,7 +55,12 @@
 
 					</StackPanel>
 				</Button>
-
+				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoStatistics}"	  >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-magnifying-glass-chart" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</Button>
+				
 				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoPlotting}" >
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-chart-line" Foreground="White" FontSize="17" />
@@ -59,21 +68,12 @@
 					</StackPanel>
 				</ToggleButton>
 
-				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	Command="{Binding GoImage}" >
-					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-						<i:Icon Value="fa-image" Foreground="White" FontSize="17" />
-
-					</StackPanel>
-				</ToggleButton>
 				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" 	Command="{Binding GoDatabase}">
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 						<i:Icon Value="fa-database" Foreground="White" FontSize="17" />
 
 					</StackPanel>
 				</ToggleButton>
-
-
-
 
 				<Border Background="white" Padding = "2" Opacity="453" Margin="10 230 10 0" />
 				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20" IsEnabled="false"	 >

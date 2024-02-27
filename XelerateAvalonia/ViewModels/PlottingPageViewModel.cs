@@ -26,13 +26,22 @@ namespace XelerateAvalonia.ViewModels
 
         public ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
 
-        public ReactiveCommand<Unit, IRoutableViewModel> GoImage { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoStatistics { get; }
 
         public ReactiveCommand<Unit, IRoutableViewModel> GoSettings { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoDatabase { get; }
 
+        public ReactiveCommand<Unit, IRoutableViewModel> ReloadPage { get; }
+
         public ReactiveCommand<Unit, Unit> OpenPlotWindow { get; }
 
+
+        private bool _isDarkModeEnabled;
+        public bool IsDarkModeEnabled
+        {
+            get => _isDarkModeEnabled;
+            set => this.RaiseAndSetIfChanged(ref _isDarkModeEnabled, value);
+        }
 
         public RoutingState Router { get; } = new RoutingState();
 
@@ -103,9 +112,6 @@ namespace XelerateAvalonia.ViewModels
             ElementList = new ObservableCollection<NaturalElements>();
             CoreSections = new ObservableCollection<CoreSections>();
 
-           
-
-
             // Define and initialize the GoImport command in the constructor
             GoImport = ReactiveCommand.CreateFromObservable(
                 () =>
@@ -114,6 +120,14 @@ namespace XelerateAvalonia.ViewModels
                 }
             );
             // Define and initialize the GoImport command in the constructor
+            ReloadPage = ReactiveCommand.CreateFromObservable(
+                () =>
+                {
+                    return HostScreen.Router.NavigateAndReset.Execute(new PlottingPageViewModel(HostScreen, sessionContext));
+                }
+            );
+
+            // Define and initialize the GoImport command in the constructor
             GoHome = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
@@ -121,10 +135,10 @@ namespace XelerateAvalonia.ViewModels
                 }
             );
             // Define and initialize the GoImport command in the constructor
-            GoImage = ReactiveCommand.CreateFromObservable(
+            GoStatistics = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    return HostScreen.Router.NavigateAndReset.Execute(new ImagePageViewModel(HostScreen,sessionContext));
+                    return HostScreen.Router.NavigateAndReset.Execute(new StatisticsPageViewModel(HostScreen,sessionContext));
                 }
             );
             // Define and initialize the GoImport command in the constructor
@@ -146,12 +160,9 @@ namespace XelerateAvalonia.ViewModels
             OpenPlotWindow = ReactiveCommand.Create(() =>
             {
 
-
-                DataTable Plotting = null; // Initialize Plotting DataTable outside the if clause
+                DataTable Plotting = null; // Initialize Plotting DataTable
                 var elementArrays = new Dictionary<string, double[]>();  // Create a dictionary to hold the arrays for each selected element
                                                                          
-                
-
                 // Check for Selected CoreSections
                 var checkedCoreSections = CoreSections.Where(cs => cs.IsChecked == "True").ToList();
 
@@ -160,6 +171,7 @@ namespace XelerateAvalonia.ViewModels
                     int startRow = int.Parse(checkedCoreSections.First().StartRow);
                     int endRow = int.Parse(checkedCoreSections.Last().EndRow);
 
+                    // read the datarows for plotting
                     var rowsToPlot = PlotData.AsEnumerable().Skip(startRow - 1).Take(endRow - startRow + 1);
 
                     Plotting = rowsToPlot.CopyToDataTable();
@@ -167,9 +179,9 @@ namespace XelerateAvalonia.ViewModels
                     // and the EndRow of the last element in checkedCoreSections.
                 }
 
-                // Extract the "position__m_" column from the Plotting DataTable
+                // Extract the "DepthID" column from the Plotting DataTable
                 var positionColumn = Plotting.AsEnumerable()
-                   .Select(row => double.Parse(row["position__mm_"].ToString()))
+                   .Select(row => double.Parse(row["DepthID"].ToString()))
                    .ToArray();
 
                 // Check if Plotting DataTable is initialized
@@ -192,14 +204,13 @@ namespace XelerateAvalonia.ViewModels
                     
                 }
 
-
-                // Create a new window
+                // Create a new window for displaying the plotted data
                 Window window = new Window
                 {
                     Title = "Core Plotting",
-                    Width = 1200,
-                    Height = 800,
-                    Content = new PlotDisplay(positionColumn,elementArrays),
+                    Width = 1500,
+                    Height = 900,
+                    Content = new PlotDisplay(positionColumn,elementArrays,SelectedImageItem,IsDarkModeEnabled),
                 };
 
                 // Show the window
@@ -227,15 +238,7 @@ namespace XelerateAvalonia.ViewModels
                   
                 }
             });
-
-            
-            
-           
-
-            // METHOD Plot
-           
-            // 4 Retrieve Image ROI
-            // 5 Plot Image ROI + Dataatrix[Element1] + .... DataMatrix[n]
+       
         }
     }
 }

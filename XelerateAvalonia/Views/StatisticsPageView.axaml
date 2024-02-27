@@ -1,0 +1,182 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:rxui="http://reactiveui.net"
+			 x:DataType="vm:StatisticsPageViewModel"
+             x:Class="XelerateAvalonia.Views.StatisticsPageView"
+			 d:DesignWidth="1330"
+			 d:DesignHeight="850"
+			 xmlns:i="https://github.com/projektanker/icons.avalonia">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="75"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="779*"/>
+			<ColumnDefinition Width="51*"/>
+			<ColumnDefinition Width="20"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="20"/>
+		</Grid.RowDefinitions>
+
+		<Grid  Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Background="#0A0D0F">
+			<Border Margin="80 10 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"   Height="80" Width="1580">
+				<StackPanel Orientation="Vertical">
+					<TextBlock Padding="20"  Width="380"  HorizontalAlignment="Left" FontWeight="Bold"  Foreground="White"  FontSize="25" Text="{Binding UrlPathSegment}" />
+					<Border Margin="20 0 20 30" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1"  Background="Gray"  Height="2" Width="1200"/>
+				</StackPanel>
+			</Border>
+			<StackPanel Margin="100 100 20 20" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="1200" Orientation="Vertical">
+				<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="175" Width="550">
+					<StackPanel Orientation="Vertical">
+						<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Input selection" FontSize="18"/>
+						<TextBlock Text="Input core data :" Margin="20 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white"/>
+						<StackPanel Margin="20 10 0 0" Orientation="Horizontal" Width="550">
+							<ComboBox x:Name="SelectedDataSet" MaxDropDownHeight="300" Foreground="White" Height="30" FontSize="12" Width="500"
+									  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+									  ItemsSource="{Binding DataSets}"
+									  SelectedItem="{Binding SelectedDataSetItem}"
+									  SelectedIndex="1">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+					</StackPanel>
+				</Border>
+				<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="450" Width="550">
+					<StackPanel Orientation="Vertical">
+						<DockPanel
+							Margin="10 10 20 10">
+							<TabControl
+							  Margin="0 0"
+							  TabStripPlacement="Top">
+								<TabItem Header="Biplot" Foreground="white" FontWeight="SemiBold" FontSize="19">
+									<StackPanel Orientation="Vertical">
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Text="Normalize Data " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Margin="0 0 0 0" Text="Mark candidate calib samples " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Margin="0 0 0 0" Text="Display Observations " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Text="Mark class membership " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<Button Width="495" Height="35" Foreground="white" Content="Select participating classes" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ></Button>
+										</StackPanel>
+										<Button Margin="350 20 20 30" Width="150" Height="35"  Foreground="white"  Content="Draw" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  />
+									</StackPanel>
+								</TabItem>
+								<TabItem Header="Cluster" Foreground="white" FontWeight="SemiBold" FontSize="19">
+									<StackPanel Orientation="Vertical">
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Text="Normalize Data " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Margin="0 0 0 0" Text="Subset clustering " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Margin="0 0 0 0" Text="Cluster method " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<ComboBox Margin="180 0 0 0" VerticalAlignment="Center" Width="115" >
+												<ComboBoxItem>hierarchical</ComboBoxItem>
+												<ComboBoxItem>k-means</ComboBoxItem>
+												<ComboBoxItem>density-based</ComboBoxItem>
+											</ComboBox>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<TextBlock Text="Number of Clusters" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+											<TextBox Margin="180 0 0 0" VerticalAlignment="Center" Width="115" TextAlignment="Right"></TextBox>
+										</StackPanel>
+										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+											<Button Width="495" Height="35" Foreground="white" Content="Select participating core-sections" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ></Button>
+										</StackPanel>
+										<Button Margin="350 20 20 30" Width="150" Height="35"  Foreground="white"  Content="Draw" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  />
+									</StackPanel>
+								</TabItem>
+							</TabControl>
+						</DockPanel>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+
+			<!-- Element Selection and Core Range Selection -->
+			<StackPanel Orientation="Vertical">
+				<StackPanel Margin="675 100 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="275" Orientation="Vertical">
+					<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="646" Width="625">
+						<StackPanel Orientation="Vertical" Height="640" >
+							<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Visualisation" FontSize="18"/>
+							<Border Height="560" Margin="20"  BorderThickness="1" Background="#313131" BorderBrush="#808080">
+							</Border>
+							
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</StackPanel>
+			
+		<!--NavBar-->
+			<StackPanel Height="918" Width="75">
+				<Button  Width="45" Height="45" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 60 5 20"  Command="{Binding GoHome}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-home" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</Button>
+				<Button Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoImport}" >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-file" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</Button>
+				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20"	IsEnabled="false"		  >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-magnifying-glass-chart" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</ToggleButton>
+				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" Command="{Binding GoPlotting}"	>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-chart-line" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</ToggleButton>
+				<ToggleButton Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 10 5 20" 	Command="{Binding GoDatabase}">
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-database" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</ToggleButton>
+
+				<Border Background="white" Padding = "2" Opacity="453" Margin="10 230 10 0" />
+				<ToggleButton  Width="45" Height="45" HorizontalAlignment="Center" Background="#0A0D0F" Margin="5 30 5 20" Command="{Binding GoSettings}"	 >
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+						<i:Icon Value="fa-cog" Foreground="White" FontSize="17" />
+					</StackPanel>
+				</ToggleButton>
+
+			</StackPanel>
+			<rxui:RoutedViewHost Name="ImagePageViewHost" Grid.Row="0" Router="{Binding Router}" >
+				<rxui:RoutedViewHost.DefaultContent>
+					<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+					</StackPanel>
+				</rxui:RoutedViewHost.DefaultContent>
+			</rxui:RoutedViewHost>
+
+		</Grid>
+	</Grid>
+</UserControl>

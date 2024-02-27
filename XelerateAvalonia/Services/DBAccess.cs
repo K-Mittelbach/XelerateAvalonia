@@ -503,7 +503,7 @@ namespace XelerateAvalonia.Services
                         string currentSectionId = null;
                         int startRow = 1; // Initial start row
                         int endRow = 0;   // Initial end row
-                        string isChecked = "False";
+                        string isChecked = "True";
 
                         while (reader.Read())
                         {
@@ -568,7 +568,6 @@ namespace XelerateAvalonia.Services
                                 columnName != "Amperage" &&
                                 columnName != "CoreID" &&
                                 columnName != "SectionID" &&
-                                columnName != "DepthID" &&
                                 columnName != "SampleID" &&
                                 columnName != "RepID" &&
                                 columnName != "cps" &&
@@ -594,7 +593,6 @@ namespace XelerateAvalonia.Services
                                     columnName != "Amperage" &&
                                     columnName != "CoreID" &&
                                     columnName != "SectionID" &&
-                                    columnName != "DepthID" &&
                                     columnName != "SampleID" &&
                                     columnName != "RepID" &&
                                     columnName != "cps" &&

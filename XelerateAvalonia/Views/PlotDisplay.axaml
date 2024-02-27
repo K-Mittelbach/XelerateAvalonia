@@ -4,26 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
+             xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
              x:DataType="vm:PlottingPageViewModel"
              x:Class="XelerateAvalonia.Views.PlotDisplay"
              Background="#111619">
-
-
-
-		<Grid Grid.Column="0">
-			<!-- Bordered container for centered image -->
-			<Border BorderBrush="gray" BorderThickness="1" Margin="20 32 0 78" MaxWidth="500" MaxHeight="800">
-				<ScottPlot:AvaPlot Name="AvaPlot1" />
-			</Border>
-
-
-			<!-- Settings and Inputs on the right -->
-		<StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10">
-		
 	
-		</StackPanel>
-
-		
-	</Grid>
+	<Canvas Margin="10 50 0 0">
+		<!-- Parent container for AvaPlot objects in the first column -->
+		<Grid x:Name="AvaPlotsGrid" Grid.Column="1" Height="800" Margin="50 0 0 0">
+			<Grid.ColumnDefinitions>
+				<!-- Define as many columns as you need -->
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			
+		</Grid>
+	<Image x:Name="ImageControl"  HorizontalAlignment="Left" Width="243" Height="710" Margin="108 55 0 0" Stretch="Fill"/>
+	</Canvas>
 </UserControl>

@@ -24,7 +24,7 @@ namespace XelerateAvalonia.ViewModels
         public DateTime DateCreated => _sessionContext.CreatedIn;
 
         public ReactiveCommand<Unit, IRoutableViewModel> GoImport { get; }
-        public ReactiveCommand<Unit, IRoutableViewModel> GoImage { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoStatistics { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoPlotting { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoSettings { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoDatabase { get; }
@@ -51,10 +51,10 @@ namespace XelerateAvalonia.ViewModels
                 }
             );
             // Define and initialize the GoImage command in the constructor
-            GoImage = ReactiveCommand.CreateFromObservable(
+            GoStatistics = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    return HostScreen.Router.NavigateAndReset.Execute(new ImagePageViewModel(HostScreen, sessionContext));
+                    return HostScreen.Router.NavigateAndReset.Execute(new StatisticsPageViewModel(HostScreen, sessionContext));
                 }
             );
             // Define and initialize the GoPlotting command in the constructor

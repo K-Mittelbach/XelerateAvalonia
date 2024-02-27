@@ -20,7 +20,7 @@ namespace XelerateAvalonia.ViewModels
 
         // The command that navigates a user to first view model.
         public ReactiveCommand<Unit, IRoutableViewModel> GoHome { get; }
-        public ReactiveCommand<Unit, IRoutableViewModel> GoImage { get; }
+        public ReactiveCommand<Unit, IRoutableViewModel> GoStatistics { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoImport { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoPlotting { get; }
         public ReactiveCommand<Unit, IRoutableViewModel> GoSettings { get; }
@@ -44,11 +44,11 @@ namespace XelerateAvalonia.ViewModels
                 }
             );
 
-            GoImage = ReactiveCommand.CreateFromObservable(
+            GoStatistics = ReactiveCommand.CreateFromObservable(
                 () =>
                 {
-                    Console.WriteLine("Navigating to Image View");
-                    return Router.Navigate.Execute(new ImagePageViewModel(this, SessionContext));
+                    Console.WriteLine("Navigating to Statastics View");
+                    return Router.Navigate.Execute(new StatisticsPageViewModel(this, SessionContext));
                 }
             );
 
