@@ -19,6 +19,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="Accord.Statistics" Version="3.8.0" />
     <PackageReference Include="Avalonia" Version="11.0.2" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.2" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
@@ -33,6 +34,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.ML" Version="3.0.1" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="8.3.0" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="8.3.0" />
     <PackageReference Include="ScottPlot.Avalonia" Version="5.0.21" />
@@ -53,10 +55,5 @@
     <Compile Update="Views\StartPageView.axaml.cs">
       <DependentUpon>StartPageView.axaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>

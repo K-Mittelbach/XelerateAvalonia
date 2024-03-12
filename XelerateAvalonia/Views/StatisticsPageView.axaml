@@ -66,7 +66,7 @@
 									<StackPanel Orientation="Vertical">
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<TextBlock Text="Normalize Data " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center" ></ToggleSwitch>
 										</StackPanel>
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<TextBlock Margin="0 0 0 0" Text="Mark candidate calib samples " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
@@ -83,14 +83,14 @@
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<Button Width="495" Height="35" Foreground="white" Content="Select participating classes" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ></Button>
 										</StackPanel>
-										<Button Margin="350 20 20 30" Width="150" Height="35"  Foreground="white"  Content="Draw" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  />
+										<Button Margin="350 20 20 30" Width="150" Height="35"  Foreground="white"  Content="Draw" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CreateBiPlotCommand}"/>
 									</StackPanel>
 								</TabItem>
-								<TabItem Header="Cluster" Foreground="white" FontWeight="SemiBold" FontSize="19">
+								<TabItem Header="Clustering" Foreground="white" FontWeight="SemiBold" FontSize="19">
 									<StackPanel Orientation="Vertical">
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<TextBlock Text="Normalize Data " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center" IsChecked="{Binding IsNormalizationEnabledCluster}"></ToggleSwitch>
 										</StackPanel>
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<TextBlock Margin="0 0 0 0" Text="Subset clustering " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
@@ -98,37 +98,39 @@
 										</StackPanel>
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<TextBlock Margin="0 0 0 0" Text="Cluster method " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-											<ComboBox Margin="180 0 0 0" VerticalAlignment="Center" Width="115" >
-												<ComboBoxItem>hierarchical</ComboBoxItem>
-												<ComboBoxItem>k-means</ComboBoxItem>
-												<ComboBoxItem>density-based</ComboBoxItem>
-											</ComboBox>
+											<ComboBox Margin="180 0 0 0" VerticalAlignment="Center" Width="115" ItemsSource="{Binding ClusteringMethods}"
+													  SelectedItem="{Binding SelectedClusteringMethod, Mode=TwoWay}"
+													  SelectedIndex="1">
+												</ComboBox>
 										</StackPanel>
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<TextBlock Text="Number of Clusters" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-											<TextBox Margin="180 0 0 0" VerticalAlignment="Center" Width="115" TextAlignment="Right"></TextBox>
+											<TextBox Margin="180 0 0 0" VerticalAlignment="Center" Width="115" TextAlignment="Right" Text="{Binding NumberOfClusters,Mode=TwoWay }" ></TextBox>
 										</StackPanel>
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<Button Width="495" Height="35" Foreground="white" Content="Select participating core-sections" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ></Button>
 										</StackPanel>
-										<Button Margin="350 20 20 30" Width="150" Height="35"  Foreground="white"  Content="Draw" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  />
+										<Button Margin="350 20 20 30" Width="150" Height="35"  Foreground="white"  Content="Draw" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CreateClusterPlotCommand}"/>
 									</StackPanel>
 								</TabItem>
 							</TabControl>
 						</DockPanel>
 					</StackPanel>
+					
 				</Border>
 			</StackPanel>
 
-			<!-- Element Selection and Core Range Selection -->
+			<!-- Display of current Plot -->
 			<StackPanel Orientation="Vertical">
-				<StackPanel Margin="675 100 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2"   Width="275" Orientation="Vertical">
-					<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="646" Width="625">
-						<StackPanel Orientation="Vertical" Height="640" >
+				<StackPanel Margin="675 100 20 10" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" Width="275" Orientation="Vertical">
+					<Border Margin="0 10 20 10" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="646" Width="625">
+						<StackPanel Orientation="Vertical" Height="640">
 							<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Visualisation" FontSize="18"/>
-							<Border Height="560" Margin="20"  BorderThickness="1" Background="#313131" BorderBrush="#808080">
+							<Border Height="560" Margin="20" BorderThickness="1" Background="#313131" BorderBrush="#808080">
+								<Grid x:Name="PlottingGrid" Height="500" Width="600">
+									
+								</Grid>
 							</Border>
-							
 						</StackPanel>
 					</Border>
 				</StackPanel>
@@ -170,7 +172,7 @@
 				</ToggleButton>
 
 			</StackPanel>
-			<rxui:RoutedViewHost Name="ImagePageViewHost" Grid.Row="0" Router="{Binding Router}" >
+			<rxui:RoutedViewHost Name="StatisticsPageViewModel" Grid.Row="0" Router="{Binding Router}" >
 				<rxui:RoutedViewHost.DefaultContent>
 					<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 					</StackPanel>

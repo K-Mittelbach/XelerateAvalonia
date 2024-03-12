@@ -363,7 +363,18 @@ namespace XelerateAvalonia.ViewModels
                 object[] firstRowValues = allRowValues[0];
                 
                 string Core = (string)firstRowValues[0];
-                string validCoreName = Core.Replace("-", "_");
+                
+                string validCoreName = Core.Replace(" ", "_").Replace("-", "_");
+
+                // Check if the validCoreName contains numbers
+                if (validCoreName.Any(char.IsDigit))
+                {
+                    validCoreName = "Core_" + validCoreName; // Use a default name
+                }
+                else
+                {
+                    // Otherwise, keep the original name
+                }
 
                 DBAccess.SaveDataset(CoreDataSet, validCoreName, databasePath);
 

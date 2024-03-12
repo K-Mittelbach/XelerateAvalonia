@@ -61,6 +61,7 @@ namespace XelerateAvalonia.Services
 
             return coreMetas;
         }
+
         public static ObservableCollection<ImageCore> GetAllImages(string databasePath)
         {
             ObservableCollection<ImageCore> images = new ObservableCollection<ImageCore>();
@@ -223,8 +224,6 @@ namespace XelerateAvalonia.Services
             }
         }
 
-
-
         public static void RemoveCoreMeta(CoreMeta coreMeta, string databasePath)
         {
             ConnectionFactory cf = new ConnectionFactory(databasePath);
@@ -240,6 +239,7 @@ namespace XelerateAvalonia.Services
                 deleteCommand.ExecuteNonQuery();
             }
         }
+
         public static void RemoveImage(string imageName, string databasePath)
         {
             ConnectionFactory cf = new ConnectionFactory(databasePath);
@@ -255,8 +255,6 @@ namespace XelerateAvalonia.Services
                 deleteCommand.ExecuteNonQuery();
             }
         }
-
-
 
         public static void SaveImage(ImageCore image, bool isUpdate, string databasePath)
         {
@@ -482,6 +480,7 @@ namespace XelerateAvalonia.Services
 
             return elementsCollection;
         }
+
         public static ObservableCollection<CoreSections> GetAllCoreSections(string tableName, string databasePath)
         {
             ObservableCollection<CoreSections> coreSectionsList = new ObservableCollection<CoreSections>();
@@ -540,6 +539,7 @@ namespace XelerateAvalonia.Services
 
             return coreSectionsList;
         }
+
         public static DataTable GetTableAsDataTable(string tableName, string databasePath)
         {
             DataTable dataTable = new DataTable(tableName);

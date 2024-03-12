@@ -25,7 +25,6 @@ namespace XelerateAvalonia.Views
             // Convert depth from millimeters to meters
             Depth = Depth.Select(d => d / 1000.0).ToArray();
 
-
             // Create a new AvaPlot object
             AvaPlot avaImagePlot = new AvaPlot();
             // add a rectangle by specifying points

@@ -1,3 +1,7 @@
+C:\Users\mitte\.nuget\packages\accord\3.8.0\lib\netstandard2.0\Accord.dll
+C:\Users\mitte\.nuget\packages\accord.math\3.8.0\lib\netstandard2.0\Accord.Math.Core.dll
+C:\Users\mitte\.nuget\packages\accord.math\3.8.0\lib\netstandard2.0\Accord.Math.dll
+C:\Users\mitte\.nuget\packages\accord.statistics\3.8.0\lib\netstandard2.0\Accord.Statistics.dll
 C:\Users\mitte\.nuget\packages\avalonia\11.0.2\ref\net6.0\Avalonia.Base.dll
 C:\Users\mitte\.nuget\packages\avalonia.controls.colorpicker\11.0.2\lib\net6.0\Avalonia.Controls.ColorPicker.dll
 C:\Users\mitte\.nuget\packages\avalonia.controls.datagrid\11.0.2\lib\net6.0\Avalonia.Controls.DataGrid.dll
@@ -40,6 +44,15 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Micros
 C:\Users\mitte\.nuget\packages\microsoft.data.sqlite.core\8.0.0\lib\net6.0\Microsoft.Data.Sqlite.dll
 C:\Users\mitte\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0\lib\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\mitte\.nuget\packages\microsoft.extensions.dependencyinjection\8.0.0\lib\net6.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml\3.0.1\lib\netstandard2.0\Microsoft.ML.Core.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml.cpumath\3.0.1\lib\net6.0\Microsoft.ML.CpuMath.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml\3.0.1\lib\netstandard2.0\Microsoft.ML.Data.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml.dataview\3.0.1\lib\netstandard2.0\Microsoft.ML.DataView.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml\3.0.1\lib\netstandard2.0\Microsoft.ML.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml\3.0.1\lib\netstandard2.0\Microsoft.ML.KMeansClustering.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml\3.0.1\lib\netstandard2.0\Microsoft.ML.PCA.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml\3.0.1\lib\netstandard2.0\Microsoft.ML.StandardTrainers.dll
+C:\Users\mitte\.nuget\packages\microsoft.ml\3.0.1\lib\netstandard2.0\Microsoft.ML.Transforms.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.VisualBasic.Core.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.VisualBasic.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Microsoft.Win32.Primitives.dll
@@ -47,6 +60,7 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\Micros
 C:\Users\mitte\.nuget\packages\microsoft.win32.systemevents\6.0.0\lib\net6.0\Microsoft.Win32.SystemEvents.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\mscorlib.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\netstandard.dll
+C:\Users\mitte\.nuget\packages\newtonsoft.json\13.0.1\lib\netstandard2.0\Newtonsoft.Json.dll
 C:\Users\mitte\.nuget\packages\projektanker.icons.avalonia\8.3.0\lib\netstandard2.0\Projektanker.Icons.Avalonia.dll
 C:\Users\mitte\.nuget\packages\projektanker.icons.avalonia.fontawesome\8.3.0\lib\netstandard2.0\Projektanker.Icons.Avalonia.FontAwesome.dll
 C:\Users\mitte\.nuget\packages\reactiveui\18.3.1\lib\net6.0\ReactiveUI.dll
@@ -143,6 +157,7 @@ C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Net.WebSockets.Client.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Net.WebSockets.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Numerics.dll
+C:\Users\mitte\.nuget\packages\system.numerics.tensors\8.0.0\lib\net6.0\System.Numerics.Tensors.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.Numerics.Vectors.dll
 C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\6.0.21\ref\net6.0\System.ObjectModel.dll
 C:\Users\mitte\.nuget\packages\system.reactive\5.0.0\lib\net5.0\System.Reactive.dll
