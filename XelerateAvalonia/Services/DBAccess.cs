@@ -4,16 +4,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Xml;
 using XelerateAvalonia.Models;
-using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SixLabors.ImageSharp.Formats.Tga;
 using System.Security.Cryptography.X509Certificates;
 
 namespace XelerateAvalonia.Services
 {
     public class DBAccess
     {
+        // Retrieves all CoreMeta objects from the MetaTable in the specified database
         public static ObservableCollection<CoreMeta> GetAllCoreMetas(string databasePath)
         {
             ObservableCollection<CoreMeta> coreMetas = new ObservableCollection<CoreMeta>();
@@ -50,7 +49,7 @@ namespace XelerateAvalonia.Services
 
                                 // Creating CoreMeta using the constructor
                                 CoreMeta coreMeta = new CoreMeta(name, new UniqueId(id), deviceUsed, inputSource, 
-                                    measuredTime, voltage, current, size, DateOnly.Parse(uploaded));
+                                    measuredTime, voltage, current, size, DateOnly.Parse(uploaded),coreMetas,databasePath);
 
                                 coreMetas.Add(coreMeta);
                             }
@@ -62,6 +61,7 @@ namespace XelerateAvalonia.Services
             return coreMetas;
         }
 
+        // Retrieves all Core Images from the MetaTable in the specified database
         public static ObservableCollection<ImageCore> GetAllImages(string databasePath)
         {
             ObservableCollection<ImageCore> images = new ObservableCollection<ImageCore>();
@@ -120,6 +120,69 @@ namespace XelerateAvalonia.Services
             return images;
         }
 
+        public static ObservableCollection<Cluster> GetAllClusters(string databasePath)
+        {
+            return GetAllClusters(databasePath, null);
+        }
+
+        public static ObservableCollection<Cluster> GetAllClusters(string databasePath, string coreName)
+        {
+            ObservableCollection<Cluster> clusters = new ObservableCollection<Cluster>();
+
+            var cf = new ConnectionFactory(databasePath);
+
+            using (cf.Connection)
+            {
+                cf.Connection.Open();
+
+                // Check if the ImageTable exists
+                var checkTableExists = new SQLiteCommand("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='ClusterTable'", cf.Connection);
+                var tableExists = (long)checkTableExists.ExecuteScalar();
+
+                if (tableExists > 0)
+                {
+                    string statement = "SELECT * FROM ClusterTable";
+
+                    if (!string.IsNullOrEmpty(coreName))
+                    {
+                        statement += " WHERE Name = @CoreName";
+                    }
+
+                    using (var selectCommand = new SQLiteCommand(statement, cf.Connection))
+                    {
+                        if (!string.IsNullOrEmpty(coreName))
+                        {
+                            selectCommand.Parameters.AddWithValue("@CoreName", coreName);
+                        }
+
+                        using (var sdr = selectCommand.ExecuteReader())
+                        {
+                            while (sdr.Read())
+                            {
+                                string name = sdr["Name"].ToString();
+                                string id = sdr["ID"].ToString();
+                                byte[] plot = (byte[])sdr["Plot"];
+                                string ClusterType = sdr["ClusterType"].ToString();
+                                int ClusterNumber = sdr["ClusterNumber"] != DBNull.Value ? (int)sdr["ClusterNumber"] : 1;
+                                string clusterIDStr = sdr["ClusterID"].ToString();
+                                int[] clusterID = clusterIDStr.Split(',').Select(int.Parse).ToArray();
+
+
+                                // Creating Image using the constructor
+                                Cluster cluster = new Cluster(name, new UniqueId(id), plot,
+                                    ClusterType, ClusterNumber,clusterID);
+
+                                clusters.Add(cluster);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return clusters;
+        }
+
+        // Saves or update a CoreMeta object in the MetaTable as well as defining standard deviation and zero sum of elements
         public static void SaveCoreMeta(CoreMeta coreMeta, bool isUpdate, string databasePath, List<string> elements, List<string> elementSTD, List<string> elementZeroSum)
         {
             var cf = new ConnectionFactory(databasePath);
@@ -128,8 +191,14 @@ namespace XelerateAvalonia.Services
             {
                 cf.Connection.Open();
 
-                string[] DefaultElements = new string[] { "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn", "Fe",
-                    "Ni", "Cu", "Zn", "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag", "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb" };
+                string[] DefaultElements = new string[] { "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S",
+                    "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge",
+                    "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd",
+                    "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd",
+                    "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg",
+                    "Tl", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm",
+                    "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn",
+                    "Nh", "Fl", "Mc", "Lv", "Ts", "Og" };
 
                 // Create table if not exists
                 var createTableStatement =
@@ -224,22 +293,35 @@ namespace XelerateAvalonia.Services
             }
         }
 
-        public static void RemoveCoreMeta(CoreMeta coreMeta, string databasePath)
+        // Removes a CoreMeta object from the MetaTable and corresponding dataTable
+        public static void RemoveCoreMeta(string coreMetaName, string databasePath)
         {
+            
             ConnectionFactory cf = new ConnectionFactory(databasePath);
-            string statement =
-                "DELETE FROM MetaTable " +
-                "WHERE Id = @Id";
 
             using (cf.Connection)
             {
-                SQLiteCommand deleteCommand = new SQLiteCommand(statement, cf.Connection);
-                deleteCommand.Parameters.AddWithValue("@Id", coreMeta.ID);
                 cf.Connection.Open();
+
+                // Delete rows from MetaTable where the Name matches coreMetaName
+                string deleteStatement =
+                    "DELETE FROM MetaTable " +
+                    "WHERE Name = @Name";
+
+                SQLiteCommand deleteCommand = new SQLiteCommand(deleteStatement, cf.Connection);
+                deleteCommand.Parameters.AddWithValue("@Name", coreMetaName);
                 deleteCommand.ExecuteNonQuery();
+
+                // Drop the table with the same name as coreMetaName
+                string dropTableStatement =
+                    $"DROP TABLE IF EXISTS {coreMetaName}";
+
+                SQLiteCommand dropTableCommand = new SQLiteCommand(dropTableStatement, cf.Connection);
+                dropTableCommand.ExecuteNonQuery();
             }
         }
 
+        // Removes an Image from the MetaTable
         public static void RemoveImage(string imageName, string databasePath)
         {
             ConnectionFactory cf = new ConnectionFactory(databasePath);
@@ -256,6 +338,7 @@ namespace XelerateAvalonia.Services
             }
         }
 
+        // Image Import and saving in ImageTable
         public static void SaveImage(ImageCore image, bool isUpdate, string databasePath)
         {
             var cf = new ConnectionFactory(databasePath);
@@ -334,6 +417,67 @@ namespace XelerateAvalonia.Services
             }
         }
 
+        // Save a created cluster as an image with type and number of clusters 
+        public static void SaveCluster(Cluster cluster,bool isUpdate, string databasePath)
+        {
+            var cf = new ConnectionFactory(databasePath);
+
+            using (cf.Connection)
+            {
+                cf.Connection.Open();
+
+                var createTableStatement =
+                    "CREATE TABLE IF NOT EXISTS ClusterTable (" +
+                    "Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "Name TEXT, " +
+                    "Plot BLOB, " +
+                    "ClusterType TEXT, " +
+                    "ClusterNumber INT," +
+                    "ClusterID TEXT" +
+                    ")";
+
+                var createTableCommand = new SQLiteCommand(createTableStatement, cf.Connection);
+                createTableCommand.ExecuteNonQuery();
+
+                // Check if a record with the same name and cluster type exists
+                var checkExistingStatement = new SQLiteCommand("SELECT COUNT(*) FROM ClusterTable WHERE Name = @Name AND ClusterType = @ClusterType", cf.Connection);
+                checkExistingStatement.Parameters.AddWithValue("@Name", cluster.Name);
+                checkExistingStatement.Parameters.AddWithValue("@ClusterType", cluster.ClusterType);
+                var existingCount = (long)checkExistingStatement.ExecuteScalar();
+
+                string statement;
+
+                if (existingCount > 0)
+                {
+                    // Update existing record
+                    statement =
+                        "UPDATE ClusterTable " +
+                        "SET Plot = @Plot, ClusterNumber = @ClusterNumber, ClusterID = @ClusterID " +
+                        "WHERE Name = @Name AND ClusterType = @ClusterType";
+                }
+                else
+                {
+                    // Insert new record
+                    statement =
+                        "INSERT INTO ClusterTable " +
+                        "(Name, Plot, ClusterType, ClusterNumber, ClusterID) " +
+                        "VALUES(@Name, @Plot, @ClusterType, @ClusterNumber, @ClusterID)";
+                }
+
+                var insertCommand = new SQLiteCommand(statement, cf.Connection);
+
+                insertCommand.Parameters.AddWithValue("@Name", cluster.Name);
+                insertCommand.Parameters.AddWithValue("@Plot", cluster.ClusterPlot);
+                insertCommand.Parameters.AddWithValue("@ClusterType", cluster.ClusterType);
+                insertCommand.Parameters.AddWithValue("@ClusterNumber", cluster.ClusterNumbers);
+
+                // Convert the int array to a comma-separated string
+                string clusterIDStr = string.Join(",", cluster.ClusterID);
+                insertCommand.Parameters.AddWithValue("@ClusterID", clusterIDStr);
+
+                insertCommand.ExecuteNonQuery();
+            }
+        }
         // Save a Core dataset in the database as a table 
         public static void SaveDataset(DataSet dataSet, string tableName, string databasePath)
         {
@@ -399,6 +543,7 @@ namespace XelerateAvalonia.Services
             return columnName;
         }
 
+        // Retrieves the count of uploaded datasets
         public static string GetUploadedFileCounts(string databasePath)
         {
             var cf = new ConnectionFactory(databasePath);
@@ -433,11 +578,18 @@ namespace XelerateAvalonia.Services
             }
         }
 
+        // Retrieves all elements a specified dataset yields information of
         public static ObservableCollection<NaturalElements> GetAllElements(string DataSetname, string databasePath)
         {
             ObservableCollection<NaturalElements> elementsCollection = new ObservableCollection<NaturalElements>();
-            string[] DefaultElements = new string[] { "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn", "Fe", "Ni", "Cu", "Zn", 
-                "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag", "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb" };
+            string[] DefaultElements = new string[] { "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S",
+            "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge",
+            "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd",
+            "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd",
+            "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg",
+            "Tl", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm",
+            "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn",
+            "Nh", "Fl", "Mc", "Lv", "Ts", "Og"};
 
             var cf = new ConnectionFactory(databasePath);
             using (cf.Connection)
@@ -480,7 +632,78 @@ namespace XelerateAvalonia.Services
 
             return elementsCollection;
         }
+        public static void UpdateAndDeleteColumns(string dataSetName, List<string> elementNames,string databasePath)
+        {
+            var cf = new ConnectionFactory(databasePath);
+            using (cf.Connection)
+            {
+                cf.Connection.Open();
 
+                // Update the ElementValues in the MetaTable
+                UpdateMetaTable(dataSetName, elementNames, cf.Connection);
+
+                // Delete columns from the table with the DataSetName
+                DeleteColumnsFromTable(dataSetName, elementNames, cf.Connection);
+            }
+        }
+
+        private static void UpdateMetaTable(string dataSetName, List<string> elementNames, SQLiteConnection connection)
+        {
+            foreach (var elementName in elementNames)
+            {
+                // Construct the column names
+                string stdColumnName = $"{elementName}_std";
+                string zeroSumColumnName = $"{elementName}_zero_sum";
+
+                // Update the ElementValues to null in the MetaTable
+                var updateCmd = new SQLiteCommand($"UPDATE MetaTable SET {stdColumnName} = NULL, {zeroSumColumnName} = NULL WHERE Name = @DataSetName", connection);
+                updateCmd.Parameters.AddWithValue("@DataSetName", dataSetName);
+                updateCmd.ExecuteNonQuery();
+            }
+        }
+
+        private static void DeleteColumnsFromTable(string dataSetName, List<string> elementNames, SQLiteConnection connection)
+        {
+            foreach (var elementName in elementNames)
+            {
+                // Construct the column names
+                string columnName = $"{elementName}";
+
+                // Check if the column exists in the table and delete it if it does
+                DeleteColumnIfExists(columnName, dataSetName, connection);
+            }
+        }
+
+        private static void DeleteColumnIfExists(string columnName, string tableName, SQLiteConnection connection)
+        {
+            // Construct the SQL statement to check if the column exists in the specified table
+            string statement = $"PRAGMA table_info({tableName})";
+
+            using (var command = new SQLiteCommand(statement, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        // Get the name of each column in the table
+                        string existingColumnName = reader["name"].ToString();
+
+                        // If the column name matches the one to be deleted, drop the column
+                        if (existingColumnName == columnName)
+                        {
+                            // If the column exists, construct the SQL command to drop it
+                            string dropColumnStatement = $"ALTER TABLE {tableName} DROP COLUMN {columnName}";
+                            var dropColumnCmd = new SQLiteCommand(dropColumnStatement, connection);
+                            dropColumnCmd.ExecuteNonQuery();
+                            break; // Exit the loop after dropping the column
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // Retrieves all core sections a specified dataset yields information of
         public static ObservableCollection<CoreSections> GetAllCoreSections(string tableName, string databasePath)
         {
             ObservableCollection<CoreSections> coreSectionsList = new ObservableCollection<CoreSections>();
@@ -492,7 +715,9 @@ namespace XelerateAvalonia.Services
                 cf.Connection.Open();
 
                 // Using parameterized query to prevent SQL injection
-                string query = $"SELECT CoreID, SectionID FROM {tableName} ORDER BY CoreID, SectionID";
+                string query = $"SELECT CoreID, SectionID FROM {tableName} " +
+                               "ORDER BY CAST(SUBSTR(CoreID, 5) AS INTEGER), " +
+                               "CAST(SUBSTR(SectionID, 9) AS INTEGER)";
 
                 using (var command = new SQLiteCommand(query, cf.Connection))
                 {
@@ -503,6 +728,9 @@ namespace XelerateAvalonia.Services
                         int startRow = 1; // Initial start row
                         int endRow = 0;   // Initial end row
                         string isChecked = "True";
+                        string hasImage = "False";
+                        byte[] image = null;
+                        bool firstIteration = true; // Flag to indicate first iteration
 
                         while (reader.Read())
                         {
@@ -512,26 +740,36 @@ namespace XelerateAvalonia.Services
                             string coreName = "Core " + coreId.ToString();
                             string sectionName = "Section " + sectionId.ToString();
 
+                            if (firstIteration)
+                            {
+                                startRow = 1; // Initialize startRow only on the first iteration
+                                firstIteration = false; // Update flag
+                            }
+
                             if (currentCoreId != coreName || currentSectionId != sectionName)
                             {
-                                // If not the first iteration, add the previous CoreSections object to the list
-                                if (currentCoreId != null)
+                                // Get Image for CoreSection
+                                image = GetImageROIForCoreSection(tableName, coreId.ToString(), sectionId.ToString(), databasePath);
+                                hasImage = (image != null) ? "True" : "False"; // Check if image is null
+
+                                if (currentCoreId != null && currentSectionId != null)
                                 {
-                                    coreSectionsList.Add(new CoreSections(currentCoreId, currentSectionId, new UniqueId(Guid.NewGuid()), startRow.ToString(), endRow.ToString(), isChecked));
-                                    startRow = endRow + 1; // Update start row for the next CoreSections object
+                                    coreSectionsList.Add(new CoreSections(currentCoreId, currentSectionId, new UniqueId(Guid.NewGuid()), image, startRow.ToString(), (endRow - 1).ToString(), hasImage, isChecked));
                                 }
 
                                 currentCoreId = coreName;
                                 currentSectionId = sectionName;
+
+                                startRow = endRow + 1; // Update start row for the next CoreSections object
                             }
 
                             endRow++; // Increment end row for each CoreId
                         }
 
-                        // Add the last CoreSections object after reading all rows
-                        if (currentCoreId != null)
+                        // Add the last CoreSection
+                        if (currentCoreId != null && currentSectionId != null)
                         {
-                            coreSectionsList.Add(new CoreSections(currentCoreId, currentSectionId, new UniqueId(Guid.NewGuid()), startRow.ToString(), endRow.ToString(), isChecked));
+                            coreSectionsList.Add(new CoreSections(currentCoreId, currentSectionId, new UniqueId(Guid.NewGuid()), image, startRow.ToString(), (endRow - 1).ToString(), hasImage, isChecked));
                         }
                     }
                 }
@@ -540,6 +778,36 @@ namespace XelerateAvalonia.Services
             return coreSectionsList;
         }
 
+        private static byte[] GetImageROIForCoreSection(string coreName, string coreId, string sectionId, string databasePath)
+        {
+            var cf = new ConnectionFactory(databasePath);
+
+            coreName = coreName.Substring("Core_".Length);
+
+            using (cf.Connection)
+            {
+                cf.Connection.Open();
+
+                // Access the images from ImageTable
+                string query = "SELECT ImageROI FROM ImageTable WHERE Name LIKE @coreName AND CoreID = @coreId AND SectionID = @sectionId";
+                using (var command = new SQLiteCommand(query, cf.Connection))
+                {
+                    command.Parameters.AddWithValue("@coreName", "%" + coreName + "%");
+                    command.Parameters.AddWithValue("@coreId", coreId);
+                    command.Parameters.AddWithValue("@sectionId", sectionId);
+
+                    var result = command.ExecuteScalar();
+                    if (result != DBNull.Value)
+                    {
+                        return (byte[])result;
+                    }
+                }
+            }
+
+            return null; // Return null if no ImageROI found
+        }
+
+        // Retrieves a dataTable object from a saved dataset 
         public static DataTable GetTableAsDataTable(string tableName, string databasePath)
         {
             DataTable dataTable = new DataTable(tableName);

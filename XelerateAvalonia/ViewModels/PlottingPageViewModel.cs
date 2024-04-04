@@ -6,8 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Avalonia.Controls;
 using ReactiveUI;
+using XelerateAvalonia.Auxiliaries;
 using XelerateAvalonia.Models;
 using XelerateAvalonia.Services;
 using XelerateAvalonia.Views;
@@ -49,7 +51,6 @@ namespace XelerateAvalonia.ViewModels
 
         public DataTable PlotData;
 
-        public double[] ImageROI;
 
         private ObservableCollection<CoreMeta> _dataSets;
         public ObservableCollection<CoreMeta> DataSets
@@ -65,19 +66,20 @@ namespace XelerateAvalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedDataSetItem, value);
         }
 
-        private ImageCore _selectedImageItem;
-        public ImageCore SelectedImageItem
+        private Cluster _selectedClusterItem;
+        public Cluster SelectedClusterItem
         {
-            get => _selectedImageItem;
-            set => this.RaiseAndSetIfChanged(ref _selectedImageItem, value);
+            get => _selectedClusterItem;
+            set => this.RaiseAndSetIfChanged(ref _selectedClusterItem, value);
         }
 
-        private ObservableCollection<ImageCore> _imageList;
-        public ObservableCollection<ImageCore> ImageList
+        private ObservableCollection<Cluster> _clusterList;
+        public ObservableCollection<Cluster> ClusterList
         {
-            get => _imageList;
-            set => this.RaiseAndSetIfChanged(ref _imageList, value);
+            get => _clusterList;
+            set => this.RaiseAndSetIfChanged(ref _clusterList, value);
         }
+
 
         private ObservableCollection<NaturalElements> _elementList;
         public ObservableCollection<NaturalElements> ElementList
@@ -93,6 +95,10 @@ namespace XelerateAvalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _coreSections, value);
         }
 
+        private byte[] CompositeImageItem;
+        private List<CoreSections> checkedCoreSections;
+
+
         public PlottingPageViewModel(IScreen screen, ISessionContext sessionContext)
         {
             HostScreen = screen;
@@ -106,8 +112,9 @@ namespace XelerateAvalonia.ViewModels
             DataSets = new ObservableCollection<CoreMeta>();
             DataSets = DBAccess.GetAllCoreMetas(databasePath);
 
-            ImageList = new ObservableCollection<ImageCore>();
-            ImageList = DBAccess.GetAllImages(databasePath);
+            ClusterList = new ObservableCollection<Cluster>();
+            ClusterList = DBAccess.GetAllClusters(databasePath);
+
 
             ElementList = new ObservableCollection<NaturalElements>();
             CoreSections = new ObservableCollection<CoreSections>();
@@ -164,53 +171,77 @@ namespace XelerateAvalonia.ViewModels
                 var elementArrays = new Dictionary<string, double[]>();  // Create a dictionary to hold the arrays for each selected element
                                                                          
                 // Check for Selected CoreSections
-                var checkedCoreSections = CoreSections.Where(cs => cs.IsChecked == "True").ToList();
+                checkedCoreSections = CoreSections.Where(cs => cs.IsChecked == "True").ToList();
+                double[] positionColumn = new double[0];
 
                 if (checkedCoreSections.Any())
                 {
                     int startRow = int.Parse(checkedCoreSections.First().StartRow);
                     int endRow = int.Parse(checkedCoreSections.Last().EndRow);
 
-                    // read the datarows for plotting
+                    // Read the datarows for plotting
                     var rowsToPlot = PlotData.AsEnumerable().Skip(startRow - 1).Take(endRow - startRow + 1);
 
                     Plotting = rowsToPlot.CopyToDataTable();
                     // Now Plotting DataTable contains the rows from PlotData corresponding to the StartRow of the first element
                     // and the EndRow of the last element in checkedCoreSections.
+
+                    // Extract the "DepthID" column from the Plotting DataTable
+                     positionColumn = Plotting.AsEnumerable()
+                        .Select(row => double.Parse(row["DepthID"].ToString()))
+                        .ToArray();
                 }
 
-                // Extract the "DepthID" column from the Plotting DataTable
-                var positionColumn = Plotting.AsEnumerable()
-                   .Select(row => double.Parse(row["DepthID"].ToString()))
-                   .ToArray();
+                CompositeImageItem = ImageTransformations.CreateComposite(checkedCoreSections,positionColumn);
 
                 // Check if Plotting DataTable is initialized
                 if (Plotting != null)
                 {
                     // Check for Selected Elements
-                    var checkedElements = ElementList.Where(element => element.IsChecked == "True").ToList();              
-                
-                    // Loop through all checked elements
+                    var checkedElements = ElementList.Where(element => element.IsChecked == "True").ToList();
+
                     foreach (var element in checkedElements)
                     {
-                        // Extract the values for the current element from the Plotting DataTable
                         var elementValues = Plotting.AsEnumerable()
-                            .Select(row => double.Parse(row[element.Name].ToString()))
+                            .Select(row =>
+                            {
+                                double value;
+                                if (double.TryParse(row[element.Name].ToString(), out value))
+                                    return value;
+                                else
+                                {
+                                    // Log the problematic value for debugging
+                                    Console.WriteLine("Invalid value found: " + row[element.Name].ToString());
+                                    return double.NaN; // Return a NaN (Not-a-Number) value as a placeholder for invalid data
+                                }
+                            })
                             .ToArray();
+
+                        // Calculate the mean value of the column
+                        double meanValue = elementValues.Where(v => !double.IsNaN(v)).DefaultIfEmpty(0).Average();
+
+                        // Replace invalid values with the mean value
+                        for (int i = 0; i < elementValues.Length; i++)
+                        {
+                            if (double.IsNaN(elementValues[i]))
+                                elementValues[i] = meanValue;
+                        }
 
                         // Add the array of element values to the dictionary with the element's name as the key
                         elementArrays[element.Name] = elementValues;
                     }
-                    
+
+
                 }
 
                 // Create a new window for displaying the plotted data
                 Window window = new Window
                 {
-                    Title = "Core Plotting",
+                    Title = "Core Plotting: " + SelectedDataSetItem.Name.ToString(),
                     Width = 1500,
                     Height = 900,
-                    Content = new PlotDisplay(positionColumn,elementArrays,SelectedImageItem,IsDarkModeEnabled),
+                    Content = new PlotDisplay(positionColumn,elementArrays,CompositeImageItem,SelectedClusterItem, IsDarkModeEnabled),
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen
                 };
 
                 // Show the window
@@ -230,9 +261,14 @@ namespace XelerateAvalonia.ViewModels
                 {
                     ObservableCollection<NaturalElements> elements = DBAccess.GetAllElements(selectedItem.Name.ToString(), databasePath);
 
+                    // Each Core Section SHOULD Get an image if there is one
                     ObservableCollection<CoreSections> coreSections = DBAccess.GetAllCoreSections(selectedItem.Name.ToString(), databasePath);
+
                     PlotData = DBAccess.GetTableAsDataTable(selectedItem.Name.ToString(), databasePath);
 
+                    ObservableCollection<Cluster> clusterList = DBAccess.GetAllClusters(databasePath, selectedItem.Name.ToString());
+                                     
+                    ClusterList = clusterList;
                     CoreSections = coreSections;
                     ElementList = elements;
                   

@@ -21,6 +21,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/DatabasePageView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/ElementSelectionDisplay.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/FileCreationPageView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
@@ -28,9 +31,6 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/ImageDisplay.axaml]
-build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
-
-[C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/ImageSettingsDisplay.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [C:/Users/mitte/Documents/XelerateAvalonia/XelerateAvalonia/Views/ImportPageView.axaml]

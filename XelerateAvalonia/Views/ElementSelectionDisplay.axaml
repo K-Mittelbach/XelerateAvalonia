@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450" 
+			 xmlns:vm="clr-namespace:XelerateAvalonia.ViewModels"
+			 x:DataType="vm:PlottingPageViewModel"
+             x:Class="XelerateAvalonia.Views.ElementSelectionDisplay"
+             Background="#111619">
+	<StackPanel>
+	<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Select elements" FontSize="18"/>
+	<ScrollViewer VerticalScrollBarVisibility="Auto" Height="275"  Margin="2" Padding="0">
+		<WrapPanel Margin="20 20 0 25" Orientation="Horizontal" HorizontalAlignment="Left" Height="525" Width="525">
+			<ItemsRepeater x:Name="ItemsRepeater"  ItemsSource="{Binding ElementList}">
+				<ItemsRepeater.Layout>
+					<WrapLayout Orientation="Horizontal" />
+				</ItemsRepeater.Layout>
+				<ItemsRepeater.ItemTemplate>
+					<DataTemplate>
+						<ToggleButton IsChecked="{Binding IsChecked, Mode=TwoWay}}"  Margin="5" Height="66" Width="72" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="17" FontWeight="SemiBold" CornerRadius="5"  >
+							<StackPanel Orientation="Vertical">
+								<TextBlock Text="{Binding Name}" FontSize="20" HorizontalAlignment="Center"/>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<TextBlock Text="std: " Margin="0" FontSize="10"/>
+									<TextBlock Text="{Binding StandardDeviation}" Margin="0" FontSize="10"/>
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<TextBlock Text="Ø: " Margin="0" FontSize="10"/>
+									<TextBlock Text="{Binding ZeroSum}" Margin="0 0 0 0" FontSize="10"/>
+								</StackPanel>
+							</StackPanel>
+						</ToggleButton>
+					</DataTemplate>
+				</ItemsRepeater.ItemTemplate>
+			</ItemsRepeater>
+		</WrapPanel>
+	</ScrollViewer>
+		<Button Margin="200 0 20 30" Width="150" Height="35"  Foreground="white"  Content="Apply Selection" Background="#313131" CornerRadius="0" BorderBrush="#313131"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ApplySelection_Clicked"/>
+		<!--BUTTON TO APPLY SELECTION CHANGES AND ONCLICK METHOD WITH DB ACCESS AND COLUMN DELETION FOR DATASET AS WELL AS METACORETABLE-->
+	</StackPanel>
+</UserControl>

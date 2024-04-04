@@ -100,7 +100,6 @@ namespace XelerateAvalonia.Models
 
             DisplayImageCommand = ReactiveCommand.Create(() => DisplayImage(databasePath));
 
-            DisplayImageSettingsCommand = ReactiveCommand.Create(() => DisplayImageSettings());
        
         }
 
@@ -136,27 +135,6 @@ namespace XelerateAvalonia.Models
             
         }
 
-       
-
-        //Displaying a window with all properties that are adjustable for the user of the specific image
-        public void DisplayImageSettings()
-        {
-            Console.WriteLine($"Displaying Settings for image: {Name}");
-
-            // Create a new window
-            Window window = new Window
-            {
-                Title = "Image Settings",
-                Width = 600,
-                Height = 700,
-                Content = new ImageSettingsDisplay(this),
-            };
-
-            // Show the window
-
-            window.Show();
-        }
-      
         private Image CreateImageControl()
         {
             // Create an Image control

@@ -8,7 +8,7 @@
 			 d:DesignWidth="1330"
 			 d:DesignHeight="800"
 			 xmlns:i="https://github.com/projektanker/icons.avalonia">
-	
+
 	
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -42,7 +42,7 @@
 				<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="275" Width="550">
 					<StackPanel Orientation="Vertical">
 						<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Input selection" FontSize="18"/>
-						<TextBlock Text="Input core data :" Margin="20 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white"/>
+						<TextBlock Text="Select core data :" Margin="20 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white"/>
 						<StackPanel Margin="20 10 0 0" Orientation="Horizontal" Width="550">
 							<ComboBox x:Name="SelectedDataSet" MaxDropDownHeight="300" Foreground="White" Height="30" FontSize="12" Width="500"
 									  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
@@ -56,53 +56,61 @@
 								</ComboBox.ItemTemplate>
 							</ComboBox>
 						</StackPanel>
-
-
-						<TextBlock Text="Input core image :" Margin="20 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white"/>
+						<TextBlock Text="Select clustering data :" Margin="20 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white"/>
 						<StackPanel Margin="20 10 0 0" Orientation="Horizontal" Width="550">
-							<ComboBox x:Name="SelectedImage" MaxDropDownHeight="300" Foreground="White" Height="30" FontSize="12" Width="500"
+							<ComboBox x:Name="SelectedCluster" MaxDropDownHeight="300" Foreground="White" Height="30" FontSize="12" Width="500"
 									  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-									  ItemsSource="{Binding ImageList}"
-									  SelectedItem="{Binding SelectedImageItem}">
+									  ItemsSource="{Binding ClusterList}"
+									  SelectedItem="{Binding SelectedClusterItem}"
+									  SelectedIndex="2">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
-										<TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" >
+											<TextBlock.Text>
+												<MultiBinding StringFormat="{}{0}  {1}">
+													<Binding Path="ClusterType" FallbackValue=""/>
+													<Binding Path="ClusterNumbers" FallbackValue=""/>
+												</MultiBinding>
+											</TextBlock.Text>
+										</TextBlock>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
 							</ComboBox>
 						</StackPanel>
+
+						
+						
 					</StackPanel>
 				</Border>
 				<Border Margin="0 10 20 10" VerticalAlignment="Top"  HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" BorderThickness="1" Background="#1D1D1D" BorderBrush="#808080" Height="350" Width="550">
 					<StackPanel Orientation="Vertical">
 						<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Plotting settings" FontSize="18"/>
 						<StackPanel Orientation="Vertical">
+							
 							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
-								<TextBlock Text="Core image compression factor " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<TextBlock Text="Vertical display" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" ></ToggleSwitch>
+							</StackPanel>	
+							<StackPanel Margin="20 30 0 0"   Width="300" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+								<TextBlock Text="Plot overlay " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" ></ToggleSwitch>
+							</StackPanel>
+							<StackPanel Margin="20 30 0 0"   Width="300" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+								<TextBlock Text="Section name order" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
+								<ComboBox Margin="235 0 0 0" VerticalAlignment="Center" MaxWidth="65" >
+									<ComboBoxItem>Top bottom</ComboBoxItem>
+									<ComboBoxItem>Bottom up</ComboBoxItem>
+								</ComboBox>
+							</StackPanel>
+							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
+								<TextBlock Text="Theme" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
 								<ComboBox Margin="235 0 0 0" VerticalAlignment="Center" >
 									<ComboBoxItem>1</ComboBoxItem>
 									<ComboBoxItem>2</ComboBoxItem>
 									<ComboBoxItem>3</ComboBoxItem>
 								</ComboBox>
 							</StackPanel>
-							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
-								<TextBlock Text="Vertical display" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" ></ToggleSwitch>
-							</StackPanel>
-							<StackPanel Margin="20 30 0 0"   Width="300" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
-								<TextBlock Text="TrueDepth conversion " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" ></ToggleSwitch>
-							</StackPanel>
-							<StackPanel Margin="20 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
-								<TextBlock Text="Dark Mode " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-								<ToggleSwitch Margin="235 0 0 0" VerticalAlignment="Center"  IsChecked="{Binding IsDarkModeEnabled}" ></ToggleSwitch>
-							</StackPanel>
-
-
-						
-							
 						</StackPanel>
-						
 					</StackPanel>
 				</Border>
 			</StackPanel>
@@ -117,7 +125,6 @@
 								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 									<StackPanel Orientation="Vertical" Margin="20" HorizontalAlignment="Left">
 										<ScrollViewer VerticalScrollBarVisibility="Auto" Height="155"  Margin="2" Padding="0">
-											
 												<ListBox x:Name="CoresAdd" Width="575" Height="475" >
 													<ItemsRepeater ItemsSource="{Binding CoreSections}">
 												<ItemsRepeater.ItemTemplate>
@@ -125,22 +132,22 @@
 											<ListBoxItem Height="35"  >
 												<StackPanel Orientation="Horizontal">
 													<TextBlock  Text="{Binding CoreName}" FontSize="12" VerticalAlignment="Center"/>
-													<TextBlock  Text="{Binding SectionName}" FontSize="12" VerticalAlignment="Center" Margin="2 0 0 0"/>
-													<CheckBox HorizontalAlignment="Right" Margin="425 0 0 50" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
-												</StackPanel>
-																							
+													<TextBlock  Text="{Binding SectionName}" Width="65" FontSize="12" VerticalAlignment="Center" Margin="2 0 0 0"/>
+													<StackPanel Orientation="Horizontal" Width="60"> 
+														<Border IsVisible="{Binding HasImage}" Margin="2 0 0 0" >
+															<i:Icon Value="fa-file-image" Foreground="White" FontSize="13"/>
+														</Border> 
+													</StackPanel>
+													<CheckBox HorizontalAlignment="Right" Margin="350 0 0 50" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+												</StackPanel>										
 											</ListBoxItem>
 											</DataTemplate>
 													</ItemsRepeater.ItemTemplate>
 											</ItemsRepeater>
-										</ListBox>
-														
+										</ListBox>			
 										</ScrollViewer>
-										
 									</StackPanel>
-									
 								</StackPanel>
-							
 							
 							<!--ELEMENTS -->
 							<TextBlock Margin="20 20 0 0" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="white" Text="Select elements" FontSize="18"/>

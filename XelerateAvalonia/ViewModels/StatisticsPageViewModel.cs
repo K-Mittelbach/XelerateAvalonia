@@ -22,6 +22,11 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using SixLabors.ImageSharp.Formats.Png;
 using static XelerateAvalonia.Auxiliaries.Clustering;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using System.Xml;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace XelerateAvalonia.ViewModels
 {
@@ -59,7 +64,7 @@ namespace XelerateAvalonia.ViewModels
         {
             "Hierarchical",
             "K-means",
-            "Density-based"
+            "DBSCAN"
         };
 
         public List<string> ClusteringMethods
@@ -81,14 +86,28 @@ namespace XelerateAvalonia.ViewModels
             get => _isNormalizationEnabledCluster;
             set => this.RaiseAndSetIfChanged(ref _isNormalizationEnabledCluster, value);
         }
+        private Cluster _selectedClusterItem;
+        public Cluster SelectedClusterItem
+        {
+            get => _selectedClusterItem;
+            set => this.RaiseAndSetIfChanged(ref _selectedClusterItem, value);
+        }
 
-        private string _numberOfClusters;
+        private ObservableCollection<Cluster> _clusterList;
+        public ObservableCollection<Cluster> ClusterList
+        {
+            get => _clusterList;
+            set => this.RaiseAndSetIfChanged(ref _clusterList, value);
+        }
+
+
+        private string _numberOfClusters = "10";
+
         public string NumberOfClusters
         {
             get => _numberOfClusters;
             set => this.RaiseAndSetIfChanged(ref _numberOfClusters, value);
         }
-
 
         private ObservableCollection<NaturalElements> _elements;
         public ObservableCollection<NaturalElements> Elements
@@ -120,6 +139,10 @@ namespace XelerateAvalonia.ViewModels
 
             DataSets = new ObservableCollection<CoreMeta>();
             DataSets = DBAccess.GetAllCoreMetas(databasePath);
+
+            ClusterList = new ObservableCollection<Cluster>();
+            ClusterList = DBAccess.GetAllClusters(databasePath);
+            
 
             // Initialize the CreatePlotCommand
             CreateBiPlotCommand = ReactiveCommand.Create(CreateBiplot);
@@ -161,6 +184,18 @@ namespace XelerateAvalonia.ViewModels
                     return HostScreen.Router.NavigateAndReset.Execute(new SettingsPageViewModel(HostScreen, sessionContext));
                 }
             );
+
+            // Whenever an item is selected update the ElementList
+            this.WhenAnyValue(x => x.SelectedDataSetItem)
+            .Where(selectedItem => selectedItem != null)
+            .Subscribe(selectedItem =>
+            {
+                if (selectedItem != null)
+                {
+                    ObservableCollection<Cluster> clusterList = DBAccess.GetAllClusters(databasePath, selectedItem.Name.ToString());
+                    ClusterList = clusterList;
+                }
+            });
         }
 
         // Logic for creating the Biplot 
@@ -169,16 +204,19 @@ namespace XelerateAvalonia.ViewModels
             string databaseFileName = "database.db";
             string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
 
-            // Read the data -> SelectedDataSetItem and read from db table by name
+            // [0] DATA PREPARATION FOR PCA
+            //  Read the data -> SelectedDataSetItem and read from db table by name
             DataTable BiPlotData = DBAccess.GetTableAsDataTable(SelectedDataSetItem.Name, databasePath);
 
-            // Remove the first two columns
+            // Remove the first two columns containing position[mm] and DepthID
             BiPlotData.Columns.RemoveAt(0);
             BiPlotData.Columns.RemoveAt(0);
 
-            // Remove columns with headers containing "inc" or "coh"
+            // Remove columns with headers containing "inc", "coh", or "cps"
             var columnsToRemove = BiPlotData.Columns.Cast<DataColumn>()
-                .Where(column => column.ColumnName.ToLower().Contains("inc") || column.ColumnName.ToLower().Contains("coh"))
+                .Where(column => column.ColumnName.ToLower().Contains("inc") ||
+                                 column.ColumnName.ToLower().Contains("coh") ||
+                                 column.ColumnName.ToLower().Contains("cps"))
                 .ToList();
 
             foreach (var column in columnsToRemove)
@@ -186,90 +224,119 @@ namespace XelerateAvalonia.ViewModels
                 BiPlotData.Columns.Remove(column);
             }
 
-            // Convert DataTable to array of arrays (matrix) column by column
-            var dataMatrix = Enumerable.Range(0, BiPlotData.Columns.Count)
-                .Select(colIndex => BiPlotData.AsEnumerable()
-                    .Select(row => row[colIndex])
-                    .Select(value => value == DBNull.Value ? 0 : Convert.ToDouble(value))
-                    .ToArray())
-                .ToArray();
+            // Convert DataTable to double[][]
+            double[][] dataMatrix = new double[BiPlotData.Rows.Count][];
 
-            double[] standardDeviation = new double[dataMatrix[0].Length];
-            double[] mean = new double[dataMatrix[0].Length];
-
-            for (int i = 0; i < dataMatrix[0].Length; i++)
+            Parallel.For(0, BiPlotData.Rows.Count, row =>
             {
-                double[] columnValues = dataMatrix.Select(row => row[i]).ToArray();
-                standardDeviation[i] = CalculateStandardDeviation(columnValues);
-                mean[i] = columnValues.Average();
-            }
+                dataMatrix[row] = new double[BiPlotData.Columns.Count];
 
-            // Scaling the data with zero unit variance
-            var dataAfterScalingMatrix = dataMatrix.Select(row =>
-                row.Select((value, index) => (value - mean[index]) / standardDeviation[index]).ToArray()).ToArray();
+                for (int col = 0; col < BiPlotData.Columns.Count; col++)
+                {
+                    object value = BiPlotData.Rows[row][col];
+                    dataMatrix[row][col] = value == DBNull.Value ? 0 : Convert.ToDouble(value);
+                }
+            });
 
-            // Apply log2 transformation to each value in the matrix (dataAfterScalingMatrix)
-            double[][] loggedDataMatrix = dataAfterScalingMatrix
-                .Select(column => column.Select(value => Math.Log(value + 1, 2)).ToArray())
-                .ToArray();
+            // [1] DATA NORMALIZATION
+            double[][] stdX = Auxiliaries.DataTransformations.MatStandardize(dataMatrix, out double[] means, out double[] stds);
 
-            // Create a Principal Component Analysis object
-            PrincipalComponentAnalysis pca = new PrincipalComponentAnalysis()
-            {
-                Method = PrincipalComponentMethod.Center,
-                Whiten = true // This will normalize the data
-            };
+            // [2] COMPUTING COVARIANCE MATRIX
+            double[][] covarMat = Auxiliaries.DataTransformations.CovarMatrix(stdX,false);
 
-            // Fit the PCA model to your data
-            pca.Learn(loggedDataMatrix);
+            // [3] COMPUTING EIGENVALUES AND EIGENVECTORS
+            double[] eigenVals;
+            double[][] eigenVecs;
 
-            // Get the components (eigenvectors) and eigenvalues
-            double[][] components = pca.ComponentVectors;
+            Auxiliaries.DataTransformations.Eigen(covarMat, out eigenVals, out eigenVecs);
 
-            // Perform dimensionality reduction (optional)
-            double[][] transformedData = pca.Transform(loggedDataMatrix);
+            int[] idxs = Auxiliaries.DataTransformations.ArgSort(eigenVals);  // Sorted indices of eigenvalues
+
+            Array.Sort(eigenVals);
+            Array.Reverse(eigenVals);
+
+            eigenVecs = Auxiliaries.DataTransformations.MatExtractCols(eigenVecs, idxs); // Sort eigenvectors
+            eigenVecs = Auxiliaries.DataTransformations.MatTranspose(eigenVecs);
+
+            // [4] COMPUTING VARIANCE EXPLAINED
+            double[] varExplained = Auxiliaries.DataTransformations.VarExplained(eigenVals);
+
+            // [5] COMPUTING TRANSFORMED DATA
+            double[][] transformed = Auxiliaries.DataTransformations.MatProduct(stdX, Auxiliaries.DataTransformations.MatTranspose(eigenVecs));
+
+            // [6] Reconstructing for VALIDATION
+            double[][] reconstructed = Auxiliaries.DataTransformations.MatProduct(transformed, eigenVecs);
+            for (int i = 0; i < reconstructed.Length; ++i)
+                for (int j = 0; j < reconstructed[0].Length; ++j)
+                    reconstructed[i][j] = (reconstructed[i][j] * stds[j]) + means[j];
+
 
             // Create a new plot
             AvaPlot plt = new AvaPlot();
 
-            // Plot vectors representing the original variables
-            for (int i = 0; i < pca.ComponentVectors.Length; i++)
+            // Plot vectors representing the original variables (eigenvectors)
+            for (int i = 0; i < eigenVecs.Length; i++)
             {
-                // Extract the ith principal component (eigenvector)
-                double[] component = pca.ComponentVectors[i];
+                double x = eigenVecs[i][0]; // X coordinate of the eigenvector
+                double y = eigenVecs[i][1]; // Y coordinate of the eigenvector
 
-                // Scale the component for visualization
-                double scale = Math.Sqrt(Math.Abs(pca.Eigenvalues[i]));
-
-                // Scale the component vector
-                double scaledComponentX = component[0] * scale;
-                double scaledComponentY = component[1] * scale;
-
-                // Add arrows representing original variables
-                var arrow = plt.Plot.Add.Arrow(0, 0, scaledComponentX, scaledComponentY);
+                // Plot each eigenvector as an arrow starting from the origin
+                var arrow = plt.Plot.Add.Arrow(0, 0, x, y);
                 arrow.ArrowheadLength = 10; // Customize arrowhead length
                 arrow.ArrowheadWidth = 5; // Customize arrowhead width
+                arrow.Color = Colors.LightBlue; // Customize arrow color
 
                 // Extract element name from column name
                 string elementName = BiPlotData.Columns[i].ColumnName;
 
                 // Calculate text label coordinates
-                double xText = scaledComponentX * 1.1; // Offset from arrow endpoint along x-axis
-                double yText = scaledComponentY * 1.1; // Offset from arrow endpoint along y-axis
+                double xText = x * 1.1; // Offset from arrow endpoint along x-axis
+                double yText = y * 1.1; // Offset from arrow endpoint along y-axis
 
                 // Add text label next to the arrow
                 plt.Plot.Add.Text(elementName, xText, yText);
             }
 
+            // Plot the transformed data points
+            for (int i = 0; i < transformed.Length; i++)
+            {
+                double x = transformed[i][0]; // First principal component
+                double y = transformed[i][1]; // Second principal component
+                var fillColor = Colors.Black;
+
+                if (SelectedClusterItem != null)
+                {
+                    int[] clusterID = SelectedClusterItem.ClusterID;
+                    ScottPlot.Palettes.Category10 palette = new ScottPlot.Palettes.Category10();
+                    int colorIndex = clusterID[i]; // Adjust the index as needed
+                    fillColor = palette.GetColor(colorIndex);
+                }
+
+                // Create a plottable for each data point
+                ScottPlot.Plottables.Marker dataPoint = new ScottPlot.Plottables.Marker()
+                {
+                    X = x,
+                    Y = y,
+                    Size = 2, // Adjust marker size as needed
+                    Color = fillColor, // Customize marker color
+                    Shape = MarkerShape.OpenCircle, // Customize marker shape
+                };
+
+                // Plot each data point
+                plt.Plot.Add.Plottable(dataPoint);
+            }
+
+
             // Customize the plot
             plt.Plot.Title("Biplot of Principal Components");
-            plt.Plot.XLabel("Principal Component 1");
-            plt.Plot.YLabel("Principal Component 2");
+            plt.Plot.XLabel($"Principal Component 1 ({varExplained[0]:0.00%})");
+            plt.Plot.YLabel($"Principal Component 2 ({varExplained[1]:0.00%})");
             plt.Width = 550;
             plt.Height = 500;
 
-            plt.Plot.Axes.SetLimitsX(-0.005, 0.005);
-            plt.Plot.Axes.SetLimitsY(-0.005, 0.005);
+            // Set axis limits (optional)
+            plt.Plot.Axes.SetLimitsX(-0.7, 0.7);
+            plt.Plot.Axes.SetLimitsY(-0.7, 0.7);
 
             // Assign the new plot to CurrentPlot
             CurrentPlot = plt;
@@ -352,7 +419,7 @@ namespace XelerateAvalonia.ViewModels
                     // Hierarchical clustering logic
                     PerformHierarchicalClustering(clusterData, depth);
                     break;
-                case "Density-based":
+                case "DBSCAN":
                     // Density-based clustering logic
                     PerformDensityBasedClustering(clusterData, depth);
                     break;
@@ -360,6 +427,7 @@ namespace XelerateAvalonia.ViewModels
                     // Handle unknown clustering methods or provide a default behavior
                     break;
             }
+            ClusterList = DBAccess.GetAllClusters(databasePath, SelectedDataSetItem.Name.ToString());
         }
 
         private void PerformKMeansClustering(DataTable data, DataTable depth, string ClusterNumber)
@@ -388,12 +456,12 @@ namespace XelerateAvalonia.ViewModels
             int position = 0;
 
             // Define the first depth value
-            double lastDepth = Convert.ToDouble(depth.Rows[0]["DepthID"]);
+            double lastDepth = Convert.ToDouble(depth.Rows[0]["DepthID"]) / 1000.0;
 
             // Iterate through depths in the DataTable
             foreach (DataRow row in depth.Rows)
             {
-                double depthValue = Convert.ToDouble(row["DepthID"]);
+                double depthValue = Convert.ToDouble(row["DepthID"]) / 1000.0;
 
                 // Determine color 
 
@@ -413,7 +481,7 @@ namespace XelerateAvalonia.ViewModels
                 bars.Add(bar);
 
                 position++; // Move to the next position for the next depth
-                lastDepth = Convert.ToDouble(row["DepthID"]);
+                lastDepth = Convert.ToDouble(row["DepthID"]) / 1000.0;
             }
             
             plt.Plot.Add.Bars(bars.ToArray());
@@ -424,25 +492,70 @@ namespace XelerateAvalonia.ViewModels
 
             // Customize the plot
             plt.Plot.Title("Categorical (K-means)");
-            plt.Plot.YLabel("Depth (mm)");
-            plt.Width = 550;
-            plt.Height = 550;
+            plt.Plot.YLabel("Depth (m)");
+            plt.Width = 350;
+            plt.Height = 800;
             plt.Plot.HideGrid();
             plt.Plot.Axes.Bottom.TickGenerator = new ScottPlot.TickGenerators.NumericManual(ticks);
             plt.Plot.Axes.Bottom.MajorTickStyle.Length = 0;
 
+            plt.Plot.FigureBackground.Color = ScottPlot.Color.FromHex("#D3D3D3");
+            plt.Plot.DataBackground.Color = ScottPlot.Color.FromHex("#FFFFFF");
+            plt.Plot.Axes.Left.Label.ForeColor = Colors.Black;
+            plt.Plot.Axes.Bottom.Label.ForeColor = Colors.Black;
+            plt.Plot.Axes.Bottom.MajorTickStyle.Color = Colors.Black;
+            plt.Plot.Axes.Left.MajorTickStyle.Color = Colors.Black;
+            plt.Plot.Axes.Left.TickLabelStyle.ForeColor = Colors.Black;
+            plt.Plot.Axes.Bottom.TickLabelStyle.ForeColor = Colors.Black;
+
+            plt.Plot.Axes.Bottom.MinorTickStyle.Length = 5;
+            plt.Plot.Axes.Bottom.MinorTickStyle.Width = 0.5f;
+            plt.Plot.Axes.Bottom.MinorTickStyle.Color = Colors.Transparent;
+            plt.Plot.Axes.Bottom.FrameLineStyle.Color = Colors.Transparent;
+
+            plt.Plot.Axes.Left.MinorTickStyle.Length = 5;
+            plt.Plot.Axes.Left.MinorTickStyle.Width = 0.5f;
+            plt.Plot.Axes.Left.MinorTickStyle.Color = Colors.Transparent;
+            plt.Plot.Axes.Left.FrameLineStyle.Color = Colors.Transparent;
+
+            plt.Plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#E0E0E0");
+            plt.Plot.Axes.Left.Label.FontSize = 11;
+
             // Assuming "DepthID" is the name of the column
-            double minDepth = depth.AsEnumerable().Min(row => Convert.ToDouble(row["DepthID"]));
-            double maxDepth = depth.AsEnumerable().Max(row => Convert.ToDouble(row["DepthID"]));
+            double minDepth = depth.AsEnumerable().Min(row => Convert.ToDouble(row["DepthID"]) / 1000.0);
+            double maxDepth = depth.AsEnumerable().Max(row => Convert.ToDouble(row["DepthID"]) / 1000.0);
 
             // Set the limits of the Y-axis in the plot
             plt.Plot.Axes.SetLimitsY(minDepth, maxDepth);
-            
-            // Assign the new plot to CurrentPlot
-            CurrentPlot = plt;
+
+
+            // -----  Saving the Cluster in the DB
+            // Generate a unique ID
+            UniqueId id = new UniqueId(Guid.NewGuid());
+
+            plt.Plot.SavePng("XelerateClusterPlot.png", 350, 800);
+            // Load the PNG image into a SixLabors Image variable
+            Image<Rgba32> plot = SixLabors.ImageSharp.Image.Load<Rgba32>("XelerateClusterPlot.png");
+
+            // Delete the PNG file
+            File.Delete("XelerateClusterPlot.png");
+
+            byte[] pltImage = Auxiliaries.ImageTransformations.GetBytesFromImage(plot);
+
+            string databaseFileName = "database.db";
+            string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
+
+            Cluster CurrentClusterPlot = new Cluster(SelectedDataSetItem.Name, id, pltImage, SelectedClusteringMethod, int.Parse(ClusterNumber), clustering);
+
+            // Save created Cluster in db 
+            DBAccess.SaveCluster(CurrentClusterPlot, false, databasePath);
+
+
+            // Assign the new plot to CurrentPlot // Dendorg
+            //CurrentPlot = plt;
 
             // Raise event to notify View to display the new plot
-            NewPlotRequested?.Invoke(this, EventArgs.Empty);
+            //NewPlotRequested?.Invoke(this, EventArgs.Empty);
 
         }
 

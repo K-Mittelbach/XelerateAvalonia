@@ -200,3 +200,4 @@ C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\runt
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\runtimes\win-arm64\native\LdaNative.dll
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\runtimes\win-x64\native\LdaNative.dll
 C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\runtimes\win-x86\native\LdaNative.dll
+C:\Users\mitte\Documents\XelerateAvalonia\XelerateAvalonia\bin\Debug\net6.0\MathNet.Numerics.dll

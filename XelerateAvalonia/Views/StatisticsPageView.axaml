@@ -77,8 +77,27 @@
 											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
 										</StackPanel>
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
-											<TextBlock Text="Mark class membership " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="200"/>
-											<ToggleSwitch Margin="220 0 0 0" VerticalAlignment="Center"  ></ToggleSwitch>
+											<TextBlock Text="Inlcude clustering data " HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="white" Width="180"/>
+											<StackPanel Margin="20 10 0 0" Orientation="Horizontal" Width="100">
+												<ComboBox x:Name="SelectedCluster" MaxDropDownHeight="300" Foreground="White" Height="30" FontSize="12" Margin="180 0 0 0" VerticalAlignment="Center" Width="115"
+														  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+														  ItemsSource="{Binding ClusterList}"
+														  SelectedItem="{Binding SelectedClusterItem}"
+														  SelectedIndex="2">
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" >
+																<TextBlock.Text>
+																	<MultiBinding StringFormat="{}{0}  {1}">
+																		<Binding Path="ClusterType" FallbackValue=""/>
+																		<Binding Path="ClusterNumbers" FallbackValue=""/>
+																	</MultiBinding>
+																</TextBlock.Text>
+															</TextBlock>
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+											</StackPanel>
 										</StackPanel>
 										<StackPanel Margin="5 30 0 0"  Orientation="Horizontal" VerticalAlignment="Center" >
 											<Button Width="495" Height="35" Foreground="white" Content="Select participating classes" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ></Button>

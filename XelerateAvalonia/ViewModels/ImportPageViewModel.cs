@@ -45,7 +45,6 @@ namespace XelerateAvalonia.ViewModels
             set => this.RaiseAndSetIfChanged(ref _imageList, value);
         }
 
-        
         // Unique identifier for the routable view model.
         public string UrlPathSegment { get; } = "File Import";
 
@@ -197,6 +196,9 @@ namespace XelerateAvalonia.ViewModels
             // Extract values from the first set of row values
             object[] firstRowValues = allRowValues.FirstOrDefault();
 
+            string databaseFileName = "database.db";
+            string databasePath = Path.Combine(_sessionContext.ProjectPath, _sessionContext.ProjectName, databaseFileName);
+
             if (firstRowValues != null)
             {
                 // Extract values from the first row
@@ -215,13 +217,12 @@ namespace XelerateAvalonia.ViewModels
                 DateOnly uploaded = DateOnly.FromDateTime(DateTime.Now);
 
                 // Create a new CoreMeta instance
-                CoreMeta newEntry = new CoreMeta(Corename, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, uploaded);
+                CoreMeta newEntry = new CoreMeta(Corename, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, uploaded,FileList,databasePath);
 
                 // Add the new entry to the FileList or perform any other required operations
                 FileList.Add(newEntry);
             }
         }
-
 
         public object[] MetaCoreReader(DataSet dataset, float size)
         {
@@ -255,7 +256,6 @@ namespace XelerateAvalonia.ViewModels
 
             return rowValues;
         }
-
 
         // Method to handle dataset import
         public async void DatasetImport()
@@ -299,9 +299,14 @@ namespace XelerateAvalonia.ViewModels
                 // Initialize a list of abbreviations of all occurring natural elements
                 List<string> naturalElementAbbreviations = new List<string>
                 {
-                    "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn",
-                    "Fe", "Ni", "Cu", "Zn", "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag",
-                    "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb"
+                     "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P", "S",
+                    "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn", "Ga", "Ge",
+                    "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh", "Pd", "Ag", "Cd",
+                    "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "La", "Ce", "Pr", "Nd", "Pm", "Sm", "Eu", "Gd",
+                    "Tb", "Dy", "Ho", "Er", "Tm", "Yb", "Lu", "Hf", "Ta", "W", "Re", "Os", "Ir", "Pt", "Au", "Hg",
+                    "Tl", "Pb", "Bi", "Po", "At", "Rn", "Fr", "Ra", "Ac", "Th", "Pa", "U", "Np", "Pu", "Am", "Cm",
+                    "Bk", "Cf", "Es", "Fm", "Md", "No", "Lr", "Rf", "Db", "Sg", "Bh", "Hs", "Mt", "Ds", "Rg", "Cn",
+                    "Nh", "Fl", "Mc", "Lv", "Ts", "Og"
                 };
 
 
@@ -340,15 +345,7 @@ namespace XelerateAvalonia.ViewModels
                     }
                 }
 
-                // Fill in missing elements with null values
-                List<string> allElements = new List<string>
-                    {
-                        "Mg", "Al", "Si", "P", "S", "Cl", "Ar", "K", "Ca", "Ti", "V", "Cr", "Mn",
-                        "Fe", "Ni", "Cu", "Zn", "Ga", "As", "Br", "Rb", "Sr", "Y", "Zr", "Ag",
-                        "Ba", "Ce", "Pr", "Nd", "Sm", "Eu", "Gd", "Tb", "Dy", "Ta", "W", "Co", "Pb"
-                    };
-
-                foreach (string element in allElements)
+                foreach (string element in naturalElementAbbreviations)
                 {
                     if (!elements.Contains(element))
                     {
@@ -393,7 +390,7 @@ namespace XelerateAvalonia.ViewModels
                     float size = (float)firstRowValues[6];
                     DateOnly currentDateTime = DateOnly.FromDateTime(DateTime.Now);
 
-                    CoreMeta newEntry = new CoreMeta(validCoreName, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, currentDateTime);
+                    CoreMeta newEntry = new CoreMeta(validCoreName, ID, DeviceName, InputSource, MeasuredTime, Voltage, Current, size, currentDateTime, FileList, databasePath);
 
                     DBAccess.SaveCoreMeta(newEntry, false, databasePath, elements, elementsSTD, elementsZeroSum);
                 }
@@ -405,7 +402,6 @@ namespace XelerateAvalonia.ViewModels
             ProgressValue = "0";
             ProgressBarBackground = "#1D1D1D";
         }
-
 
         public async void ImageImport()
         {

@@ -23,6 +23,8 @@ using System.Runtime.InteropServices;
 using System;
 using Avalonia.Controls.Primitives;
 using ReactiveUI;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace XelerateAvalonia.Views
 {
@@ -43,6 +45,8 @@ namespace XelerateAvalonia.Views
 
         private double totalRotationAngle = 0;
         private double GammaValue;
+
+        private string _appyForAllChecked;
 
         private SixLabors.ImageSharp.Image<Rgba32> ImageSharp;
 
@@ -67,7 +71,7 @@ namespace XelerateAvalonia.Views
             TextBoxROILeft = this.FindControl<TextBox>("TextBoxROILeft");
             TextBoxROIRight = this.FindControl<TextBox>("TextBoxROIRight");
             PixelSize = this.FindControl<TextBox>("PixelSize");
-            Orientation = this.FindControl<TextBox>("Orientation");
+            ApplyForAll = this.FindControl<ToggleSwitch>("ApplyForAll");
             CoreID = this.FindControl<TextBox>("CoreID");
             SectionID = this.FindControl<TextBox>("SectionID");
 
@@ -82,7 +86,6 @@ namespace XelerateAvalonia.Views
                 TextBoxROILeft.Text = item.ImageMarginLeft?.ToString();
                 TextBoxROIRight.Text = item.ImageMarginRight?.ToString();
                 PixelSize.Text = item.ImagePixelSize?.ToString();
-                Orientation.Text = item.ImageOrientation?.ToString();
                 CoreID.Text = item.CoreID.ToString();
                 SectionID.Text = item.SectionID.ToString();
             }
@@ -246,7 +249,7 @@ namespace XelerateAvalonia.Views
             string roiLeft = TextBoxROILeft.Text;
             string roiRight = TextBoxROIRight.Text;
             string pixelSize = PixelSize.Text;
-            string orientation = Orientation.Text;
+            string orientation = "Vertical";
             string coreID = CoreID.Text;
             string sectionID = SectionID.Text;
             string FileType = Item.FileType;
@@ -270,6 +273,33 @@ namespace XelerateAvalonia.Views
 
             byte[] croppedImageBytes = ImageTransformations.CaptureImageSlice(_sliderGridLeft, _sliderGridRight, _sliderGridStart, _sliderGridEnd, imageBytes);
 
+            // Check if ApplyForAll toggle button is checked
+            if (ApplyForAll.IsChecked == true)
+            {
+                // Get all images whose names start with FileName.Text
+                ObservableCollection<ImageCore> images = new ObservableCollection<ImageCore>(
+                    DBAccess.GetAllImages(DatabasePath)
+                    .Where(image => string.Concat(image.Name.TakeWhile(c => !char.IsDigit(c))) == string.Concat(FileName.Text.TakeWhile(c => !char.IsDigit(c))))
+                );
+
+                foreach (var image in images)
+                {
+                    // Set ROI values for each image
+                    image.ROIStart = roiStart;
+                    image.ROIEnd = roiEnd;
+                    image.ImageMarginLeft = roiLeft;
+                    image.ImageMarginRight = roiRight;
+
+                    // Capture image slice using the same ROI values
+                    byte[] otherCroppedImageBytes = ImageTransformations.CaptureImageSlice(_sliderGridLeft, _sliderGridRight, _sliderGridStart, _sliderGridEnd, image.Blob);
+
+                    // Update the image's cropped bytes
+                    image.BlobROI = otherCroppedImageBytes;
+
+                    // Save the updated image to the database
+                    DBAccess.SaveImage(image, true, DatabasePath);
+                }
+            }
 
             // Create a new ImageCore object with the gathered values and updated image bytes
             ImageCore newItem = new ImageCore(
@@ -301,24 +331,21 @@ namespace XelerateAvalonia.Views
             // Save the updated item in the database
             DBAccess.SaveImage(newItem, true, DatabasePath);
 
+            // Change the ROI Settings for all other images with the given slices and set the cropedImageBytes !(if ApplyButton isChecked ="true") 
+
             ImageSharp?.Dispose();
             // Get the parent window of the UserControl
             var window = this.VisualRoot as Window;
 
             window.Close();
 
-            
-            
+      
         }
-
 
         //private bool IsTiffImage(byte[] imageBytes)
         //{
         //    // Check if the imageBytes represent a TIFF image
         //    return imageBytes.Length > 1 && (imageBytes[0] == 'I' && imageBytes[1] == 'I' || imageBytes[0] == 'M' && imageBytes[1] == 'M');
         //}
-
-
-
     }
 }

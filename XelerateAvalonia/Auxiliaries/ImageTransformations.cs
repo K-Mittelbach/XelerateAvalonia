@@ -7,7 +7,10 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using XelerateAvalonia.Models;
 
 namespace XelerateAvalonia.Auxiliaries
 {
@@ -72,8 +75,7 @@ namespace XelerateAvalonia.Auxiliaries
                 return new Bitmap(memoryStream);
             }
         }
-        // Get the ROI image slice 
-        // WIP ---!
+
         public static byte[] CaptureImageSlice(Grid sliderGridLeft, Grid sliderGridRight, Grid sliderGridStart, Grid sliderGridEnd, byte[] imageBytes)
         {
             // Load the image from the byte array to retrieve the original dimensions
@@ -111,16 +113,96 @@ namespace XelerateAvalonia.Auxiliaries
             int cropRight = (int)Math.Round(Math.Abs(rightSliderMargin));
             int cropTop = (int)Math.Round(topSliderMargin);
 
-            
+
             int cropLeft = (int)Math.Round(leftSliderMargin);
 
             // Crop the image to obtain the slice
+            // WIP Error when image is smaller than cropped image?
             SixLabors.ImageSharp.Image<Rgba32> croppedImage = originalImage.Clone(x => x.Crop(new Rectangle(cropLeft, cropTop, sliceWidth, sliceHeight)));
 
             // Convert the cropped ImageSharp image to a byte array using GetBytesFromImage method
             return GetBytesFromImage(croppedImage);
         }
 
+        public static byte[] CreateComposite(List<CoreSections> checkedCoreSections, double[] depth)
+        {
+            // Initialize variables
+            List<Image<Rgba32>> images = new List<Image<Rgba32>>();
+            int maxWidth = 0;
+            int totalHeight = 0;
+            int imageCount = 0;
 
+            // Convert each byte array into an image and calculate total height
+            foreach (CoreSections section in checkedCoreSections)
+            {
+                byte[] blobROI = section.BlobROI;
+
+                if (blobROI != null)
+                {
+                    // Convert byte array to image
+                    Image<Rgba32> image = LoadImageFromBytes(blobROI);
+
+                    // Add the image to the list
+                    images.Add(image);
+
+                    // Update maximum width
+                    maxWidth = Math.Max(maxWidth, image.Width);
+
+                    // Update total height and image count
+                    totalHeight += image.Height;
+                    imageCount++;
+                }
+            }
+
+            // Check if there's at least one section without BlobROI
+            if (imageCount < checkedCoreSections.Count)
+            {
+                // Calculate the mean height of the images
+                int meanHeight = totalHeight / imageCount;
+
+                // Create the white rectangle with the mean height
+                Image<Rgba32> whiteRectangle = new Image<Rgba32>(maxWidth > 0 ? maxWidth : 100, meanHeight);
+                whiteRectangle.Mutate(ctx => ctx.BackgroundColor(SixLabors.ImageSharp.Color.White));
+
+                // Track the index where the white rectangle should be inserted
+                int whiteRectangleIndex = 0;
+                foreach (CoreSections section in checkedCoreSections)
+                {
+                    if (section.BlobROI == null)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        whiteRectangleIndex++;
+                    }
+                }
+
+                // Insert the white rectangle at the appropriate position in the list
+                images.Insert(whiteRectangleIndex, whiteRectangle);
+            }
+
+            // Reverse the order of images
+            images.Reverse();
+
+            // Recalculate total height
+            totalHeight = images.Sum(image => image.Height);
+
+            // Create composite image
+            using (Image<Rgba32> compositeImage = new Image<Rgba32>(maxWidth, totalHeight))
+            {
+                int currentY = 0;
+
+                // Draw each image or white rectangle onto the composite image
+                foreach (Image<Rgba32> image in images)
+                {
+                    compositeImage.Mutate(ctx => ctx.DrawImage(image, new SixLabors.ImageSharp.Point(0, currentY), 1f));
+                    currentY += image.Height;
+                }
+
+                // Convert composite image to byte array
+                return GetBytesFromImage(compositeImage);
+            }
+        }
     }
 }
